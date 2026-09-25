@@ -1,0 +1,3 @@
+population,n_trials_participant_level,n_participants,n_primary_associations_holm_sig,carryover_n_trials,M0_reference_exposure_slope,M1_compact_prev_density_prev_nback_exposure_slope,M2_full_prev_cell_exposure_slope,M0_reference_wald_p,M1_compact_prev_density_prev_nback_wald_p,M2_full_prev_cell_wald_p
+primary: protocol-resolved TOR,492,57,0,435,-0.02560733207255192,-0.026637833361848738,-0.026449945315951587,,0.5591068839901776,0.7707710592125777
+sensitivity: exclude all multi-TOR trials,472,57,0,416,-0.027881257773855604,-0.028585943891564162,-0.02855214116840134,,0.5324648630221701,0.7360474575725529

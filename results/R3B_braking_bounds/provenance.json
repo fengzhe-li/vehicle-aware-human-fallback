@@ -1,0 +1,105 @@
+{
+  "code_commit": "a4f2cc4cf402e9fe01b58b2cea5330e0d99d759c",
+  "src_tree_dirty": false,
+  "code": [
+    "src/experiments/r3b_braking_bounds.py",
+    "src/metrics/oracle.py",
+    "src/simulation/simulator.py",
+    "src/vehicle/models.py",
+    "src/handover/models.py"
+  ],
+  "inputs": {
+    "research/data_matrix/r3a_epa_coastdown_deceleration.csv": "c236bc91891e50bbe0d410433ce20bf26fed7b25a7f5ca2cf419350ae196f4f2",
+    "research/PARAMETER_PROVENANCE_REGISTRY.csv": "4f468982178b42f1f4d0dc3ae24a1b0e8cc80762d2b43efde1a251042cabac5e"
+  },
+  "parameters": {
+    "t1": {
+      "cls": "EXPLICIT ASSUMPTION INTERVAL",
+      "low": 1.15,
+      "high": 3.0,
+      "unit": "s",
+      "registry": "P02",
+      "label": "assumption interval for sensitivity analysis: TOR -> effective human braking. Lower end = UN R157 Annex 3 attentive-driver benchmark (0.4 s + 0.75 s, S02; a regulatory reference, not a takeover measurement); upper end = scenario choice. Not t_button, not Manual_Start, not the meta-analysis takeover time."
+    },
+    "t2": {
+      "cls": "SOURCE-SUPPORTED",
+      "low": 0.05,
+      "high": 0.17,
+      "unit": "s",
+      "registry": "P08",
+      "label": "hydraulic brake actuation delay, instrumented hard braking (S20); within the R13-H 0.6 s bound (S01)"
+    },
+    "t3": {
+      "cls": "EXPLICIT ASSUMPTION INTERVAL",
+      "low": 0.3,
+      "high": 1.2,
+      "unit": "s",
+      "registry": "P09",
+      "label": "assumption interval for sensitivity analysis: deceleration build-up (human x vehicle). Informed by S02 benchmark 0.6 s and S04 non-professional pedal build-up (0.83 s mean, up to 1.26 s); not a measured takeover build-up distribution"
+    },
+    "a_max": {
+      "cls": "SOURCE-SUPPORTED",
+      "low": 6.43,
+      "high": 9.1,
+      "unit": "m/s2",
+      "registry": "P10",
+      "label": "dry-road braking capability: R13-H approval floor 6.43 (S01) to measured ~9.1 (S04)"
+    },
+    "a_drag": {
+      "cls": "SOURCE-SUPPORTED",
+      "low": null,
+      "high": null,
+      "unit": "m/s2",
+      "registry": "P03",
+      "label": "coast/drag deceleration, EPA road-load 5th-95th percentile at the scenario speed (S07)"
+    },
+    "f_auth": {
+      "cls": "EXPLICIT ASSUMPTION INTERVAL",
+      "low": 0.0,
+      "high": 1.0,
+      "unit": "-",
+      "registry": "P24",
+      "label": "assumption: authority transfer at fraction f of the TOR -> effective-control interval (R157 permits deactivation by holding the steering control before braking, \u00a76.2.5.2, or by a braking override, \u00a76.3.2); not identified from D003"
+    },
+    "a_sup": {
+      "cls": "EXPLICIT ASSUMPTION INTERVAL",
+      "low": 1.0,
+      "high": 3.0,
+      "unit": "m/s2",
+      "registry": "P25",
+      "label": "assumption interval for P2 supported deceleration; kept below the UN R157 emergency-manoeuvre threshold of 5.0 m/s2 (S02 \u00a75.3.1.1); no direct source for its magnitude"
+    }
+  },
+  "scenario_grid": {
+    "speeds_kmh": {
+      "60": "original UN R157 (00 series) ALKS speed limit, S31 \u00a75.2.3.1",
+      "100": "D003 motorway speed limit (S17)",
+      "130": "UN R157 Rev.1 maximum ALKS speed, S02 \u00a75.2.3.1"
+    },
+    "ttc_s": {
+      "2.0": "short budget; UN R157 Annex 3 uses TTC 2 s as its longitudinal danger threshold (S02)",
+      "3.0": "intermediate short budget (grid fill)",
+      "5.0": "intermediate budget (grid fill)",
+      "7.0": "D003 protocol TOR at TTC 7 s (S17)",
+      "10.0": "long budget (grid fill); not a regulatory TTC"
+    },
+    "friction": {
+      "1.0": "reference road friction used by the UN R157 Annex 3 benchmark (S02); non-binding for a_max <= 9.81",
+      "0.5": "reduced-friction scenario value (assumption, not a wet-road measurement); binding: mu*g = 4.905 m/s2"
+    }
+  },
+  "gravity_mps2": 9.81,
+  "validity_envelope": [
+    "stationary longitudinal hazard fully blocking the ego lane",
+    "no usable escape path: braking-only analysis",
+    "deterministic point-mass longitudinal approximation (no tyre, load-transfer or ABS dynamics)",
+    "full braking command (u = 1) after effective human control: capability bound, not observed human braking",
+    "zero acceleration during actuation delay and drag neglected after effective control (conservative)",
+    "drag held at its value at v0 during pre-control (slightly optimistic; <= 0.6 m/s2 over <= 3 s)",
+    "authority-transfer timing, t1 and t3 are explicit assumptions, not identified from any data",
+    "no detailed lateral dynamics and no human steering strategy",
+    "no probabilistic driver model; interval bounds are not confidence intervals",
+    "no D003 vehicle calibration; D003 values are used only to choose scenario values",
+    "no claim about production automated-driving systems; P0/P1/P2 are counterfactual branches"
+  ]
+}

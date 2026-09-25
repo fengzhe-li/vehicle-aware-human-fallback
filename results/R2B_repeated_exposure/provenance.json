@@ -1,0 +1,26 @@
+{
+  "archive_path": "data/external/d003/tu_delft_takeover.zip",
+  "archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "code_commit": "7662114faf10f4d8325409ecb3a66ef37daa0ed6",
+  "src_tree_dirty": false,
+  "ingestion": "src/data/d003_ingest.py (canonical); populations/windows: src/data/d003_populations.py",
+  "outputs": {
+    "trial_table.csv": "RAW; one row per trial with exposure, populations, outcomes (NaN outside each outcome's population)",
+    "exposure_summary.csv": "per outcome \u00d7 exposure; population per outcome as in summary.json['outcomes']",
+    "participant_slopes.csv": "primary outcomes; participants with \u2265 5 values",
+    "early_vs_late.csv": "participants with values in exposures (1, 2, 3) and (7, 8, 9)",
+    "exposure_models.csv": "primary outcomes; fitted only if exposure is separable from cell",
+    "multitor_sensitivity_t_button.csv": "TOR_ANCHORED vs TOR_ANCHORED with a single raw TOR value",
+    "cell_by_exposure_counts.csv": "RAW",
+    "figures/": "exposure_t_button_s.png, exposure_tor_to_lane_change_s.png, participant_slopes.png, cell_by_exposure_balance.png",
+    "summary.json": "machine-readable summary incl. definitions, windows, exclusions, limitations"
+  },
+  "known_semantic_limitations": [
+    "B17: accelerator/brake/steering channels are not driver-only; no control-channel quantity is used",
+    "B7: Manual_Start is an event marker; authority transfer UNRESOLVED",
+    "B11: scenario cells are aliased with road, speed, hazard state, lane configuration and automation-transition behaviour; cells are controls, not factors of interest",
+    "Exposure is chronological trial position; carry-over from the specific preceding scenario is not separable",
+    "Any practice or familiarisation drives before the recorded trials are not in the public data",
+    "B12: the owners' 466-trial analysis set is not reconstructed"
+  ]
+}

@@ -1,0 +1,18 @@
+variable,definition,unit,evidence_class,candidate_source,notes
+v0,Initial ego speed,m/s,OBSERVED or COUNTERFACTUAL,takeover datasets / scenario grid,Phase 1 core
+TTC0,Initial time-to-collision / scenario criticality,s,"OBSERVED, DERIVED or COUNTERFACTUAL",range/radar trajectories or scenario definition,Phase 1 core
+T_TOR,Time from TOR to hazard/required intervention,s,COUNTERFACTUAL + LITERATURE_CONSTRAINED,takeover literature,Scan e.g. 3/5/7/10 s initially; final grid to be frozen after Phase 0
+t_reaction,Driver reaction latency,s,OBSERVED or LITERATURE_CONSTRAINED,takeover datasets/literature,Fixed in Phase 1; distribution later
+mu,Road friction parameter,dimensionless,LITERATURE_CONSTRAINED / COUNTERFACTUAL,vehicle-dynamics references,"Sensitivity variable, not inferred from vehicle label"
+B_map,Driver braking command -> actual deceleration mapping,function/profile,LITERATURE_CONSTRAINED / COUNTERFACTUAL,SAE + EV dynamics datasets,Primary Phase 1A treatment
+a_max,Maximum achievable deceleration,m/s^2,LITERATURE_CONSTRAINED,vehicle tests / dynamics references,Can be held equal across profiles for mechanism isolation
+jerk,Rate of acceleration change,m/s^3,OBSERVED or DERIVED,vehicle dynamics traces,Outcome + profile descriptor
+withdrawal_policy,Automation control withdrawal mode,categorical,COUNTERFACTUAL,handover design literature,Immediate vs staged/overlap later
+M_mismatch,Driver expected-response vs actual-response mismatch,model parameter,COUNTERFACTUAL / DERIVED,future internal-model formulation,Set to 0 in Phase 1
+accel_authority,Propulsion acceleration capability,m/s^2 or profile,OBSERVED / LITERATURE_CONSTRAINED,vehicle data/specs/OpenLKA acceleration dataset,Phase 1B only
+collision,Collision indicator,binary,DERIVED,simulation,Primary outcome
+TTC_min,Minimum TTC,s,DERIVED,simulation / trajectory,Primary outcome
+stopping_margin,Remaining distance at full stop (negative if collision region crossed),m,DERIVED,simulation,Primary continuous safety outcome
+impact_speed,Speed at collision,m/s,DERIVED,simulation,Severity-sensitive outcome
+t_stabilise,Time to stable recovered control,s,DERIVED,project operational definition,Definition must be frozen before final analysis
+N_correction,Number of meaningful post-first-action corrections,count,DERIVED,control time series,Definition must be frozen before Phase 2/3

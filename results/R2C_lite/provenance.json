@@ -1,0 +1,31 @@
+{
+  "archive_path": "data/external/d003/tu_delft_takeover.zip",
+  "archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "questionnaire_member": "Driver takeover responses in conditionally automated driving/2. driver characteristics/2.2 driver_characteristic_answers.csv",
+  "r2b_trial_table": "results/R2B_repeated_exposure/trial_table.csv",
+  "r2b_trial_table_sha256": "99bb39a562e8ff2a752f84414448e0c3b07e9e6e17398a1e804ed600b2c1ef9d",
+  "code_commit": "49ed1f8b8825a49a28dd48f7ac29990f1573b9fa",
+  "src_tree_dirty": false,
+  "outputs": {
+    "participant_summary.csv": "one row per participant: t_button aggregates (primary and single-TOR population) joined to the pre-specified covariates",
+    "participant_associations.csv": "outcome x covariate x population; Spearman + bootstrap CI, OLS per SD + HC3 CI, Holm within family",
+    "carryover_models.csv": "exposure slope with and without carry-over terms (FE CR1 and REML random intercept), joint Wald test; both populations",
+    "carryover_coefficients.csv": "carry-over term estimates (s), relative to the reference level",
+    "carryover_prev_by_current_counts.csv": "previous x current cell trial counts (primary carry-over population)",
+    "multitor_sensitivity.csv": "primary vs multi-TOR exclusion population",
+    "summary.json": "machine-readable summary incl. definitions, windows, exclusions, decision rules, limitations"
+  },
+  "known_semantic_limitations": [
+    "Associational only; no causal claim about experience, mileage, ADAS use or carry-over",
+    "Secondary re-analysis: the dataset owners have already analysed driver characteristics against takeover timing (Liang et al., Applied Ergonomics 129:104603, 2025; only the abstract was read). These results are not novel evidence about participant characteristics",
+    "Covariates are single self-report items (n = 57); accu_km is past-12-month mileage, not accumulated km",
+    "Years of driving is strongly correlated with age; the two cannot be separated at n = 57 and age is not adjusted",
+    "Questionnaire `id` is joined to the trial filename `id_N`; the data dictionary describes it as the assigned participant id, but an identical id space is not stated explicitly",
+    "B7: t_button uses Manual_Start, an event marker; authority transfer UNRESOLVED",
+    "B17: no accelerator/brake/steering quantity is used",
+    "B11: scenario cells bundle density, n-back, road, speed, hazard state and automation-transition behaviour; 'previous cell' is a bundle, not a workload or density factor",
+    "Carry-over is limited to the immediately preceding cell's main effect; previous x current interactions are not identifiable and not fitted",
+    "Participant 28 had a ~50.7 h break before exposure 5; that trial keeps its nominal predecessor",
+    "B12: the owners' 466-trial analysis set is not reconstructed"
+  ]
+}

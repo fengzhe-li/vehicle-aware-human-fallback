@@ -1,0 +1,38 @@
+{
+  "archive_path": "data/external/d003/tu_delft_takeover.zip",
+  "archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "archive_source": "TU Delft / 4TU.ResearchData, DOI 10.4121/E853B4E6-CBA0-4E13-AC4B-506716DDD0FB",
+  "code_commit": "9d1c41d01a5a141f07020610c58879b76b214d11",
+  "src_tree_dirty": false,
+  "ingestion": "src/data/d003_ingest.py (canonical)",
+  "interpretation_rule": "B17: accelerator/brake/steering channels are not driver-only; no human-input inference",
+  "populations": {
+    "RAW": "every simulator CSV in the archive",
+    "TOR_PRESENT": "TOR column present in the file header",
+    "TOR_ANCHORED": "TOR anchor resolved (single value, or unique value at TTC 7.0 \u00b1 0.25 s)",
+    "OWNER_WINDOW_ELIGIBLE": "TOR_ANCHORED and lane change VALIDATED against lane_id and TOR < lane change (owners' published window; not handback-bounded)",
+    "LANE_CHANGE_ANCHORED": "OWNER_WINDOW_ELIGIBLE and lane change < handback",
+    "MANUAL_WINDOW_ELIGIBLE": "TOR_ANCHORED and single Manual_Start and handback defined and TOR < handback and Manual_Start < handback",
+    "OWNER_ANALYSIS_SET": "UNKNOWN / NOT RECONSTRUCTED (owner per-trial list not public)"
+  },
+  "windows": {
+    "POST_TOR_MANUAL": "[TOR, handback) where handback = first Manual_Stop after Manual_Start",
+    "POST_BUTTON_MANUAL": "[Manual_Start, handback); Manual_Start authority semantics UNRESOLVED",
+    "OWNER_TOR_TO_LANE_CHANGE": "[TOR, validated lane change] as published by the owners; requires OWNER_WINDOW_ELIGIBLE; not handback-bounded",
+    "MANUAL_TOR_TO_LANE_CHANGE": "[TOR, validated lane change] with lane change < handback; requires LANE_CHANGE_ANCHORED"
+  },
+  "unresolved_semantic_dependencies": [
+    "B17: accelerator, brake and steering channel authorship (automation / simulator / driver / mixed) UNRESOLVED",
+    "B6: brake channel physical meaning and unit UNRESOLVED",
+    "B7: Manual_Start as authority transfer UNRESOLVED (used only as a button/event marker)",
+    "B14: meaning of additional Manual_Stop values UNRESOLVED",
+    "B12: owners' 466-trial analysis set NOT RECONSTRUCTED"
+  ],
+  "outputs": {
+    "populations.csv": "RAW (all trials)",
+    "event_and_vehicle_state_metrics.csv": "RAW rows; t_button for TOR_ANCHORED; owner_* for OWNER_WINDOW_ELIGIBLE; manual_* for LANE_CHANGE_ANCHORED",
+    "control_channel_observations.csv": "MANUAL_WINDOW_ELIGIBLE; windows: pre-TOR [TOR-4, TOR-0.2], post-TOR [TOR, TOR+0.3), POST_TOR_MANUAL, OWNER_TOR_TO_LANE_CHANGE",
+    "channel_transition_pattern_by_cell.csv": "MANUAL_WINDOW_ELIGIBLE, grouped by scenario cell (descriptive)",
+    "channel_activity_diagnostics.csv": "MANUAL_WINDOW_ELIGIBLE; one row per trial x window (POST_TOR_MANUAL, POST_BUTTON_MANUAL and two historical comparators); authorship UNRESOLVED (B17)"
+  }
+}

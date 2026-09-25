@@ -1,0 +1,11 @@
+# Core scientific and numerical computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+sympy>=1.12
+
+# Data visualization and figure rendering
+matplotlib>=3.7.0
+
+# Testing and verification framework
+pytest>=7.4.0

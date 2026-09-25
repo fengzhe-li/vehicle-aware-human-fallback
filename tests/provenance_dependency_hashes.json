@@ -1,0 +1,82 @@
+{
+  "description": "Dependency-equivalence manifest for the R2A, R2B and R2C-lite result sets. Each code_commit is the historical development commit recorded in the result's provenance.json; those commits belong to the pre-release development history and are not part of this repository's Git history. Each sha256 is the SHA-256 of the dependency file's content at that historical commit. The provenance tests assert that the corresponding files in this release have exactly these hashes.",
+  "hash_algorithm": "sha256",
+  "results": {
+    "R2A": {
+      "results_dir": "results/R2A_event_vehicle_descriptives",
+      "code_commit": "9d1c41d01a5a141f07020610c58879b76b214d11",
+      "verified_by": "tests/test_r2a.py::test_r2a_provenance",
+      "note": "Run-relevant source dependencies whose content must equal the recorded historical commit.",
+      "dependencies": [
+        {
+          "path": "src/data/d003_ingest.py",
+          "sha256": "c41477862cf0a8c3537bb13fa604200a6cfc238a083ceb9f8db4f0b346919972"
+        },
+        {
+          "path": "src/data/d003_loader.py",
+          "sha256": "b674b29035b785c16870d65a988a926e2db539e8e33cae934f493759ccda50f9"
+        },
+        {
+          "path": "src/data/d003_populations.py",
+          "sha256": "471e75f0ab33262cabb05c5d4108ab7adfeeb7e28446121126a832b42a07bc50"
+        },
+        {
+          "path": "src/metrics/control_activity.py",
+          "sha256": "dd0e99dd91c3d46909f7f0f7aef9bcb2506abc6e510a85fcfd93df42216acc72"
+        },
+        {
+          "path": "src/experiments/r2a_event_vehicle_descriptives.py",
+          "sha256": "a0667d14b36c625d490017e17622fa3fccab70dec432d17c66dc4a5cc643260f"
+        }
+      ]
+    },
+    "R2B": {
+      "results_dir": "results/R2B_repeated_exposure",
+      "code_commit": "7662114faf10f4d8325409ecb3a66ef37daa0ed6",
+      "verified_by": "tests/test_r2b.py::test_r2b_provenance",
+      "note": "Run-relevant source dependencies whose content must equal the recorded historical commit.",
+      "dependencies": [
+        {
+          "path": "src/data/d003_ingest.py",
+          "sha256": "c41477862cf0a8c3537bb13fa604200a6cfc238a083ceb9f8db4f0b346919972"
+        },
+        {
+          "path": "src/data/d003_loader.py",
+          "sha256": "b674b29035b785c16870d65a988a926e2db539e8e33cae934f493759ccda50f9"
+        },
+        {
+          "path": "src/data/d003_populations.py",
+          "sha256": "471e75f0ab33262cabb05c5d4108ab7adfeeb7e28446121126a832b42a07bc50"
+        },
+        {
+          "path": "src/experiments/r2a_event_vehicle_descriptives.py",
+          "sha256": "a0667d14b36c625d490017e17622fa3fccab70dec432d17c66dc4a5cc643260f"
+        },
+        {
+          "path": "src/experiments/r2b_repeated_exposure.py",
+          "sha256": "6db85ddd3e2ca07c7835132450ff0db37a12dbd0585dccc71375effba7f81996"
+        }
+      ]
+    },
+    "R2C": {
+      "results_dir": "results/R2C_lite",
+      "code_commit": "49ed1f8b8825a49a28dd48f7ac29990f1573b9fa",
+      "verified_by": "tests/test_r2c_lite.py::test_r2c_provenance",
+      "note": "Run-relevant source dependencies whose content must equal the recorded historical commit.",
+      "dependencies": [
+        {
+          "path": "src/experiments/r2c_lite.py",
+          "sha256": "8a46568b5b83bc8f0733a85114f9fbbfd74e6ad729682895ca8742e068fdb392"
+        },
+        {
+          "path": "src/experiments/r2b_repeated_exposure.py",
+          "sha256": "6db85ddd3e2ca07c7835132450ff0db37a12dbd0585dccc71375effba7f81996"
+        },
+        {
+          "path": "src/experiments/r2a_event_vehicle_descriptives.py",
+          "sha256": "a0667d14b36c625d490017e17622fa3fccab70dec432d17c66dc4a5cc643260f"
+        }
+      ]
+    }
+  }
+}

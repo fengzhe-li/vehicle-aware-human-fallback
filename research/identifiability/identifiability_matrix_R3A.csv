@@ -1,0 +1,18 @@
+quantity,layer,r3a_identifiability,evidence_basis,what_would_change_it,registry_param_ids,matrix_row_ids
+a_pre,VEHICLE x TRANSITION,PARTIALLY IDENTIFIABLE,drag component measured (EPA); lift-off regen bounded 1-4; engine braking not established; automation component is a policy variable,documented transition policy + vehicle mode,P03;P04;P05;P06;P07,V01;V02;V03;V04;T04
+t2,VEHICLE,BOUNDED,hydraulic 0.05-0.17 s measured; regulatory 0.6 s upper bound,instrumented tests of brake-by-wire vehicles,P08,V08;V16
+t3,VEHICLE x HUMAN,PARTIALLY IDENTIFIABLE,combined human-vehicle build-up measured (0.05-1.26 s); vehicle-only component not separable,pedal-force and deceleration logging with robotic actuation,P09,V09
+a_max,VEHICLE x ENVIRONMENT,BOUNDED,6.43 approval floor to about 9.1 measured dry; 7.0-7.9 wet,current-fleet instrumented stops,P10;P11,V11;V12;V13
+jerk,VEHICLE x HUMAN,BOUNDED,derived from a_max and t3; comfort and regulatory reference values only,emergency jerk measurement in takeovers,P13,V10
+regen / one-pedal,VEHICLE,EXTERNALLY PARAMETERISED,1-4 m/s2 mode-dependent from small samples; timing effect on humans shown in simulator,multi-vehicle measured lift-off profiles,P04,V04;V05;V06
+blending,VEHICLE,NOT IDENTIFIABLE,proprietary; regulatory definition only,OEM data,,V17
+TOR timing,TRANSITION,IDENTIFIABLE,protocol value in D003 (7 s); design variable elsewhere,-,P16,T01
+authority transfer,TRANSITION,NOT IDENTIFIABLE,"R157 override defined, deactivation criteria unverified; D003 Manual_Start unresolved (B7); channels not driver-only (B17)",owner answers B1/B3; R157 full text,P20,T05;T06
+continued automation support,TRANSITION,PARTIALLY IDENTIFIABLE,required by R157 during transition; SUMO preparatory phase; D003 patterns undocumented,documented controller behaviour,P06,T04;T14
+withdrawal,TRANSITION,BOUNDED,immediate withdrawal is a counterfactual bound for regulated L3,-,P07,T08
+MRM,TRANSITION,EXTERNALLY PARAMETERISED,R157 aim <= 4.0 m/s2 after 10 s transition; SUMO default 1.5,R157 full text; ISO 23793-1 full text,P17;P18,T03;T09;T10
+v0,HAZARD,IDENTIFIABLE,direct in D003 and in any scenario grid,-,P01,H01
+TTC,HAZARD,IDENTIFIABLE,direct channel within its domain (B13),-,P16,H03
+distance,HAZARD,PARTIALLY IDENTIFIABLE,derived; hazard reference point undocumented,owner geometry,,H02
+mu,HAZARD,EXTERNALLY PARAMETERISED,not in simulator data; real sections 0.49-0.75,-,P12,H06
+escape-path availability,HAZARD,NOT IDENTIFIABLE,"needs hazard geometry and target-lane gaps (B5, B10)",owner geometry + laneGap semantics,P22,H05;H09;H10;H11

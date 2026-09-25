@@ -1,0 +1,9 @@
+parameter_name,symbol,unit,nominal_w0,nominal_w1,core_min,core_max,ext_min,ext_max,elasticity_w0,elasticity_w1,dominance_rank,provenance_class,claim_level,evidence_source,claim_bottleneck,validation_status
+Initial Cruising Velocity,v0,m/s,20.0,20.0,10.0,30.0,10.0,30.0,+0.4858,+0.5584,2,CORE_EMPIRICAL,TYPE 3,"Operational speed domain (36-108 km/h); standard road traffic bounds",NO,VALIDATED_DOMAIN
+Human Reaction Latency,t1,s,1.0,1.0,0.7,1.5,0.7,1.5,+0.4124,+0.3379,3,CORE_EMPIRICAL,TYPE 3,"Human factors takeover literature (L001, L014; D002, D003 parameter ranges)",NO,VALIDATED_DISTRIBUTION
+Pre-Human Deceleration,a_pre,m/s^2,0.0,1.5,0.0,3.0,0.0,3.0,0.0000,-0.0998,4,EMPIRICAL_RANGE,TYPE 3,"D004 EV kinematics telemetry & SAE coast-down literature (a_coast)",NO,VALIDATED_RANGE
+Brake Actuation Delay,t2,s,0.10,0.10,0.05,0.17,0.05,0.17,+0.0412,+0.0421,6,EMPIRICAL_RANGE,TYPE 3,"Paquette & Porter (2014) light vehicle hydraulic lag measurements",NO,VALIDATED_RANGE
+Brake Build-up Ramp,t3,s,0.30,0.30,0.30,0.30,0.10,0.50,+0.0605,+0.0617,5,COUNTERFACTUAL_SENSITIVITY,TYPE 2,"Engineering assumption; D001 gated/mixed 10Hz, D004 no sampled hard braking, D005 no brake channel",YES,UNRESOLVED_BOTTLENECK
+Maximum Deceleration,a_max,m/s^2,8.5,8.5,8.0,9.0,4.9,9.0,-0.4858,-0.4585,1,LITERATURE_CONSTRAINED,TYPE 3,"Vehicle dynamics passenger car emergency braking literature; dry vs wet scaling",NO,VALIDATED_LITERATURE
+Initial Path Curvature,K0,1/m,0.0,0.0,0.0,0.0,0.0,0.0,0.0000,0.0000,N/A,KINEMATIC_INVARIANT,TYPE 1,"B0 State-Mediation Invariance proof (effect is 100% mediated by longitudinal v0)",NO,STRUCTURAL_INVARIANT
+Resolvable Stopping Margin,dx_robust,m,8.5e-6,8.5e-6,8.0e-6,9.0e-6,4.9e-6,9.0e-6,<2.0e-7,<2.0e-7,N/A,DISCRETIZATION_ARTIFACT,TYPE 1,"A0 numerical grid specification (a_max * dt^2); converges to 0 as dt -> 0",NO,NUMERICAL_CONVERGENCE_PROVEN

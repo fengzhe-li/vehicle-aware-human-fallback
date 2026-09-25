@@ -1,0 +1,13 @@
+speed_kmh,group,n_configurations,p05_mps2,p25_mps2,median_mps2,p75_mps2,p95_mps2
+60,all,1537,0.1264,0.156,0.1733,0.1909,0.2267
+60,battery electric (road load only; regen NOT included),261,0.1112,0.1258,0.1333,0.1428,0.1619
+60,non-electric,1276,0.1486,0.1654,0.1791,0.1954,0.2296
+80,all,1537,0.1685,0.212,0.2367,0.2585,0.3021
+80,battery electric (road load only; regen NOT included),261,0.1447,0.1664,0.177,0.1902,0.2155
+80,non-electric,1276,0.2026,0.2251,0.2433,0.2636,0.3045
+100,all,1537,0.218,0.2805,0.3145,0.3439,0.4002
+100,battery electric (road load only; regen NOT included),261,0.188,0.2146,0.2313,0.2507,0.2952
+100,non-electric,1276,0.2647,0.3008,0.3242,0.3513,0.4042
+130,all,1537,0.3098,0.407,0.464,0.5061,0.5897
+130,battery electric (road load only; regen NOT included),261,0.2614,0.3027,0.3308,0.3695,0.4464
+130,non-electric,1276,0.3809,0.4381,0.4767,0.515,0.5953

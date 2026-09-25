@@ -1,0 +1,71 @@
+{
+  "description": "Pre-audit D003 outputs retained for audit history. Not current findings. Reproducible byte-for-byte with the legacy pipeline (src/experiments/h1_recovery_analysis.run_full_h1_analysis, src/experiments/h1_sensitivity_analysis.run_sensitivity_audit), which is HISTORICAL ONLY.",
+  "source_archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "files": {
+    "results/H1/event_times.csv": {
+      "sha256": "5d7e74246033fb00676be067d9ea17484da56391dcea23adff18f8c7f8ea84dc",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "T_first/T_effective from control channels (B17); T_stable columns WITHDRAWN"
+    },
+    "results/H1/action_sequence.csv": {
+      "sha256": "b4abdcc2459efa3525ff25f523579083c3ffcdaf9277886c2b4ed9243aa3e2aa",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "brake-first / steer-first ordering from control channels (B17)"
+    },
+    "results/H1/initial_control_metrics.csv": {
+      "sha256": "d5dd9d3127a1cd2e41b944e618431b795a760d08a772c969642ef432d0580baa",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "brake/steering rise and peaks attributed to the driver (B17)"
+    },
+    "results/H1/correction_metrics.csv": {
+      "sha256": "ba678a79acc9d61a9513a98ede1032a890eb09f0f9b986ce73101aa20ace90ce",
+      "status": "WITHDRAWN",
+      "reason": "full-record windows past handback; channel authorship (B17)"
+    },
+    "results/H1/stabilization_candidates.csv": {
+      "sha256": "99507ce6361f519f991adaa18e78180708a51da07957221a439cb9ba5d2b877b",
+      "status": "WITHDRAWN",
+      "reason": "T_stable: ~81% of values after handback"
+    },
+    "results/H1/participant_summary.csv": {
+      "sha256": "bd01efe2800d53711d8e0083577f827af18489e5ab6c96852df4135c48882e77",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "aggregates of the above"
+    },
+    "results/H1/scenario_summary.csv": {
+      "sha256": "ec22cef533bbdf0031d399437ed6026d3d86fefe7659394dbf6ddf51a287c9f0",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "aggregates of the above; cells aliased (B11)"
+    },
+    "results/H1_sensitivity/tfirst_threshold_sensitivity.csv": {
+      "sha256": "da5cea37bb2866174551eb1203142d88947c895672dc76bd0a7ccc762616d3e2",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "T_first from control channels (B17)"
+    },
+    "results/H1_sensitivity/teffective_definition_sensitivity.csv": {
+      "sha256": "75aebf1171edd5853fad29375920c7c12faeb8bece27c3745c06bd233fcde6ea",
+      "status": "INVALID / UNRESOLVED HUMAN-AUTHORSHIP SEMANTICS",
+      "reason": "anchored to control-channel onsets (B17)"
+    },
+    "results/H1_sensitivity/tstable_definition_sensitivity.csv": {
+      "sha256": "908b6e209faeefdaed7d544e238e1d800bccc3f4d374e7040fd3653e138425e2",
+      "status": "WITHDRAWN",
+      "reason": "T_stable window past handback"
+    },
+    "results/H1_sensitivity/correction_metric_sensitivity.csv": {
+      "sha256": "e5b18408313b3e74c280eecc148c4575bd0273d274bbb2b66f3a41add291566e",
+      "status": "WITHDRAWN",
+      "reason": "full-record windows; channel authorship (B17)"
+    },
+    "results/H1_sensitivity/scenario_repeated_measures.csv": {
+      "sha256": "a0505542c84fa3e2672b980137cbb74a9313adfb1e40d2524c95b80edca5cad7",
+      "status": "WITHDRAWN",
+      "reason": "causal workload/density contrasts; cells aliased incl. automation-transition behaviour (B11)"
+    },
+    "research/data_matrix/d003_trial_qa.csv": {
+      "sha256": "0cd8af19c6349224ff3a00e0e6026ea9f63f3c9a719eb355b6f509591e0cc4aa",
+      "status": "HISTORICAL ONLY",
+      "reason": "collision_outcome / COLLISION_FAILURE labels WITHDRAWN (B10); legacy QA"
+    }
+  }
+}

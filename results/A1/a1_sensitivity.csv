@@ -1,0 +1,5 @@
+check,description,w0_stopping_margin_diff_m,w1_stopping_margin_diff_m,withdrawal_effect_shift_m
+v_rolloff_active,"v_threshold=5.0m/s, floor=0.2 vs inactive",-0.7251256926434664,-0.7251256926434806,-1.4210854715202004e-14
+comparator_a_reaction_time,t_reaction 0.7s vs 1.5s perturbation (0.8s spread),-15.999999999999943,,15.999999999999943
+comparator_b_dt_halving,dt=0.0005s vs dt=0.001s numerical noise floor,0.005000265605310972,0.0045002656214734316,0.005000265605310972
+friction_wet_asphalt,mu=0.7 (a_max=5.95 m/s^2) vs mu=1.0,-10.110596007200215,-8.194629620643667,1.9159663865565477

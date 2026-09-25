@@ -1,0 +1,10 @@
+density,nback,n_trials,accelerator_channel_drops_to_zero_within_0p3s,brake_channel_active_within_0p3s,steering_channel_moving_before_tor,earliest_channel_activity_within_0p3s
+0,0,56,0,0,0,0
+0,1,57,57,1,57,0
+0,2,54,53,0,0,0
+10,0,53,53,53,53,53
+10,1,57,0,0,0,0
+10,2,57,57,0,0,0
+20,0,50,0,0,50,0
+20,1,51,51,24,50,4
+20,2,57,50,29,28,21

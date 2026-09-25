@@ -1,0 +1,3 @@
+analysis,n_trials,n_participants,median_s,q1_s,q3_s,exposure_slope_per_trial,ci95_low,ci95_high,conclusion
+primary: protocol-resolved TOR,492,57,1.6499290466000005,1.2501821518000025,1.9999299049499975,-0.03288214851294367,-0.058404688941526985,-0.007359608084360349,decrease with exposure (95% CI below 0)
+sensitivity: exclude all multi-TOR trials,472,57,1.6498355865499992,1.2499709129250016,1.9999299049499975,-0.03555002108509893,-0.061597253205072394,-0.009502788965125467,decrease with exposure (95% CI below 0)

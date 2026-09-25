@@ -1,0 +1,349 @@
+{
+  "n_trials": 492,
+  "n_participants": 57,
+  "thresholds": {
+    "brake": 15.0,
+    "steer_rad": 0.05,
+    "accelerator": 0.02,
+    "stereotypy_fraction": 0.9,
+    "stereotypy_iqr_s": 0.1
+  },
+  "criteria": {
+    "a1_documented_as_control_input": "data dictionary documents the channel as a control-input quantity",
+    "a2_no_automation_signature_after_MS": "no scenario cell shows cell-locked stereotyped post-MS activity (>= 90% of trials with onset IQR <= 0.1 s)",
+    "a3_participant_structure": "post-MS onset latency: participant ICC(1) > 0.1 and cell eta^2 < 0.5",
+    "a4_mode_locked_automation_content": "automation-like content present while automation drives is absent between MS and handback",
+    "a5_vehicle_response_consistency": "post-MS channel activity is followed by the expected vehicle response (consistency only, not authorship)",
+    "classes": {
+      "DRIVER_AUTHORSHIP_SUPPORTED": "a1-a5 all hold",
+      "DRIVER_AUTHORSHIP_PLAUSIBLE_BUT_UNVERIFIED": "a1 and a2 hold, but a3 or a4 is not established",
+      "MIXED_OR_AMBIGUOUS": "a2 fails, or evidence conflicts",
+      "NOT_IDENTIFIABLE": "a1 fails (semantics undocumented) and behaviour cannot discriminate"
+    }
+  },
+  "state_flag_values": [
+    "2.0"
+  ],
+  "mode_locking": {
+    "accelerator_automation_content_before_TOR_and_after_handback": false,
+    "torque_offset_present_pre_TOR_and_absent_TOR_to_MS": false
+  },
+  "event_structure": {
+    "brake_onset_tor_ms_rel_tor_s": {
+      "event": "brake_onset_tor_ms_rel_tor_s",
+      "n": 294,
+      "median_s": 1.1002339124755736,
+      "iqr_s": [
+        0.3999474048912841,
+        1.2006289958587155
+      ],
+      "participant_icc1": -0.1120771892975589,
+      "cell_eta2": 0.759539555616196
+    },
+    "accel_release_rel_tor_s": {
+      "event": "accel_release_rel_tor_s",
+      "n": 492,
+      "median_s": 0.04992997645814157,
+      "iqr_s": [
+        0.0009683966877851446,
+        1.0501241683750004
+      ],
+      "participant_icc1": -0.11786326040896133,
+      "cell_eta2": 0.9404993777036996
+    },
+    "brake_onset_after_ms_rel_ms_s": {
+      "event": "brake_onset_after_ms_rel_ms_s",
+      "n": 426,
+      "median_s": 0.04982447626628428,
+      "iqr_s": [
+        0.0008221864668582768,
+        0.35053330657092996
+      ],
+      "participant_icc1": -0.010323919240621402,
+      "cell_eta2": 0.24988555130105028
+    },
+    "brake_straddle_release_rel_ms_s": {
+      "event": "brake_straddle_release_rel_ms_s",
+      "n": 264,
+      "median_s": 0.9493143558337156,
+      "iqr_s": [
+        0.8001115918284976,
+        1.1002384424418574
+      ],
+      "participant_icc1": 0.20733197060295178,
+      "cell_eta2": 0.10272758741787785
+    },
+    "brake_clean_onset_rel_ms_s": {
+      "event": "brake_clean_onset_rel_ms_s",
+      "n": 299,
+      "median_s": 1.200891971567433,
+      "iqr_s": [
+        0.5253764391244253,
+        2.1255908012174327
+      ],
+      "participant_icc1": 0.006581757899912617,
+      "cell_eta2": 0.05199641609680375
+    },
+    "accel_straddle_drop_rel_ms_s": {
+      "event": "accel_straddle_drop_rel_ms_s",
+      "n": 120,
+      "median_s": 0.2995738982999967,
+      "iqr_s": [
+        0.10080540177442465,
+        0.5495001077918573
+      ],
+      "participant_icc1": -0.17032885344672827,
+      "cell_eta2": 0.22726453454240972
+    },
+    "accel_onset_after_ms_rel_ms_s": {
+      "event": "accel_onset_after_ms_rel_ms_s",
+      "n": 476,
+      "median_s": 1.2008879184837173,
+      "iqr_s": [
+        0.08743321895814216,
+        4.199849724791856
+      ],
+      "participant_icc1": 0.08630337214411458,
+      "cell_eta2": 0.12287862075308177
+    },
+    "steer_onset_after_ms_rel_ms_s": {
+      "event": "steer_onset_after_ms_rel_ms_s",
+      "n": 492,
+      "median_s": 2.000353574716284,
+      "iqr_s": [
+        1.1499097347162817,
+        3.1631367206337178
+      ],
+      "participant_icc1": 0.15595139720422205,
+      "cell_eta2": 0.09164643637125798
+    },
+    "indicator_left_onset_rel_ms_s": {
+      "event": "indicator_left_onset_rel_ms_s",
+      "n": 372,
+      "median_s": 2.049983262983716,
+      "iqr_s": [
+        1.3998944759587175,
+        3.250301241883143
+      ],
+      "participant_icc1": 0.19344355993257334,
+      "cell_eta2": 0.032804529042062124
+    },
+    "steer_onset_to_lane_crossing_s": {
+      "event": "steer_onset_to_lane_crossing_s",
+      "n": 478,
+      "median_s": 2.3495273589999996,
+      "iqr_s": [
+        1.9500250816325675,
+        3.2002398371465013
+      ],
+      "participant_icc1": 0.062209798485858066,
+      "cell_eta2": 0.10566915202557427
+    },
+    "t_button_s": {
+      "event": "t_button_s",
+      "n": 492,
+      "median_s": 1.6499290466000005,
+      "iqr_s": [
+        1.2501821518000025,
+        1.9999299049499975
+      ],
+      "participant_icc1": 0.12797340739769048,
+      "cell_eta2": 0.14188579044367278
+    },
+    "brake_straddle_release_rel_tor_s": {
+      "event": "brake_straddle_release_rel_tor_s",
+      "n": 264,
+      "median_s": 2.800138831108141,
+      "iqr_s": [
+        2.287089586241284,
+        3.599799752241859
+      ],
+      "participant_icc1": 0.1874418103374614,
+      "cell_eta2": 0.15832292316615407
+    }
+  },
+  "fractions": {
+    "brake_active_pre_tor": 0.266260162601626,
+    "brake_onset_in_tor_ms": 0.5975609756097561,
+    "brake_active_at_ms": 0.5386178861788617,
+    "brake_onset_after_ms": 0.8658536585365854,
+    "brake_saturated_400": 0.006097560975609756,
+    "steer_moved_tor_ms": 0.008130081300813009,
+    "indicator_left_before_ms": 0.0
+  },
+  "straddle": {
+    "brake_active_at_ms_fraction": 0.5386178861788617,
+    "brake_straddle_release_rel_ms": {
+      "event": "brake_straddle_release_rel_ms_s",
+      "n": 264,
+      "median_s": 0.9493143558337156,
+      "iqr_s": [
+        0.8001115918284976,
+        1.1002384424418574
+      ],
+      "participant_icc1": 0.20733197060295178,
+      "cell_eta2": 0.10272758741787785
+    },
+    "brake_straddle_release_sd_rel_ms_vs_rel_tor": [
+      1.1716518254150659,
+      1.4466453984583074
+    ],
+    "brake_max_step_near_ms_median": 1.2746858596499973,
+    "accel_active_at_ms_fraction": 0.24390243902439024,
+    "accel_active_at_ms_by_cell": {
+      "d0_n0": 0.32142857142857145,
+      "d0_n1": 0.017543859649122806,
+      "d0_n2": 0.25925925925925924,
+      "d10_n0": 0.0,
+      "d10_n1": 0.08771929824561403,
+      "d10_n2": 0.0,
+      "d20_n0": 0.86,
+      "d20_n1": 0.43137254901960786,
+      "d20_n2": 0.2982456140350877
+    },
+    "interpretation": "brake/accelerator content present at MS continues smoothly across the switch and releases later: the channels are not driver-only at MS"
+  },
+  "geometry": {
+    "hazard_station_sd_plus_m_median": 58.47630309512215,
+    "hazard_station_sd_minus_m_median": 7.791757222931762,
+    "d_construction_rate_per_abscissa_median": 0.7598665815405792,
+    "d_construction_at_tor_m_median": 177.454711914,
+    "gap_zero_fraction_by_cell": {
+      "d_follow": {
+        "d0_n0": 0.9972826036791922,
+        "d0_n1": 0.9079903147699758,
+        "d0_n2": 0.920693342506113,
+        "d10_n0": 0.12363387978142076,
+        "d10_n1": 0.7752126366950183,
+        "d10_n2": 0.45390070921985815,
+        "d20_n0": 0.12271106176866471,
+        "d20_n1": 0.12950138504155126,
+        "d20_n2": 0.321652719665272
+      },
+      "d_lead_next": {
+        "d0_n0": 0.18157256439448108,
+        "d0_n1": 0.14085297418630752,
+        "d0_n2": 0.21875629169295197,
+        "d10_n0": 0.11714770797962648,
+        "d10_n1": 0.1657142857142857,
+        "d10_n2": 0.10526315789473684,
+        "d20_n0": 0.12181477209515396,
+        "d20_n1": 0.13522427440633245,
+        "d20_n2": 0.13527851458885942
+      },
+      "d_follow_next": {
+        "d0_n0": 0.9234436865283895,
+        "d0_n1": 0.792089791555318,
+        "d0_n2": 0.997444089456869,
+        "d10_n0": 0.1701534170153417,
+        "d10_n1": 0.15593434343434343,
+        "d10_n2": 0.13027295285359802,
+        "d20_n0": 0.14122261685056842,
+        "d20_n1": 0.1671751067724222,
+        "d20_n2": 0.12204103103629668
+      }
+    },
+    "gap_value_before_zero_median_m": {
+      "d_follow": 154.742904663025,
+      "d_lead_next": 40.94104016384723,
+      "d_follow_next": 46.77648925785
+    },
+    "gap_min_nonzero_m": {
+      "d_follow": 0.422423988581,
+      "d_lead_next": 0.000121999997646,
+      "d_follow_next": 0.000365999992937
+    }
+  },
+  "steering_mode_content": {
+    "pre_tor_mean_angle_cell_eta2": 0.9951329133959977,
+    "pre_tor_mean_angle_by_cell": {
+      "d0_n0": [
+        0.07469246722757633,
+        4.387632209529313e-06
+      ],
+      "d0_n1": [
+        0.15866677482657898,
+        0.0009005855965658061
+      ],
+      "d0_n2": [
+        9.21673262139684e-08,
+        5.553217316303989e-06
+      ],
+      "d10_n0": [
+        0.048836564142752635,
+        0.0008502826584748727
+      ],
+      "d10_n1": [
+        1.067281289684634e-06,
+        5.063788112901371e-06
+      ],
+      "d10_n2": [
+        0.06753634720256185,
+        6.368383768426411e-06
+      ],
+      "d20_n0": [
+        0.06345810334345395,
+        0.0004811591566756812
+      ],
+      "d20_n1": [
+        0.03561681929032273,
+        0.01786939655290963
+      ],
+      "d20_n2": [
+        -7.176270832824696e-05,
+        0.006816030383824414
+      ]
+    },
+    "step_at_tor_gt_0p03_rad_by_cell": {
+      "d0_n0": 0.0,
+      "d0_n1": 1.0,
+      "d0_n2": 0.0,
+      "d10_n0": 1.0,
+      "d10_n1": 0.0,
+      "d10_n2": 0.0,
+      "d20_n0": 1.0,
+      "d20_n1": 0.5294117647058824,
+      "d20_n2": 0.0
+    },
+    "steer_std_tor_ms_median": 0.0011176733783017563
+  },
+  "handback_window": {
+    "accel_gt_threshold_after_handback_fraction": 0.8252032520325203,
+    "accel_gt_threshold_pre_tor_fraction": 1.0
+  },
+  "coupling_median": {
+    "brake_decel_tor_ms": 0.9869714250301409,
+    "brake_decel_post_ms": 0.8561587645234187
+  },
+  "authorship_classification_rule": {
+    "brake": "MIXED_OR_AMBIGUOUS",
+    "accelerator": "MIXED_OR_AMBIGUOUS",
+    "steering_wheel_angle": "DRIVER_AUTHORSHIP_SUPPORTED",
+    "steering_torque": "NOT_IDENTIFIABLE",
+    "left_indicator": "DRIVER_AUTHORSHIP_SUPPORTED",
+    "state_flag": "NOT_IDENTIFIABLE"
+  },
+  "review_overrides": {
+    "steering_wheel_angle": {
+      "class": "DRIVER_AUTHORSHIP_PLAUSIBLE_BUT_UNVERIFIED",
+      "reason": "rule verdict SUPPORTED not accepted: while automation drives, the angle is cell-locked (pre-TOR mean angle near-identical within a scenario cell, eta^2 ~1) and changes at TOR in whole cells only, so the same channel carries scenario/automation-driven content under undocumented logic; post-MS onset ICC(1) (~0.16) is only marginally above the 0.1 criterion"
+    },
+    "left_indicator": {
+      "class": "DRIVER_AUTHORSHIP_PLAUSIBLE_BUT_UNVERIFIED",
+      "reason": "channel is not in the data dictionary (a1 fails); the 1 = left mapping is inferred; behaviour (never before MS, not stereotyped, precedes lane crossing) is corroborative only"
+    }
+  },
+  "authorship_classification": {
+    "brake": "MIXED_OR_AMBIGUOUS",
+    "accelerator": "MIXED_OR_AMBIGUOUS",
+    "steering_wheel_angle": "DRIVER_AUTHORSHIP_PLAUSIBLE_BUT_UNVERIFIED",
+    "steering_torque": "NOT_IDENTIFIABLE",
+    "left_indicator": "DRIVER_AUTHORSHIP_PLAUSIBLE_BUT_UNVERIFIED",
+    "state_flag": "NOT_IDENTIFIABLE"
+  },
+  "brake_magnitude": {
+    "class": "NOT_IDENTIFIABLE",
+    "reason": "unit conflict (dictionary: force N; owners' paper: pedal position), automation brake content straddles MS, max value 400 reached in 0.6% of trials (possible cap)"
+  },
+  "not_authorship_evidence": "correlations and vehicle-response coupling are consistency checks only"
+}

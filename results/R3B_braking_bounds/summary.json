@@ -1,0 +1,105 @@
+{
+  "label": "Interval-bounded longitudinal braking recoverability slice",
+  "not": [
+    "a probability model",
+    "a claim that human fallback succeeds",
+    "a recoverability envelope",
+    "a Human Fallback Safety Envelope"
+  ],
+  "success_definition": {
+    "standstill_margin_m": 2.0,
+    "u_brake": 1.0,
+    "class_standstill_margin": "EXPLICIT ASSUMPTION INTERVAL",
+    "class_u_brake": "MODEL CONDITION (definition of this slice, not evidence)",
+    "definition": "speed reaches zero at least 2.0 m before the stationary obstacle; T_available = TTC at TOR (constant-velocity reference); T_required = (D_stop + 2.0 m) / v0"
+  },
+  "classification_rule": {
+    "ROBUSTLY SATISFIED": "worst-case (conservative) time margin > +epsilon",
+    "ROBUSTLY UNSATISFIED": "best-case (optimistic) time margin < -epsilon",
+    "PARAMETER-SENSITIVE": "otherwise (bounds straddle or touch the +-epsilon band)",
+    "epsilon": 0.01,
+    "margin_units": "s",
+    "boundary_flag": "|worst| <= epsilon or |best| <= epsilon"
+  },
+  "bound_method": "corner evaluation, valid only where the analytic-derivative monotonicity guard passes (fail-closed); not a general constrained-bound search",
+  "bound_methods": {
+    "main_domain": "monotone_endpoint_bound",
+    "t1_high_4s_supplement": {
+      "60|1.0|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "60|1.0|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "60|1.0|P1": "monotone_endpoint_bound",
+      "60|1.0|P2|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "60|1.0|P2|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "60|0.5|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "60|0.5|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "60|0.5|P1": "monotone_endpoint_bound",
+      "60|0.5|P2|AUTH_AT_EFFECTIVE": "stationary_point_t1_bound",
+      "60|0.5|P2|AUTH_UNCERTAIN": "stationary_point_t1_bound",
+      "100|1.0|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "100|1.0|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "100|1.0|P1": "monotone_endpoint_bound",
+      "100|1.0|P2|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "100|1.0|P2|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "100|0.5|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "100|0.5|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "100|0.5|P1": "monotone_endpoint_bound",
+      "100|0.5|P2|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "100|0.5|P2|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "130|1.0|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "130|1.0|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "130|1.0|P1": "monotone_endpoint_bound",
+      "130|1.0|P2|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "130|1.0|P2|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "130|0.5|P0|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "130|0.5|P0|AUTH_UNCERTAIN": "monotone_endpoint_bound",
+      "130|0.5|P1": "monotone_endpoint_bound",
+      "130|0.5|P2|AUTH_AT_EFFECTIVE": "monotone_endpoint_bound",
+      "130|0.5|P2|AUTH_UNCERTAIN": "monotone_endpoint_bound"
+    },
+    "definitions": {
+      "monotone_endpoint_bound": "corner evaluation inside the guarded monotone domain",
+      "stationary_point_t1_bound": "corners of all other (guard-monotone) parameters x {t1 endpoints, interior roots of the exact dT/dt1}"
+    }
+  },
+  "interval_method": "exact min/max over all corners of the parameter box; verified by a 4-point-per-dimension interior grid; no distributions",
+  "cross_check": {
+    "tolerance_rel": 0.001,
+    "max_rel_diff": 0.0002249
+  },
+  "n_scenarios": 150,
+  "classification_counts": {
+    "ROBUSTLY UNSATISFIED": 45,
+    "PARAMETER-SENSITIVE": 47,
+    "ROBUSTLY SATISFIED": 58
+  },
+  "branches": {
+    "P0|AUTH_AT_EFFECTIVE": "automation holds speed (net 0) until authority transfer at effective human braking; equals the legacy W0 pre-control behaviour",
+    "P0|AUTH_UNCERTAIN": "automation holds speed until authority transfer at f*t1, f in [0, 1]; drag only afterwards",
+    "P1": "automation ceases propulsion at TOR; drag only until effective braking. Authority timing has no longitudinal effect because both sides of it are drag. Lift-off regen / engine braking excluded, so this is the powertrain-conservative passive case",
+    "P2|AUTH_AT_EFFECTIVE": "automation applies net deceleration a_sup until effective human braking",
+    "P2|AUTH_UNCERTAIN": "automation applies a_sup until authority transfer at f*t1, then drag only"
+  },
+  "blocked_inputs_not_used": {
+    "u_eff": "human takeover braking-strength distribution (P14)",
+    "j_brake": "braking jerk as an independent input (P13)",
+    "a_auto_max": "ISO 15622 ACC numeric limits (P19, secondary only)",
+    "TOT": "abstract-only takeover-time distribution (P21)",
+    "a_engine_brake": "engine braking magnitude (P05)",
+    "v_rolloff": "regen low-speed roll-off (P15)",
+    "a_liftoff": "lift-off regenerative deceleration (P04; excluded, so P1 uses drag only)",
+    "d003_vehicle": "unidentified D003 vehicle properties (V21)"
+  },
+  "validity_envelope": [
+    "stationary longitudinal hazard fully blocking the ego lane",
+    "no usable escape path: braking-only analysis",
+    "deterministic point-mass longitudinal approximation (no tyre, load-transfer or ABS dynamics)",
+    "full braking command (u = 1) after effective human control: capability bound, not observed human braking",
+    "zero acceleration during actuation delay and drag neglected after effective control (conservative)",
+    "drag held at its value at v0 during pre-control (slightly optimistic; <= 0.6 m/s2 over <= 3 s)",
+    "authority-transfer timing, t1 and t3 are explicit assumptions, not identified from any data",
+    "no detailed lateral dynamics and no human steering strategy",
+    "no probabilistic driver model; interval bounds are not confidence intervals",
+    "no D003 vehicle calibration; D003 values are used only to choose scenario values",
+    "no claim about production automated-driving systems; P0/P1/P2 are counterfactual branches"
+  ]
+}

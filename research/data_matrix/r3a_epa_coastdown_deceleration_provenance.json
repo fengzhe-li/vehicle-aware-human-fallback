@@ -1,0 +1,18 @@
+{
+  "source": "US EPA Test Car List, model year 2024 (file dated 2025-05)",
+  "source_url": "https://www.epa.gov/system/files/documents/2025-05/24-testcar-2025-05.xlsx",
+  "source_sha256": "e3a5378fa5e6820861d705e36fd2f2046234be8d050026bcfde29f0b8e63a6f9",
+  "definition": "deceleration = (A + B v + C v^2) / equivalent test weight; coast-down road load only",
+  "unit_conversions": {
+    "lbf_to_N": 4.4482216152605,
+    "lb_to_kg": 0.45359237,
+    "mph_to_mps": 0.44704
+  },
+  "assumptions": [
+    "mass = equivalent test weight; rotational inertia not added (values slightly high)",
+    "level road, still air",
+    "deduplicated to unique make, model, test weight and coefficients"
+  ],
+  "scope_limitation": "bounds the drag / coast component of a_pre only; excludes engine braking, regenerative and one-pedal deceleration, and automation braking",
+  "code": "src/experiments/r3a_coastdown_epa.py"
+}

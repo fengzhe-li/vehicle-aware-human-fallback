@@ -1,0 +1,9 @@
+metric_type,gap_threshold_deg,gap_threshold_rad,acute_window_s,acute_raw_median,acute_raw_iqr,acute_filt_median,acute_filt_iqr,full_raw_median,full_raw_iqr,full_filt_median,full_filt_iqr
+steering_wheel_reversals,1.0,0.017453292519943295,8.0,3.0,2.0,3.0,2.0,16.0,8.0,15.0,6.0
+steering_wheel_reversals,2.0,0.03490658503988659,8.0,2.0,2.0,2.0,2.0,13.0,7.75,13.0,6.0
+steering_wheel_reversals,3.0,0.05235987755982989,8.0,2.0,1.0,2.0,1.0,12.0,6.0,11.0,5.0
+steering_wheel_reversals,5.0,0.08726646259971647,8.0,1.0,1.0,1.0,2.0,9.0,5.0,9.0,4.0
+brake_reapplications_and_peaks,,,,,,,,2.0,4.0,4.0,3.0
+brake_reapplications_and_peaks,,,,,,,,2.0,4.0,3.0,3.0
+brake_reapplications_and_peaks,,,,,,,,2.0,4.0,3.0,3.0
+brake_reapplications_and_peaks,,,,,,,,1.0,3.75,3.0,2.0

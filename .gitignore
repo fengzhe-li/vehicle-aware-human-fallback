@@ -1,0 +1,52 @@
+# data
+data/external/*
+data/processed/*
+!data/external/.gitkeep
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs and editor swap files
+*.log
+*.swp
+*.swo
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
+
+# simulation outputs
+results/*
+!results/.gitkeep
+!results/A1/
+!results/A1/**
+!results/H1/
+!results/H1/**
+!results/H1_sensitivity/
+!results/H1_sensitivity/**
+!results/R1_ingestion_validation/
+!results/R1_ingestion_validation/**
+!results/R2A_event_vehicle_descriptives/
+!results/R2A_event_vehicle_descriptives/**
+!results/historical_outputs_manifest.json
+!results/HISTORICAL_OUTPUTS_MANIFEST.md
+!results/R2B_repeated_exposure/
+!results/R2B_repeated_exposure/**
+!results/R2C_lite/
+!results/R2C_lite/**
+!results/R3B_braking_bounds/
+!results/R3B_braking_bounds/**
+!results/R4V_channel_authorship/
+!results/R4V_channel_authorship/**
+!results/R4V_steering_sequence/
+!results/R4V_steering_sequence/**

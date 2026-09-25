@@ -1,0 +1,244 @@
+{
+  "framing": "Repeated-exposure / within-participant adaptation in the D003 simulated takeover task. Associational; not causal learning; not vehicle-specific familiarity.",
+  "exposure_definition": "chronological position (1\u20139) of each participant's trial by recording start time",
+  "order_reconstructable": true,
+  "exposure_separable_from_cell": true,
+  "order_balance": {
+    "n_participants": 57,
+    "trials_per_participant": {
+      "9": 57
+    },
+    "distinct_cells_per_participant": {
+      "9": 57
+    },
+    "n_distinct_order_sequences": 20,
+    "cell_x_exposure_min": 4,
+    "cell_x_exposure_max": 8,
+    "cramer_v_cell_exposure": 0.0496,
+    "chi2_p_cell_exposure": 1.0,
+    "vif_exposure_given_participant_and_cell": 1.0078,
+    "trials_after_break_over_60_min": [
+      {
+        "participant_id": 28,
+        "exposure": 5,
+        "gap_from_previous_trial_min": 3039.1
+      }
+    ]
+  },
+  "populations": {
+    "RAW": 513,
+    "TOR_ANCHORED": 492,
+    "TOR_ANCHORED_single_raw_TOR": 472,
+    "OWNER_WINDOW_ELIGIBLE": 478,
+    "LANE_CHANGE_ANCHORED": 477,
+    "MANUAL_WINDOW_ELIGIBLE": 492,
+    "n_t_button_s": 492,
+    "n_tor_to_lane_change_s": 477,
+    "n_min_ttc_s": 478,
+    "n_vehicle_max_decel_mps2": 478,
+    "n_vehicle_max_accel_mps2": 478,
+    "exclusions_t_button": {
+      "MISSING_TOR_COLUMN": 15,
+      "MULTI_UNRESOLVED": 6
+    },
+    "exclusions_tor_to_lane_change": {
+      "NO_TOR_ANCHOR": 21,
+      "LANE_CHANGE_ABSENT_COLUMN": 13,
+      "LANE_CHANGE_CLOCK_EXCEPTION": 1,
+      "AT_OR_AFTER_HANDBACK": 1
+    }
+  },
+  "outcomes": {
+    "t_button_s": {
+      "role": "primary",
+      "definition": "Manual_Start \u2212 selected TOR (s); Manual_Start is a mode-switch event marker, authority UNRESOLVED (B7)",
+      "population": "TOR_ANCHORED (single TOR, or unique protocol-TTC match)",
+      "window": "event difference"
+    },
+    "tor_to_lane_change_s": {
+      "role": "primary",
+      "definition": "validated lane change \u2212 selected TOR (s)",
+      "population": "LANE_CHANGE_ANCHORED (lane change VALIDATED against lane_id and before handback)",
+      "window": "MANUAL_TOR_TO_LANE_CHANGE"
+    },
+    "min_ttc_s": {
+      "role": "secondary (descriptive)",
+      "definition": "minimum Time_TTC over samples with distance > 0, speed > 0, TTC > 0 (s)",
+      "population": "OWNER_WINDOW_ELIGIBLE",
+      "window": "OWNER_TOR_TO_LANE_CHANGE (owners' published window; not handback-bounded)"
+    },
+    "vehicle_max_decel_mps2": {
+      "role": "secondary (descriptive; vehicle state)",
+      "definition": "\u2212min longitudinal acceleration (m/s\u00b2); vehicle kinematics, NOT driver braking intensity (B17)",
+      "population": "OWNER_WINDOW_ELIGIBLE",
+      "window": "OWNER_TOR_TO_LANE_CHANGE"
+    },
+    "vehicle_max_accel_mps2": {
+      "role": "secondary (descriptive; vehicle state)",
+      "definition": "max longitudinal acceleration (m/s\u00b2); vehicle kinematics (B17)",
+      "population": "OWNER_WINDOW_ELIGIBLE",
+      "window": "OWNER_TOR_TO_LANE_CHANGE"
+    }
+  },
+  "model": "OLS, participant fixed intercepts, scenario-cell indicators, linear exposure; CR1 participant-clustered SE",
+  "models": [
+    {
+      "outcome": "t_button_s",
+      "cell_controls": true,
+      "n_trials": 492,
+      "n_participants": 57,
+      "exposure_slope_per_trial": -0.03288214851294367,
+      "se_cluster": 0.012740625821175477,
+      "ci95_low": -0.058404688941526985,
+      "ci95_high": -0.007359608084360349,
+      "p_value": 0.012501779789843482,
+      "conclusion": "decrease with exposure (95% CI below 0)"
+    },
+    {
+      "outcome": "t_button_s",
+      "cell_controls": false,
+      "n_trials": 492,
+      "n_participants": 57,
+      "exposure_slope_per_trial": -0.03224340057625739,
+      "se_cluster": 0.01262581690240487,
+      "ci95_low": -0.057535951103872524,
+      "ci95_high": -0.006950850048642248,
+      "p_value": 0.013405685534453348,
+      "conclusion": "decrease with exposure (95% CI below 0)"
+    },
+    {
+      "outcome": "tor_to_lane_change_s",
+      "cell_controls": true,
+      "n_trials": 477,
+      "n_participants": 57,
+      "exposure_slope_per_trial": 0.09160648682144994,
+      "se_cluster": 0.10866482224828665,
+      "ci95_low": -0.126075309812684,
+      "ci95_high": 0.3092882834555839,
+      "p_value": 0.40280434970212764,
+      "conclusion": "no clear linear exposure association (95% CI includes 0)"
+    },
+    {
+      "outcome": "tor_to_lane_change_s",
+      "cell_controls": false,
+      "n_trials": 477,
+      "n_participants": 57,
+      "exposure_slope_per_trial": 0.09013744284146176,
+      "se_cluster": 0.1175167024924598,
+      "ci95_low": -0.1452768007361649,
+      "ci95_high": 0.3255516864190884,
+      "p_value": 0.4462924749561388,
+      "conclusion": "no clear linear exposure association (95% CI includes 0)"
+    }
+  ],
+  "early_vs_late": [
+    {
+      "outcome": "t_button_s",
+      "n_participants": 57,
+      "median_late_minus_early": -0.0997867584333344,
+      "share_participants_late_lower": 0.631578947368421,
+      "wilcoxon_p": 0.00562450293468423
+    },
+    {
+      "outcome": "tor_to_lane_change_s",
+      "n_participants": 57,
+      "median_late_minus_early": -0.06716187803333273,
+      "share_participants_late_lower": 0.543859649122807,
+      "wilcoxon_p": 0.7058783105187265
+    },
+    {
+      "outcome": "min_ttc_s",
+      "n_participants": 57,
+      "median_late_minus_early": 0.11112578709999976,
+      "share_participants_late_lower": 0.40350877192982454,
+      "wilcoxon_p": 0.2137112382739167
+    },
+    {
+      "outcome": "vehicle_max_decel_mps2",
+      "n_participants": 57,
+      "median_late_minus_early": 0.8829465707166673,
+      "share_participants_late_lower": 0.45614035087719296,
+      "wilcoxon_p": 0.5121589732161957
+    },
+    {
+      "outcome": "vehicle_max_accel_mps2",
+      "n_participants": 57,
+      "median_late_minus_early": 0.032130430144666766,
+      "share_participants_late_lower": 0.49122807017543857,
+      "wilcoxon_p": 0.6251034592708102
+    }
+  ],
+  "multitor_sensitivity_t_button": [
+    {
+      "analysis": "primary: protocol-resolved TOR",
+      "n_trials": 492,
+      "n_participants": 57,
+      "median_s": 1.6499290466000005,
+      "q1_s": 1.2501821518000025,
+      "q3_s": 1.9999299049499975,
+      "exposure_slope_per_trial": -0.03288214851294367,
+      "ci95_low": -0.058404688941526985,
+      "ci95_high": -0.007359608084360349,
+      "conclusion": "decrease with exposure (95% CI below 0)"
+    },
+    {
+      "analysis": "sensitivity: exclude all multi-TOR trials",
+      "n_trials": 472,
+      "n_participants": 57,
+      "median_s": 1.6498355865499992,
+      "q1_s": 1.2499709129250016,
+      "q3_s": 1.9999299049499975,
+      "exposure_slope_per_trial": -0.03555002108509893,
+      "ci95_low": -0.061597253205072394,
+      "ci95_high": -0.009502788965125467,
+      "conclusion": "decrease with exposure (95% CI below 0)"
+    }
+  ],
+  "multitor_sensitivity_materially_changes_conclusion": false,
+  "handback": {
+    "definition": "handback = first Time_Manual_Stop after Manual_Start (switch back to automated mode); a protocol-driven competing event / observation boundary, not stabilisation",
+    "tor_to_handback_s": {
+      "n": 492,
+      "median": 18.85001564025,
+      "q1": 15.249566555024998,
+      "q3": 24.050089359300003,
+      "min": 4.599954605099995,
+      "max": 133.749744415
+    },
+    "manual_start_to_handback_s": {
+      "n": 492,
+      "median": 16.9498672485,
+      "q1": 13.55074834825,
+      "q3": 22.400021076199998,
+      "min": 1.549053192099997,
+      "max": 131.5500831601
+    },
+    "lane_change_to_handback_s": {
+      "n": 477,
+      "median": 11.800113677900008,
+      "q1": 8.999298095699999,
+      "q3": 15.050268173200003,
+      "min": 0.7000541686999995,
+      "max": 122.2500381467
+    },
+    "lane_change_vs_handback_counts": {
+      "BEFORE_HANDBACK": 477,
+      "NO_TOR_ANCHOR": 21,
+      "LANE_CHANGE_ABSENT_COLUMN": 13,
+      "LANE_CHANGE_CLOCK_EXCEPTION": 1,
+      "AT_OR_AFTER_HANDBACK": 1
+    },
+    "lane_change_after_handback_trials": [
+      "density_0_nback_2_id_29"
+    ],
+    "multi_manual_stop_trials": 12
+  },
+  "known_semantic_limitations": [
+    "B17: accelerator/brake/steering channels are not driver-only; no control-channel quantity is used",
+    "B7: Manual_Start is an event marker; authority transfer UNRESOLVED",
+    "B11: scenario cells are aliased with road, speed, hazard state, lane configuration and automation-transition behaviour; cells are controls, not factors of interest",
+    "Exposure is chronological trial position; carry-over from the specific preceding scenario is not separable",
+    "Any practice or familiarisation drives before the recorded trials are not in the public data",
+    "B12: the owners' 466-trial analysis set is not reconstructed"
+  ]
+}

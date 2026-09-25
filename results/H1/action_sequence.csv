@@ -1,0 +1,514 @@
+trial_id,participant_id,scenario_id,density,nback,first_action_type,action_order_string,dt_steer_minus_brake,dt_brake_minus_accel,is_simultaneous_brake_steer,is_simultaneous_accel_steer
+density_0_nback_0_id_1,1,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.049999952316284,0.10000014305114746,False,False
+density_0_nback_1_id_1,1,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-1.9000000953674316,,False,False
+density_0_nback_2_id_1,1,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.9000000953674316,,False,False
+density_10_nback_0_id_1,1,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.2999999523162842,0.4499998092651367,False,False
+density_10_nback_1_id_1,1,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.0500001907348633,0.14999985694885254,False,False
+density_10_nback_2_id_1,1,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.6500000953674316,1.1999998092651367,False,False
+density_20_nback_0_id_1,1,density_20_nback_0,20,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,1.7999999523162842,True,False
+density_20_nback_1_id_1,1,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5,0.7000000476837158,False,False
+density_20_nback_2_id_1,1,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,8.450000047683716,2.1500000953674316,False,False
+density_0_nback_0_id_2,2,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.799999952316284,0.10000014305114746,False,False
+density_0_nback_1_id_2,2,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-6.650000095367432,,False,False
+density_0_nback_2_id_2,2,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.4000000953674316,,False,False
+density_10_nback_0_id_2,2,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.20000004768371582,0.34999990463256836,False,False
+density_10_nback_1_id_2,2,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.7999999523162842,0.15000009536743164,False,False
+density_10_nback_2_id_2,2,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.25,1.1500000953674316,False,False
+density_20_nback_0_id_2,2,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8999998569488525,False,False
+density_20_nback_1_id_2,2,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.3499999046325684,0.75,False,False
+density_20_nback_2_id_2,2,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.6500000953674316,0.14999985694885254,False,False
+density_0_nback_0_id_3,3,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.4000000953674316,0.20000004768371582,False,False
+density_0_nback_1_id_3,3,density_0_nback_1,0,1,STEER_FIRST,steer,,,False,False
+density_0_nback_2_id_3,3,density_0_nback_2,0,2,STEER_FIRST,accel_release -> steer -> brake,-33.85000014305115,35.05000019073486,False,False
+density_10_nback_0_id_3,3,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.19999980926513672,True,False
+density_10_nback_1_id_3,3,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.75,0.09999990463256836,False,False
+density_10_nback_2_id_3,3,density_10_nback_2,10,2,STEER_FIRST,accel_release -> steer -> brake,-1.75,3.0999999046325684,False,False
+density_20_nback_0_id_3,3,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8499999046325684,False,False
+density_20_nback_1_id_3,3,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,0.5499999523162842,0.75,False,False
+density_20_nback_2_id_3,3,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.299999952316284,0.20000004768371582,False,False
+density_0_nback_0_id_4,4,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.8499999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_4,4,density_0_nback_1,0,1,STEER_FIRST,steer,,,False,False
+density_0_nback_2_id_4,4,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-40.299999952316284,,False,False
+density_10_nback_0_id_4,4,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.20000004768371582,0.34999990463256836,False,False
+density_10_nback_1_id_4,4,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.799999952316284,0.15000009536743164,False,False
+density_10_nback_2_id_4,4,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.450000047683716,1.1999998092651367,False,False
+density_20_nback_0_id_4,4,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-33.700000047683716,32.40000009536743,False,False
+density_20_nback_1_id_4,4,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.849999904632568,0.75,False,False
+density_20_nback_2_id_4,4,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.5,0.2999999523162842,False,False
+density_0_nback_0_id_5,5,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.8999998569488525,0.10000014305114746,False,False
+density_0_nback_1_id_5,5,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-19.950000047683716,,False,False
+density_0_nback_2_id_5,5,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.0,,False,False
+density_10_nback_0_id_5,5,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_5,5,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.349999904632568,0.10000014305114746,False,False
+density_10_nback_2_id_5,5,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,5.8999998569488525,1.1500000953674316,False,False
+density_20_nback_0_id_5,5,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.8499999046325684,False,False
+density_20_nback_1_id_5,5,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.9500000476837158,0.7999999523162842,False,False
+density_20_nback_2_id_5,5,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.1499998569488525,0.25,False,False
+density_0_nback_0_id_6,6,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.4499998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_6,6,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.299999952316284,,False,False
+density_0_nback_2_id_6,6,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-10.5,,False,False
+density_10_nback_0_id_6,6,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5999999046325684,0.7999999523162842,False,False
+density_10_nback_1_id_6,6,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.9500000476837158,0.14999985694885254,False,False
+density_10_nback_2_id_6,6,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,0.8999998569488525,1.1500000953674316,False,False
+density_20_nback_0_id_6,6,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.0,0.5499999523162842,False,False
+density_20_nback_1_id_6,6,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.7999999523162842,0.75,False,False
+density_20_nback_2_id_6,6,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.75,0.0,False,False
+density_0_nback_0_id_7,7,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.1499998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_7,7,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-41.90000009536743,,False,False
+density_0_nback_2_id_7,7,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.299999952316284,,False,False
+density_10_nback_0_id_7,7,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.2999999523162842,0.4499998092651367,False,False
+density_10_nback_1_id_7,7,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.200000047683716,0.09999990463256836,False,False
+density_10_nback_2_id_7,7,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.1999998092651367,1.1000001430511475,False,False
+density_20_nback_0_id_7,7,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.9500000476837158,0.5999999046325684,False,False
+density_20_nback_1_id_7,7,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.049999952316284,0.75,False,False
+density_20_nback_2_id_7,7,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.4499998092651367,0.20000004768371582,False,False
+density_0_nback_0_id_8,8,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.0999999046325684,0.10000014305114746,False,False
+density_0_nback_1_id_8,8,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-41.5,,False,False
+density_0_nback_2_id_8,8,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-31.75,,False,False
+density_10_nback_0_id_8,8,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5,0.6499998569488525,False,False
+density_10_nback_1_id_8,8,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.049999952316284,0.04999995231628418,False,False
+density_10_nback_2_id_8,8,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.1500000953674316,1.1499998569488525,False,False
+density_20_nback_0_id_8,8,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5999999046325684,0.8999998569488525,False,False
+density_20_nback_1_id_8,8,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.5999999046325684,0.7999999523162842,False,False
+density_20_nback_2_id_8,8,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,0.34999990463256836,1.9500000476837158,False,False
+density_0_nback_0_id_9,9,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.8999998569488525,0.10000014305114746,False,False
+density_0_nback_1_id_9,9,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-45.5,,False,False
+density_0_nback_2_id_9,9,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-27.15000009536743,,False,False
+density_10_nback_0_id_9,9,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,0.09999990463256836,True,False
+density_10_nback_1_id_9,9,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.049999952316284,0.15000009536743164,False,False
+density_10_nback_2_id_9,9,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.550000190734863,1.0999999046325684,False,False
+density_20_nback_0_id_9,9,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-3.549999952316284,2.8999998569488525,False,False
+density_20_nback_1_id_9,9,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.6000001430511475,0.2999999523162842,False,False
+density_20_nback_2_id_9,9,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,7.299999952316284,0.9000000953674316,False,False
+density_0_nback_0_id_10,10,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.7999999523162842,0.15000009536743164,False,False
+density_0_nback_1_id_10,10,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-31.600000143051147,,False,False
+density_0_nback_2_id_10,10,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,3.0,,False,False
+density_10_nback_0_id_10,10,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.19999980926513672,True,False
+density_10_nback_1_id_10,10,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.299999952316284,0.10000014305114746,False,False
+density_10_nback_2_id_10,10,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.1999998092651367,1.25,False,False
+density_20_nback_0_id_10,10,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5999999046325684,0.19999980926513672,False,False
+density_20_nback_1_id_10,10,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,7.400000095367432,0.2999999523162842,False,False
+density_20_nback_2_id_10,10,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,7.6000001430511475,0.04999995231628418,False,False
+density_0_nback_0_id_11,11,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.4499998092651367,0.15000009536743164,False,False
+density_0_nback_1_id_11,11,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-40.60000014305115,,False,False
+density_0_nback_2_id_11,11,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.3500001430511475,,False,False
+density_10_nback_0_id_11,11,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,0.09999990463256836,True,False
+density_10_nback_1_id_11,11,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.199999809265137,0.10000014305114746,False,False
+density_10_nback_2_id_11,11,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.049999952316284,1.25,False,False
+density_20_nback_0_id_11,11,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-3.0,2.5,False,False
+density_20_nback_1_id_11,11,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.700000047683716,0.7999999523162842,False,False
+density_20_nback_2_id_11,11,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.25,0.19999980926513672,False,False
+density_0_nback_0_id_12,12,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.7000000476837158,0.25,False,False
+density_0_nback_1_id_12,12,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-41.40000009536743,,False,False
+density_0_nback_2_id_12,12,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-21.59999990463257,,False,False
+density_10_nback_0_id_12,12,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.20000004768371582,True,False
+density_10_nback_1_id_12,12,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.8499999046325684,0.15000009536743164,False,False
+density_10_nback_2_id_12,12,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.0499999523162842,1.5999999046325684,False,False
+density_20_nback_0_id_12,12,density_20_nback_0,20,0,STEER_FIRST,steer -> brake -> accel_release,-0.9000000953674316,-0.2999999523162842,False,False
+density_20_nback_1_id_12,12,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.299999952316284,0.75,False,False
+density_20_nback_2_id_12,12,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.9499998092651367,0.20000004768371582,False,False
+density_0_nback_0_id_13,13,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.5999999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_13,13,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-43.0,,False,False
+density_0_nback_2_id_13,13,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.4500000476837158,,False,False
+density_10_nback_0_id_13,13,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5499999523162842,0.6999998092651367,False,False
+density_10_nback_1_id_13,13,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.75,0.09999990463256836,False,False
+density_10_nback_2_id_13,13,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.199999809265137,1.2000000476837158,False,False
+density_20_nback_0_id_13,13,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.4500000476837158,0.8499999046325684,False,False
+density_20_nback_1_id_13,13,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.049999952316284,0.7999999523162842,False,False
+density_20_nback_2_id_13,13,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.549999952316284,0.25,False,False
+density_0_nback_0_id_14,14,density_0_nback_0,0,0,STEER_FIRST,accel_release -> steer -> brake,-10.049999952316284,10.200000047683716,False,False
+density_0_nback_1_id_14,14,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-18.450000047683716,,False,False
+density_0_nback_2_id_14,14,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-24.799999952316284,,False,False
+density_10_nback_0_id_14,14,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-9.099999904632568,9.099999904632568,False,False
+density_10_nback_1_id_14,14,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.200000047683716,0.09999990463256836,False,False
+density_10_nback_2_id_14,14,density_10_nback_2,10,2,STEER_FIRST,accel_release -> steer -> brake,-3.3500001430511475,5.200000047683716,False,False
+density_20_nback_0_id_14,14,density_20_nback_0,20,0,STEER_FIRST,accel_release -> steer -> brake,-3.5,4.1499998569488525,False,False
+density_20_nback_1_id_14,14,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.4499998092651367,0.75,False,False
+density_20_nback_2_id_14,14,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.9500000476837158,0.19999980926513672,False,False
+density_0_nback_0_id_15,15,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.3999998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_15,15,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.0,,False,False
+density_0_nback_2_id_15,15,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.0999999046325684,,False,False
+density_10_nback_0_id_15,15,density_10_nback_0,10,0,BRAKE_FIRST,accel_release -> brake -> steer,0.39999985694885254,0.0,False,False
+density_10_nback_1_id_15,15,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,5.950000047683716,0.15000009536743164,False,False
+density_10_nback_2_id_15,15,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.949999809265137,1.2000000476837158,False,False
+density_20_nback_0_id_15,15,density_20_nback_0,20,0,BRAKE_FIRST,brake -> accel_release -> steer,0.4499998092651367,-0.2999999523162842,False,False
+density_20_nback_1_id_15,15,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.7000000476837158,0.7999999523162842,False,False
+density_20_nback_2_id_15,15,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.700000047683716,0.19999980926513672,False,False
+density_0_nback_0_id_16,16,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.3499999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_16,16,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-18.799999952316284,,False,False
+density_0_nback_2_id_16,16,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-30.549999952316284,,False,False
+density_10_nback_0_id_16,16,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.25,0.39999985694885254,False,False
+density_10_nback_1_id_16,16,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.8500001430511475,0.09999990463256836,False,False
+density_10_nback_2_id_16,16,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.0,1.2000000476837158,False,False
+density_20_nback_0_id_16,16,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.049999952316284,1.25,False,False
+density_20_nback_1_id_16,16,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.799999952316284,0.75,False,False
+density_20_nback_2_id_16,16,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.8500001430511475,0.19999980926513672,False,False
+density_0_nback_0_id_17,17,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.8499999046325684,0.10000014305114746,False,False
+density_0_nback_1_id_17,17,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-12.450000047683716,,False,False
+density_0_nback_2_id_17,17,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,0.3000001907348633,,False,False
+density_10_nback_0_id_17,17,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_17,17,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.299999952316284,0.15000009536743164,False,False
+density_10_nback_2_id_17,17,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.75,1.1000001430511475,False,False
+density_20_nback_0_id_17,17,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.7999999523162842,1.0999999046325684,False,False
+density_20_nback_1_id_17,17,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.450000047683716,0.75,False,False
+density_20_nback_2_id_17,17,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.1000001430511475,1.8499999046325684,False,False
+density_0_nback_0_id_18,18,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.4499998092651367,0.15000009536743164,False,False
+density_0_nback_1_id_18,18,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-42.35000014305115,,False,False
+density_0_nback_2_id_18,18,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-32.35000014305115,,False,False
+density_10_nback_0_id_18,18,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_18,18,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.0,0.15000009536743164,False,False
+density_10_nback_2_id_18,18,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.3999998569488525,1.1500000953674316,False,False
+density_20_nback_0_id_18,18,density_20_nback_0,20,0,STEER_FIRST,steer -> brake -> accel_release,-1.1000001430511475,-0.34999990463256836,False,False
+density_20_nback_1_id_18,18,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.25,0.7000000476837158,False,False
+density_20_nback_2_id_18,18,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.950000047683716,0.25,False,False
+density_0_nback_0_id_19,19,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.1999998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_19,19,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-20.450000047683716,,False,False
+density_0_nback_2_id_19,19,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-28.34999990463257,,False,False
+density_10_nback_0_id_19,19,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5499999523162842,0.7000000476837158,False,False
+density_10_nback_1_id_19,19,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.799999952316284,0.15000009536743164,False,False
+density_10_nback_2_id_19,19,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.049999952316284,1.2000000476837158,False,False
+density_20_nback_0_id_19,19,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.9000000953674316,0.5,False,False
+density_20_nback_1_id_19,19,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.1499998569488525,0.75,False,False
+density_20_nback_2_id_19,19,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.0,1.9000000953674316,False,False
+density_0_nback_0_id_20,20,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.7999999523162842,0.15000009536743164,False,False
+density_0_nback_1_id_20,20,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-39.25,,False,False
+density_0_nback_2_id_20,20,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.5499999523162842,,False,False
+density_10_nback_0_id_20,20,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.7000000476837158,0.8499999046325684,False,False
+density_10_nback_1_id_20,20,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.049999952316284,0.14999985694885254,False,False
+density_10_nback_2_id_20,20,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.5999999046325684,1.2000000476837158,False,False
+density_20_nback_0_id_20,20,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8499999046325684,False,False
+density_20_nback_1_id_20,20,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.549999952316284,0.25,False,False
+density_20_nback_2_id_20,20,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,6.8999998569488525,0.9000000953674316,False,False
+density_0_nback_0_id_21,21,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.25,0.15000009536743164,False,False
+density_0_nback_1_id_21,21,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-20.700000047683716,,False,False
+density_0_nback_2_id_21,21,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-21.75,,False,False
+density_10_nback_0_id_21,21,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5500001907348633,0.7000000476837158,False,False
+density_10_nback_1_id_21,21,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.450000047683716,0.09999990463256836,False,False
+density_10_nback_2_id_21,21,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.5,1.2000000476837158,False,False
+density_20_nback_0_id_21,21,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.799999952316284,2.0999999046325684,False,False
+density_20_nback_1_id_21,21,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.450000047683716,0.75,False,False
+density_20_nback_2_id_21,21,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.6500000953674316,0.14999985694885254,False,False
+density_0_nback_0_id_22,22,density_0_nback_0,0,0,STEER_FIRST,accel_release -> steer -> brake,-14.149999856948853,16.049999952316284,False,False
+density_0_nback_1_id_22,22,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-11.800000190734863,,False,False
+density_0_nback_2_id_22,22,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.1500000953674316,,False,False
+density_10_nback_0_id_22,22,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.25,0.39999985694885254,False,False
+density_10_nback_1_id_22,22,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.049999952316284,0.09999990463256836,False,False
+density_10_nback_2_id_22,22,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.6499998569488525,1.25,False,False
+density_20_nback_0_id_22,22,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-4.0,3.3499999046325684,False,False
+density_20_nback_1_id_22,22,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.0999999046325684,0.7000000476837158,False,False
+density_20_nback_2_id_22,22,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.049999952316284,0.25,False,False
+density_0_nback_0_id_23,23,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.049999952316284,0.15000009536743164,False,False
+density_0_nback_1_id_23,23,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-41.15000009536743,,False,False
+density_0_nback_2_id_23,23,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.2999999523162842,,False,False
+density_10_nback_0_id_23,23,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.20000004768371582,True,False
+density_10_nback_1_id_23,23,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.150000095367432,0.14999985694885254,False,False
+density_10_nback_2_id_23,23,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,5.049999952316284,1.2000000476837158,False,False
+density_20_nback_0_id_23,23,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.8499999046325684,False,False
+density_20_nback_1_id_23,23,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.849999904632568,0.75,False,False
+density_20_nback_2_id_23,23,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.3999998569488525,0.0,False,False
+density_0_nback_0_id_24,24,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.9499998092651367,0.15000009536743164,False,False
+density_0_nback_1_id_24,24,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-40.0,,False,False
+density_0_nback_2_id_24,24,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,0.35000014305114746,,False,False
+density_10_nback_0_id_24,24,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.09999990463256836,0.25,True,False
+density_10_nback_1_id_24,24,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.3999998569488525,0.20000004768371582,False,False
+density_10_nback_2_id_24,24,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.450000047683716,1.1499998569488525,False,False
+density_20_nback_0_id_24,24,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.2000000476837158,0.4500000476837158,False,False
+density_20_nback_1_id_24,24,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.1499998569488525,0.75,False,False
+density_20_nback_2_id_24,24,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,6.75,0.2999999523162842,False,False
+density_0_nback_0_id_25,25,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.6999998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_25,25,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-40.89999985694885,,False,False
+density_0_nback_2_id_25,25,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-23.700000047683716,,False,False
+density_10_nback_0_id_25,25,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,0.09999990463256836,True,False
+density_10_nback_1_id_25,25,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.25,0.09999990463256836,False,False
+density_10_nback_2_id_25,25,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.5,1.2000000476837158,False,False
+density_20_nback_0_id_25,25,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-3.200000047683716,2.450000047683716,False,False
+density_20_nback_1_id_25,25,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.0,0.34999990463256836,False,False
+density_20_nback_2_id_25,25,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.8499999046325684,1.0,False,False
+density_0_nback_0_id_26,26,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.549999952316284,0.15000009536743164,False,False
+density_0_nback_1_id_26,26,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-14.199999809265137,,False,False
+density_0_nback_2_id_26,26,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,0.9000000953674316,,False,False
+density_10_nback_0_id_26,26,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.25,0.39999985694885254,False,False
+density_10_nback_1_id_26,26,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.25,0.04999995231628418,False,False
+density_10_nback_2_id_26,26,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.6999998092651367,1.2000000476837158,False,False
+density_20_nback_0_id_26,26,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8999998569488525,False,False
+density_20_nback_1_id_26,26,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.0,0.75,False,False
+density_20_nback_2_id_26,26,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.349999904632568,0.25,False,False
+density_0_nback_0_id_27,27,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.75,0.15000009536743164,False,False
+density_0_nback_1_id_27,27,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-24.5,,False,False
+density_0_nback_2_id_27,27,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.1000001430511475,,False,False
+density_10_nback_0_id_27,27,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.19999980926513672,0.34999990463256836,False,False
+density_10_nback_1_id_27,27,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.0,0.15000009536743164,False,False
+density_10_nback_2_id_27,27,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.3499999046325684,1.1500000953674316,False,False
+density_20_nback_0_id_27,27,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.8499999046325684,False,False
+density_20_nback_1_id_27,27,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.3500001430511475,0.34999990463256836,False,False
+density_20_nback_2_id_27,27,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.1999998092651367,0.8000001907348633,False,False
+density_0_nback_0_id_28,28,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,4.1499998569488525,0.10000014305114746,False,False
+density_0_nback_1_id_28,28,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-40.450000047683716,,False,False
+density_0_nback_2_id_28,28,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-19.25,,False,False
+density_10_nback_0_id_28,28,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.6000001430511475,0.75,False,False
+density_10_nback_1_id_28,28,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.3000001907348633,0.09999990463256836,False,False
+density_10_nback_2_id_28,28,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,0.34999990463256836,1.5499999523162842,False,False
+density_20_nback_0_id_28,28,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.3500001430511475,0.7000000476837158,False,False
+density_20_nback_1_id_28,28,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.75,0.25,False,False
+density_20_nback_2_id_28,28,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.4000000953674316,0.25,False,False
+density_0_nback_0_id_29,29,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.8499999046325684,0.10000014305114746,False,False
+density_0_nback_1_id_29,29,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-46.799999952316284,,False,False
+density_0_nback_2_id_29,29,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.5,,False,False
+density_10_nback_0_id_29,29,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5999999046325684,0.7999999523162842,False,False
+density_10_nback_1_id_29,29,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.6499998569488525,0.10000014305114746,False,False
+density_10_nback_2_id_29,29,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.5,1.1500000953674316,False,False
+density_20_nback_0_id_29,29,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.75,0.9500000476837158,False,False
+density_20_nback_1_id_29,29,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.5,0.7999999523162842,False,False
+density_20_nback_2_id_29,29,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.549999952316284,0.0,False,False
+density_0_nback_0_id_30,30,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.6999998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_30,30,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-42.950000047683716,,False,False
+density_0_nback_2_id_30,30,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-26.299999952316284,,False,False
+density_10_nback_0_id_30,30,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5500001907348633,0.7000000476837158,False,False
+density_10_nback_1_id_30,30,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.099999904632568,0.09999990463256836,False,False
+density_10_nback_2_id_30,30,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.25,1.25,False,False
+density_20_nback_0_id_30,30,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.3499999046325684,0.0,False,False
+density_20_nback_1_id_30,30,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.700000047683716,0.2999999523162842,False,False
+density_20_nback_2_id_30,30,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,6.1000001430511475,0.75,False,False
+density_0_nback_0_id_31,31,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.8499999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_31,31,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.3500001430511475,,False,False
+density_0_nback_2_id_31,31,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.8499999046325684,,False,False
+density_10_nback_0_id_31,31,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-3.799999952316284,4.849999904632568,False,False
+density_10_nback_1_id_31,31,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.799999952316284,0.10000014305114746,False,False
+density_10_nback_2_id_31,31,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.5,1.2000000476837158,False,False
+density_20_nback_0_id_31,31,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.1499998569488525,0.75,False,False
+density_20_nback_1_id_31,31,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,1.1999998092651367,0.75,False,False
+density_20_nback_2_id_31,31,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,6.099999904632568,0.20000004768371582,False,False
+density_0_nback_0_id_32,32,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.6499998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_32,32,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-12.950000047683716,,False,False
+density_0_nback_2_id_32,32,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-9.75,,False,False
+density_10_nback_0_id_32,32,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.35000014305114746,0.5,False,False
+density_10_nback_1_id_32,32,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.0,0.09999990463256836,False,False
+density_10_nback_2_id_32,32,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.2999999523162842,1.1500000953674316,False,False
+density_20_nback_0_id_32,32,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8499999046325684,False,False
+density_20_nback_1_id_32,32,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.1499998569488525,0.75,False,False
+density_20_nback_2_id_32,32,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.950000047683716,0.19999980926513672,False,False
+density_0_nback_0_id_33,33,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,5.099999904632568,0.15000009536743164,False,False
+density_0_nback_1_id_33,33,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-16.300000190734863,,False,False
+density_0_nback_2_id_33,33,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-26.050000190734863,,False,False
+density_10_nback_0_id_33,33,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.09999990463256836,0.19999980926513672,True,False
+density_10_nback_1_id_33,33,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.299999952316284,0.10000014305114746,False,False
+density_10_nback_2_id_33,33,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,5.849999904632568,1.1500000953674316,False,False
+density_20_nback_0_id_33,33,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.049999952316284,1.2999999523162842,False,False
+density_20_nback_1_id_33,33,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.3999998569488525,0.75,False,False
+density_20_nback_2_id_33,33,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.7000000476837158,1.9500000476837158,False,False
+density_0_nback_0_id_34,34,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.549999952316284,0.10000014305114746,False,False
+density_0_nback_1_id_34,34,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-19.0,,False,False
+density_0_nback_2_id_34,34,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-30.40000009536743,,False,False
+density_10_nback_0_id_34,34,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.09999990463256836,0.04999995231628418,True,False
+density_10_nback_1_id_34,34,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.25,0.09999990463256836,False,False
+density_10_nback_2_id_34,34,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.8499999046325684,1.2000000476837158,False,False
+density_20_nback_0_id_34,34,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.049999952316284,0.6999998092651367,False,False
+density_20_nback_1_id_34,34,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.6499998569488525,0.75,False,False
+density_20_nback_2_id_34,34,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.5,0.25,False,False
+density_0_nback_0_id_35,35,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.4499998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_35,35,density_0_nback_1,0,1,STEER_FIRST,steer,,,False,False
+density_0_nback_2_id_35,35,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.0499999523162842,,False,False
+density_10_nback_0_id_35,35,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.25,0.39999985694885254,False,False
+density_10_nback_1_id_35,35,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.200000047683716,0.14999985694885254,False,False
+density_10_nback_2_id_35,35,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.8999998569488525,1.2000000476837158,False,False
+density_20_nback_0_id_35,35,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.3500001430511475,0.0,False,False
+density_20_nback_1_id_35,35,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.0,0.7000000476837158,False,False
+density_20_nback_2_id_35,35,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.75,0.25,False,False
+density_0_nback_0_id_36,36,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.9499998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_36,36,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-43.60000014305115,,False,False
+density_0_nback_2_id_36,36,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.1500000953674316,,False,False
+density_10_nback_0_id_36,36,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.8000001907348633,2.5500001907348633,False,False
+density_10_nback_1_id_36,36,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.75,0.15000009536743164,False,False
+density_10_nback_2_id_36,36,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.299999952316284,1.2000000476837158,False,False
+density_20_nback_0_id_36,36,density_20_nback_0,20,0,STEER_FIRST,steer -> brake,-4.150000095367432,,False,False
+density_20_nback_1_id_36,36,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.8999998569488525,0.75,False,False
+density_20_nback_2_id_36,36,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.450000047683716,0.14999985694885254,False,False
+density_0_nback_0_id_37,37,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.4499998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_37,37,density_0_nback_1,0,1,STEER_FIRST,steer,,,False,False
+density_0_nback_2_id_37,37,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.8000001907348633,,False,False
+density_10_nback_0_id_37,37,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.20000004768371582,True,False
+density_10_nback_1_id_37,37,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.75,0.14999985694885254,False,False
+density_10_nback_2_id_37,37,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,5.700000047683716,1.25,False,False
+density_20_nback_0_id_37,37,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.9500000476837158,0.6000001430511475,False,False
+density_20_nback_1_id_37,37,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.450000047683716,0.25,False,False
+density_20_nback_2_id_37,37,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,7.6499998569488525,0.9000000953674316,False,False
+density_0_nback_0_id_38,38,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.200000047683716,0.15000009536743164,False,False
+density_0_nback_1_id_38,38,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-6.050000190734863,,False,False
+density_0_nback_2_id_38,38,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-30.200000047683716,,False,False
+density_10_nback_0_id_38,38,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-6.049999952316284,6.200000047683716,False,False
+density_10_nback_1_id_38,38,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.950000047683716,0.09999990463256836,False,False
+density_10_nback_2_id_38,38,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.8499999046325684,1.25,False,False
+density_20_nback_0_id_38,38,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.25,False,False
+density_20_nback_1_id_38,38,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.1500000953674316,0.2999999523162842,False,False
+density_20_nback_2_id_38,38,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.550000190734863,0.75,False,False
+density_0_nback_0_id_39,39,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.8999998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_39,39,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.1000001430511475,,False,False
+density_0_nback_2_id_39,39,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.2999999523162842,,False,False
+density_10_nback_0_id_39,39,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.2999999523162842,0.4499998092651367,False,False
+density_10_nback_1_id_39,39,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,4.5,0.14999985694885254,False,False
+density_10_nback_2_id_39,39,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.449999809265137,1.2000000476837158,False,False
+density_20_nback_0_id_39,39,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.7000000476837158,0.9000000953674316,False,False
+density_20_nback_1_id_39,39,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,12.950000047683716,0.4499998092651367,False,False
+density_20_nback_2_id_39,39,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.200000047683716,0.9000000953674316,False,False
+density_0_nback_0_id_40,40,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.8999998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_40,40,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-3.8500001430511475,,False,False
+density_0_nback_2_id_40,40,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.25,,False,False
+density_10_nback_0_id_40,40,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.09999990463256836,0.25,True,False
+density_10_nback_1_id_40,40,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5,0.09999990463256836,False,False
+density_10_nback_2_id_40,40,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.549999952316284,1.1500000953674316,False,False
+density_20_nback_0_id_40,40,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.6500000953674316,0.9000000953674316,False,False
+density_20_nback_1_id_40,40,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.150000095367432,0.34999990463256836,False,False
+density_20_nback_2_id_40,40,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.900000095367432,0.75,False,False
+density_0_nback_0_id_41,41,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.6999998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_41,41,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-6.400000095367432,,False,False
+density_0_nback_2_id_41,41,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-5.3500001430511475,,False,False
+density_10_nback_0_id_41,41,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.6000001430511475,0.75,False,False
+density_10_nback_1_id_41,41,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5,0.14999985694885254,False,False
+density_10_nback_2_id_41,41,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.3500001430511475,1.1499998569488525,False,False
+density_20_nback_0_id_41,41,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.4000000953674316,0.6500000953674316,False,False
+density_20_nback_1_id_41,41,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.799999952316284,0.34999990463256836,False,False
+density_20_nback_2_id_41,41,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.3999998569488525,0.9000000953674316,False,False
+density_0_nback_0_id_42,42,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.0999999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_42,42,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.299999952316284,,False,False
+density_0_nback_2_id_42,42,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.549999952316284,,False,False
+density_10_nback_0_id_42,42,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_42,42,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.25,0.15000009536743164,False,False
+density_10_nback_2_id_42,42,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.1999998092651367,1.1500000953674316,False,False
+density_20_nback_0_id_42,42,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.9500000476837158,1.2999999523162842,False,False
+density_20_nback_1_id_42,42,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.8500001430511475,0.2999999523162842,False,False
+density_20_nback_2_id_42,42,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.5,0.75,False,False
+density_0_nback_0_id_43,43,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.5999999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_43,43,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-7.950000047683716,,False,False
+density_0_nback_2_id_43,43,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-31.450000047683716,,False,False
+density_10_nback_0_id_43,43,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5,0.6499998569488525,False,False
+density_10_nback_1_id_43,43,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5,0.15000009536743164,False,False
+density_10_nback_2_id_43,43,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.5499999523162842,1.1500000953674316,False,False
+density_20_nback_0_id_43,43,density_20_nback_0,20,0,STEER_FIRST,steer -> brake -> accel_release,-1.25,-0.20000004768371582,False,False
+density_20_nback_1_id_43,43,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.650000095367432,0.2999999523162842,False,False
+density_20_nback_2_id_43,43,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.900000095367432,0.75,False,False
+density_0_nback_0_id_44,44,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.25,0.15000009536743164,False,False
+density_0_nback_1_id_44,44,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-1.7000000476837158,,False,False
+density_0_nback_2_id_44,44,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.0499999523162842,,False,False
+density_10_nback_0_id_44,44,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.20000004768371582,0.34999990463256836,False,False
+density_10_nback_1_id_44,44,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.700000047683716,0.15000009536743164,False,False
+density_10_nback_2_id_44,44,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.1500000953674316,1.1499998569488525,False,False
+density_20_nback_0_id_44,44,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.7000000476837158,0.9000000953674316,False,False
+density_20_nback_1_id_44,44,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.0,0.2999999523162842,False,False
+density_20_nback_2_id_44,44,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.0,0.9000000953674316,False,False
+density_0_nback_0_id_45,45,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.5999999046325684,0.15000009536743164,False,False
+density_0_nback_1_id_45,45,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-15.650000095367432,,False,False
+density_0_nback_2_id_45,45,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-15.25,,False,False
+density_10_nback_0_id_45,45,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,0.09999990463256836,True,False
+density_10_nback_1_id_45,45,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.3500001430511475,0.14999985694885254,False,False
+density_10_nback_2_id_45,45,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.5,1.1500000953674316,False,False
+density_20_nback_0_id_45,45,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.8499999046325684,False,False
+density_20_nback_1_id_45,45,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.900000095367432,0.25,False,False
+density_20_nback_2_id_45,45,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.5500001907348633,0.75,False,False
+density_0_nback_0_id_46,46,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,0.20000004768371582,0.25,False,False
+density_0_nback_1_id_46,46,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.299999952316284,,False,False
+density_0_nback_2_id_46,46,density_0_nback_2,0,2,BRAKE_FIRST,accel_release -> brake -> steer,0.75,0.20000004768371582,False,False
+density_10_nback_0_id_46,46,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.04999995231628418,0.09999990463256836,True,False
+density_10_nback_1_id_46,46,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,1.1999998092651367,0.15000009536743164,False,False
+density_10_nback_2_id_46,46,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.1499998569488525,2.75,False,False
+density_20_nback_0_id_46,46,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.15000009536743164,False,False
+density_20_nback_1_id_46,46,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.0,0.2999999523162842,False,False
+density_20_nback_2_id_46,46,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.050000190734863,0.75,False,False
+density_0_nback_0_id_47,47,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.4499998092651367,0.15000009536743164,False,False
+density_0_nback_1_id_47,47,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.1500000953674316,,False,False
+density_0_nback_2_id_47,47,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,0.25,,False,False
+density_10_nback_0_id_47,47,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5,0.7000000476837158,False,False
+density_10_nback_1_id_47,47,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.3000001907348633,0.14999985694885254,False,False
+density_10_nback_2_id_47,47,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,1.7000000476837158,1.1499998569488525,False,False
+density_20_nback_0_id_47,47,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.6500000953674316,0.9500000476837158,False,False
+density_20_nback_1_id_47,47,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.650000095367432,0.34999990463256836,False,False
+density_20_nback_2_id_47,47,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.3500001430511475,0.09999990463256836,False,False
+density_0_nback_0_id_48,48,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.3499999046325684,0.25,False,False
+density_0_nback_1_id_48,48,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.5,,False,False
+density_0_nback_2_id_48,48,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,3.450000047683716,,False,False
+density_10_nback_0_id_48,48,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.35000014305114746,0.5,False,False
+density_10_nback_1_id_48,48,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,5.400000095367432,0.09999990463256836,False,False
+density_10_nback_2_id_48,48,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.5999999046325684,1.2000000476837158,False,False
+density_20_nback_0_id_48,48,density_20_nback_0,20,0,STEER_FIRST,steer -> brake -> accel_release,-0.7999999523162842,-0.4500000476837158,False,False
+density_20_nback_1_id_48,48,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.75,0.20000004768371582,False,False
+density_20_nback_2_id_48,48,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.0,0.04999995231628418,False,False
+density_0_nback_0_id_49,49,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.6999998092651367,0.15000009536743164,False,False
+density_0_nback_1_id_49,49,density_0_nback_1,0,1,STEER_FIRST,steer,,,False,False
+density_0_nback_2_id_49,49,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.75,,False,False
+density_10_nback_0_id_49,49,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.09999990463256836,0.25,True,False
+density_10_nback_1_id_49,49,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.1999998092651367,0.15000009536743164,False,False
+density_10_nback_2_id_49,49,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,2.0999999046325684,1.1500000953674316,False,False
+density_20_nback_0_id_49,49,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.9499998092651367,False,False
+density_20_nback_1_id_49,49,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,7.700000047683716,0.34999990463256836,False,False
+density_20_nback_2_id_49,49,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,5.050000190734863,0.75,False,False
+density_0_nback_0_id_50,50,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.1999998092651367,0.10000014305114746,False,False
+density_0_nback_1_id_50,50,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-46.700000047683716,,False,False
+density_0_nback_2_id_50,50,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,2.450000047683716,,False,False
+density_10_nback_0_id_50,50,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_50,50,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.049999952316284,0.10000014305114746,False,False
+density_10_nback_2_id_50,50,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.6499998569488525,1.25,False,False
+density_20_nback_0_id_50,50,density_20_nback_0,20,0,STEER_FIRST,steer -> brake -> accel_release,-1.0499999523162842,-0.15000009536743164,False,False
+density_20_nback_1_id_50,50,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.25,0.20000004768371582,False,False
+density_20_nback_2_id_50,50,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,7.049999952316284,0.8000001907348633,False,False
+density_0_nback_0_id_51,51,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.8999998569488525,0.10000014305114746,False,False
+density_0_nback_1_id_51,51,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-43.049999952316284,,False,False
+density_0_nback_2_id_51,51,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,1.5,,False,False
+density_10_nback_0_id_51,51,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_51,51,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.799999952316284,0.10000014305114746,False,False
+density_10_nback_2_id_51,51,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,5.25,1.2000000476837158,False,False
+density_20_nback_0_id_51,51,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.6500000953674316,0.2999999523162842,False,False
+density_20_nback_1_id_51,51,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,6.299999952316284,0.34999990463256836,False,False
+density_20_nback_2_id_51,51,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.3500001430511475,0.75,False,False
+density_0_nback_0_id_52,52,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.5499999523162842,0.10000014305114746,False,False
+density_0_nback_1_id_52,52,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.3500001430511475,,False,False
+density_0_nback_2_id_52,52,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,3.5,,False,False
+density_10_nback_0_id_52,52,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,0.0,0.14999985694885254,True,False
+density_10_nback_1_id_52,52,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.5,0.09999990463256836,False,False
+density_10_nback_2_id_52,52,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.0999999046325684,1.2000000476837158,False,False
+density_20_nback_0_id_52,52,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5999999046325684,0.7999999523162842,False,False
+density_20_nback_1_id_52,52,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.299999952316284,0.34999990463256836,False,False
+density_20_nback_2_id_52,52,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,15.099999904632568,0.9000000953674316,False,False
+density_0_nback_0_id_53,53,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.5499999523162842,0.15000009536743164,False,False
+density_0_nback_1_id_53,53,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-17.90000009536743,,False,False
+density_0_nback_2_id_53,53,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-28.5,,False,False
+density_10_nback_0_id_53,53,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.09999990463256836,0.04999995231628418,True,False
+density_10_nback_1_id_53,53,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5,0.15000009536743164,False,False
+density_10_nback_2_id_53,53,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.4000000953674316,1.0999999046325684,False,False
+density_20_nback_0_id_53,53,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.75,0.34999990463256836,False,False
+density_20_nback_1_id_53,53,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.549999952316284,0.34999990463256836,False,False
+density_20_nback_2_id_53,53,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,2.25,0.9000000953674316,False,False
+density_0_nback_0_id_54,54,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.1499998569488525,0.15000009536743164,False,False
+density_0_nback_1_id_54,54,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-42.84999990463257,,False,False
+density_0_nback_2_id_54,54,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-27.84999990463257,,False,False
+density_10_nback_0_id_54,54,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> steer -> brake,-0.04999995231628418,0.20000004768371582,True,False
+density_10_nback_1_id_54,54,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.5500001907348633,0.09999990463256836,False,False
+density_10_nback_2_id_54,54,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.1499998569488525,1.2000000476837158,False,False
+density_20_nback_0_id_54,54,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-2.9000000953674316,2.1500000953674316,False,False
+density_20_nback_1_id_54,54,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,2.0,0.34999990463256836,False,False
+density_20_nback_2_id_54,54,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,4.699999809265137,0.8000001907348633,False,False
+density_0_nback_0_id_55,55,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,3.8499999046325684,0.10000014305114746,False,False
+density_0_nback_1_id_55,55,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-2.6500000953674316,,False,False
+density_0_nback_2_id_55,55,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,3.8500001430511475,,False,False
+density_10_nback_0_id_55,55,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5499999523162842,0.7000000476837158,False,False
+density_10_nback_1_id_55,55,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,5.449999809265137,0.10000014305114746,False,False
+density_10_nback_2_id_55,55,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,6.1499998569488525,1.1500000953674316,False,False
+density_20_nback_0_id_55,55,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.7999999523162842,1.0,False,False
+density_20_nback_1_id_55,55,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,4.299999952316284,0.34999990463256836,False,False
+density_20_nback_2_id_55,55,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,3.549999952316284,0.9000000953674316,False,False
+density_0_nback_0_id_56,56,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,2.0,0.20000004768371582,False,False
+density_0_nback_1_id_56,56,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-19.700000047683716,,False,False
+density_0_nback_2_id_56,56,density_0_nback_2,0,2,BRAKE_FIRST,brake -> steer,0.7999999523162842,,False,False
+density_10_nback_0_id_56,56,density_10_nback_0,10,0,STEER_FIRST,accel_release -> steer -> brake,-0.5999999046325684,0.75,False,False
+density_10_nback_1_id_56,56,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,3.9000000953674316,0.09999990463256836,False,False
+density_10_nback_2_id_56,56,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,3.1499998569488525,1.2000000476837158,False,False
+density_20_nback_0_id_56,56,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5499999523162842,0.8499999046325684,False,False
+density_20_nback_1_id_56,56,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,3.9000000953674316,0.2999999523162842,False,False
+density_20_nback_2_id_56,56,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,6.1000001430511475,0.75,False,False
+density_0_nback_0_id_57,57,density_0_nback_0,0,0,BRAKE_FIRST,accel_release -> brake -> steer,1.0999999046325684,0.10000014305114746,False,False
+density_0_nback_1_id_57,57,density_0_nback_1,0,1,STEER_FIRST,steer -> brake,-49.200000047683716,,False,False
+density_0_nback_2_id_57,57,density_0_nback_2,0,2,STEER_FIRST,steer -> brake,-33.700000047683716,,False,False
+density_10_nback_0_id_57,57,density_10_nback_0,10,0,SIMULTANEOUS_BRAKE_STEER,accel_release -> brake -> steer,0.09999990463256836,0.04999995231628418,True,False
+density_10_nback_1_id_57,57,density_10_nback_1,10,1,BRAKE_FIRST,accel_release -> brake -> steer,2.049999952316284,0.15000009536743164,False,False
+density_10_nback_2_id_57,57,density_10_nback_2,10,2,BRAKE_FIRST,accel_release -> brake -> steer,4.1499998569488525,1.2000000476837158,False,False
+density_20_nback_0_id_57,57,density_20_nback_0,20,0,STEER_FIRST,steer -> accel_release -> brake,-1.5,0.8999998569488525,False,False
+density_20_nback_1_id_57,57,density_20_nback_1,20,1,BRAKE_FIRST,accel_release -> brake -> steer,5.049999952316284,0.2999999523162842,False,False
+density_20_nback_2_id_57,57,density_20_nback_2,20,2,BRAKE_FIRST,accel_release -> brake -> steer,1.3499999046325684,0.9000000953674316,False,False

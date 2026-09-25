@@ -1,0 +1,7 @@
+{
+  "archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "code_commit": "9c06946a69d379d7012fa6bdb19629f964666724",
+  "src_tree_dirty": true,
+  "code": "src/experiments/r4v_steering_sequence.py",
+  "r2b_trial_table": "results/R2B_repeated_exposure/trial_table.csv"
+}

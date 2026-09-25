@@ -1,0 +1,6 @@
+{
+  "archive_sha256": "6e85e5365d0ae5e356559d20cf0b95cf81d60f9bd3ba5a52ec36021f664ca212",
+  "code_commit": "3d99177470fce1ac875cdc6a1f117af1802c433a",
+  "src_tree_dirty": true,
+  "code": "src/experiments/r4v_channel_authorship.py"
+}

@@ -1,0 +1,229 @@
+{
+  "n_trials_total": 513,
+  "n_eligible": 492,
+  "n_participants": 57,
+  "eligibility": "TOR resolved and a single Manual_Start; no event is imputed",
+  "primary_detector": "angle_rise_0.05_s5",
+  "detectors": {
+    "angle_rise_0.02_s5": [
+      "angle",
+      0.02,
+      5,
+      "running_min"
+    ],
+    "angle_rise_0.05_s5": [
+      "angle",
+      0.05,
+      5,
+      "running_min"
+    ],
+    "angle_rise_0.10_s5": [
+      "angle",
+      0.1,
+      5,
+      "running_min"
+    ],
+    "angle_signed_0.05_s5": [
+      "angle",
+      0.05,
+      5,
+      "ms"
+    ],
+    "angle_abs_0.05_s1": [
+      "angle",
+      0.05,
+      1,
+      "ms_abs"
+    ],
+    "rate_signed_0.10_s3": [
+      "rate",
+      0.1,
+      3,
+      "rate"
+    ]
+  },
+  "search_horizon_s": 15.0,
+  "sign_convention": {
+    "value": 1,
+    "basis": "in 418 of 492 trials the first post-MS angle excursion beyond 0.05 rad (either sign) is positive; negative first excursions concentrate in cells with a pre-MS negative drift (e.g. d0_n1). Lane crossing is NOT used to set it; the +1 = left mapping is inferred, not documented."
+  },
+  "missing": {
+    "steer_onset": 1,
+    "lane_crossing": 14,
+    "indicator_left": 126,
+    "manual_stop": 0
+  },
+  "ordering": {
+    "onset_before_ms": 0,
+    "onset_before_lc_fraction": 0.9832285115303984,
+    "primary_rule_met_tor_to_ms": 0
+  },
+  "indicator": {
+    "left_before_tor_trials": 2,
+    "left_tor_to_ms_trials": 0,
+    "right_after_lc_median_s": 5.125048041358141,
+    "indicator_before_steer_onset_fraction": 0.6328767123287671
+  },
+  "torque": {
+    "corr_with_angle_manual_median": -0.9871441558218977,
+    "corr_abs_ge_0.9_fraction": 0.8292682926829268,
+    "leads_angle_samples_median": 2.0,
+    "sd_pre_tor_median": 0.0315515275640824,
+    "sd_manual_median": 0.2814834747869709,
+    "verdict": "NOT_IDENTIFIABLE as driver torque; excluded from onset definition",
+    "reason": "undocumented channel; in the manual window it is almost a linear function of the angle (opposite sign), so it adds little independent information and cannot distinguish driver torque from a restoring/feedback torque"
+  },
+  "hazard": {
+    "formula": "s_h = roadAbscissa + dir * Distance_to_Construction on the TOR road segment, D > 0, t >= TOR - 15 s; dir = sign(d roadAbscissa / dt)",
+    "consistent_fraction": 0.8841463414634146,
+    "consistent_by_cell": {
+      "d0_n0": 1.0,
+      "d0_n1": 0.0,
+      "d0_n2": 1.0,
+      "d10_n0": 1.0,
+      "d10_n1": 1.0,
+      "d10_n2": 1.0,
+      "d20_n0": 1.0,
+      "d20_n1": 1.0,
+      "d20_n2": 1.0
+    }
+  },
+  "r3b_relation": {
+    "note": "comparison only; nothing is substituted into R3B",
+    "r3b_t1_assumption_interval_s": [
+      1.15,
+      3.0
+    ],
+    "tor_to_steer_onset_median_s": 3.849739074699997,
+    "tor_to_steer_onset_iqr_s": [
+      3.0008249282499975,
+      4.8752604723244275
+    ],
+    "fraction_steer_onset_before_t1_lo": 0.0,
+    "fraction_steer_onset_within_t1": 0.24643584521384929,
+    "fraction_steer_onset_after_t1_hi": 0.7535641547861507,
+    "fraction_brake_channel_active_at_steer_onset": 0.38085539714867617
+  },
+  "descriptor_values": {
+    "hazard_distance_at_steer_onset_m (station-consistent trials)": {
+      "n": 434,
+      "median": 90.2931518555,
+      "q25": 68.656127929675,
+      "q75": 109.378684998,
+      "p05": 36.89283752441,
+      "p95": 134.588772583
+    },
+    "hazard_distance_at_lane_crossing_m (station-consistent trials)": {
+      "n": 421,
+      "median": 43.130435441511054,
+      "q25": 25.715989635489247,
+      "q75": 58.18143280588791,
+      "p05": 6.691522196506739,
+      "p95": 84.60931292860776
+    },
+    "hazard_distance_at_steer_onset_m (d0_n1, not station-consistent)": {
+      "n": 57,
+      "median": 84.0295410156,
+      "q25": 79.9194335938,
+      "q75": 89.9899902344,
+      "p05": 61.84633789062,
+      "p95": 99.68457031239998
+    },
+    "d_lead_next_at_steer_onset_m (value-tagged samples only)": {
+      "n": 483,
+      "median": 33.4274902344,
+      "q25": 15.81237840655,
+      "q75": 65.7150802612,
+      "p05": 5.2048828601879995,
+      "p95": 126.5706909181
+    },
+    "d_lead_next_at_pre_lane_crossing_m (value-tagged samples only)": {
+      "n": 478,
+      "median": 42.56396484375,
+      "q25": 22.139495849625,
+      "q75": 70.553466796875,
+      "p05": 12.39507141116,
+      "p95": 93.67348937989499
+    },
+    "d_follow_next_at_steer_onset_m (value-tagged samples only)": {
+      "n": 319,
+      "median": 45.4020996094,
+      "q25": 29.65014648435,
+      "q75": 143.5165100095,
+      "p05": 6.8860844135270005,
+      "p95": 175.83494262659997
+    },
+    "d_follow_next_at_pre_lane_crossing_m (value-tagged samples only)": {
+      "n": 307,
+      "median": 34.6499023438,
+      "q25": 22.8516845703,
+      "q75": 117.7291870115,
+      "p05": 10.94693603516,
+      "p95": 157.5136474608
+    },
+    "d_follow_at_steer_onset_m (value-tagged samples only)": {
+      "n": 198,
+      "median": 191.956237793,
+      "q25": 45.344329834,
+      "q75": 196.75233459474998,
+      "p05": 33.78545532223,
+      "p95": 207.76817626964998
+    },
+    "d_follow_at_pre_lane_crossing_m (value-tagged samples only)": {
+      "n": 207,
+      "median": 182.114624023,
+      "q25": 42.0905151367,
+      "q75": 197.05178833000002,
+      "p05": 24.3242553711,
+      "p95": 240.0746948242
+    },
+    "indicator_min_cell_iqr_s": 1.0994055271488534,
+    "indicator_presence_by_cell": {
+      "d0_n0": 0.7321428571428571,
+      "d0_n1": 0.7368421052631579,
+      "d0_n2": 0.6851851851851852,
+      "d10_n0": 0.8301886792452831,
+      "d10_n1": 0.7192982456140351,
+      "d10_n2": 0.7017543859649122,
+      "d20_n0": 0.74,
+      "d20_n1": 0.7450980392156863,
+      "d20_n2": 0.8070175438596491
+    }
+  },
+  "descriptors": {
+    "ms_to_steer_onset": {
+      "class": "PROVISIONAL_DESCRIPTOR",
+      "reason": "derived event; authorship PLAUSIBLE_BUT_UNVERIFIED; median depends on the detector (see onset_detector_sensitivity.csv); not a driver-response latency"
+    },
+    "steer_onset_to_lane_crossing": {
+      "class": "PROVISIONAL_DESCRIPTOR",
+      "reason": "lane crossing is validated; the onset end inherits the detector and authorship caveats"
+    },
+    "steering_duration_proxy": {
+      "class": "BLOCKED",
+      "reason": "no documented manoeuvre-completion event; lane crossing is not completion and Manual_Stop is not recovery completion; any end event would be invented"
+    },
+    "indicator_lead_lag_vs_steering": {
+      "class": "PROVISIONAL_DESCRIPTOR",
+      "reason": "indicator channel undocumented (+1 = left inferred); not an intention time"
+    },
+    "target_lane_gap_at_steer_onset": {
+      "class": "PROVISIONAL_DESCRIPTOR",
+      "reason": "channel names documented; the 'next lane' = target lane mapping is inferred; only non-zero values are reported; zero semantics unresolved"
+    },
+    "target_lane_gap_at_lane_crossing": {
+      "class": "PROVISIONAL_DESCRIPTOR",
+      "reason": "taken at the last sample before crossing (next-lane channels become 0 at crossing in all trials); zero semantics unresolved"
+    },
+    "hazard_distance_at_steer_onset": {
+      "class": "VALIDATED_DESCRIPTOR",
+      "reason": "logged, documented distance; -dD/dt matches speed; station reconstructs in station-consistent cells. Validated only for trials with station_state CONSISTENT; the reference point on the construction zone is undocumented"
+    },
+    "hazard_distance_at_lane_crossing": {
+      "class": "VALIDATED_DESCRIPTOR",
+      "reason": "as hazard_distance_at_steer_onset"
+    }
+  },
+  "steering_authorship": "PLAUSIBLE_BUT_UNVERIFIED (unchanged from R4V)",
+  "claims": "descriptive timing only; no causal driver-response latency; no synthesis"
+}
