@@ -57,7 +57,7 @@ All findings reported below are strictly bounded by the frozen R5A Claim Ledger 
    - **45 cases** are **ROBUSTLY UNSATISFIED** ($\max \Delta T \le -0.01\text{ s}$ across the full parameter interval; Claims L19, L20).
 
    ![Figure F5: R3B Classification Matrix](thesis/figures/F5_r3b_classification_matrix.png)
-   *Figure F5: Recoverability classification across 150 scenario cases: 58 robustly satisfied (green), 47 parameter-sensitive (yellow), and 45 robustly unsatisfied (red) (Claim L19).*
+   *Figure F5: Braking-only recoverability classification across 150 scenario cases: 58 robustly satisfied, 47 parameter-sensitive, and 45 robustly unsatisfied (Claim L19). S/P/U labels and grayscale intensity distinguish the three within-model classifications; these are necessary-condition results, not safety labels.*
 
    ![Figure F6: Required Braking Time Bounds](thesis/figures/F6_r3b_t_required_bounds.png)
    *Figure F6: Deterministic interval bounds on required stopping time $T_{\text{req}}$ versus available TTC, showing parameter sensitivity dominated by assumed human braking latency $t_1$ (Claims L20, L24).*
