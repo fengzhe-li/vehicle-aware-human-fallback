@@ -152,12 +152,43 @@ To test whether the `scene_05_active_braking_deceleration` `C10_LONGITUDINAL_ACC
 
 ---
 
-## 7. Interactive English Dashboard, Screenshots & Landscape PDF Report
+## 7. Interactive R3B Human Takeover Feasibility Simulator & AutoVLA Trajectory Explorer ([`interactive_explorer.py`](./interactive_explorer.py))
+
+To upgrade the extension from a static report into an interactive, reproducible engineering demonstrator, [`interactive_explorer.py`](./interactive_explorer.py) and [`report_generator.py`](./report_generator.py) integrate two live capabilities directly into the top of the HTML dashboard (`#interactive-demonstrator-workspace`):
+
+### Capability 1 — Interactive AutoVLA Trajectory & Step-Aware Physics Explorer (`#interactive-trajectory-explorer`)
+- **10 Saved Rollouts Across 7 Real Driving Scenes:** Supports interactive selection of all `7` canonical AutoVLA rollouts (`scene_01`–`scene_07`), the `2` controlled RQ1 command-sensitivity interventions (`scene_02` and `scene_06` `cmd='keep forward'`), and the `1` controlled Scene 05 signed-acceleration OOD diagnostic rollout (`-1.55 m/s^2`).
+- **Step-by-Step Playback & Scrubber:** Play/Pause animation, Step `-0.5 s` / `+0.5 s` buttons, and timeline scrubber across `t = 0.0 s` (observed initial state $t_0$) and `10` discrete prediction steps $k \in \{1..10\}$ ($t \in \{0.5..5.0\}\text{ s}$), plus an optional `0.1 s` display interpolation toggle explicitly badged as `DISPLAY INTERPOLATION (0.1 s)` rather than a recorded model output.
+- **Synchronized Bird's-Eye View (BEV) & Step Kinematics SVGs:** Plots ego-local `+x` forward / `+y` left trajectories, heading arrows, the $\pm 1.75\text{ m}$ R3B 1D longitudinal corridor, observed 3D lead obstacles or assumed counterfactual $d_0$ lines, logged human ground-truth trajectories, and command/ablation counterparts alongside step-indexed speed $v(t)$ and acceleration $a_{\text{lon}}(t), |a_{\text{tot}}(t)|$.
+- **Strict Separation of `TIME_LOCAL_STEP` vs. `TRAJECTORY_WIDE` C1–C10 Checks:** At $t = 0.0\text{ s}$ (Step 0), finite-difference interval checks `C2`–`C10` are explicitly marked `NOT_DEFINED_AT_T0` (`evaluation_scope = TIME_LOCAL_STEP`) while `C1_TIMESTAMP_AND_HORIZON_CONTINUITY` is labeled `TRAJECTORY_WIDE_PASS` (`evaluation_scope = TRAJECTORY_WIDE`). At steps $k = 1..10$, each time-local check (`C2`–`C10`) is evaluated at step $k$ alongside its full-horizon summary.
+
+### Capability 2 — Coupled & Standalone R3B Human Takeover Simulator (`#interactive-r3b-simulator`)
+- **Exact Analytical R3B Engine:** Reuses `stopping_distance_r3b_analytical` and `braking_t_required` ([`src/metrics/oracle.py`](../../src/metrics/oracle.py)), `t_required`, `classify`, `PARAMETERS`, `BRANCHES`, `SUCCESS` ([`src/experiments/r3b_braking_bounds.py`](../../src/experiments/r3b_braking_bounds.py)), and `effective_braking_deceleration` ([`src/vehicle/models.py`](../../src/vehicle/models.py)) with zero textbook approximations.
+- **Live Controls & Dual Speed Units (`m/s` $\leftrightarrow$ `km/h`):** Supports **Connected AutoVLA Trajectory Mode** (synchronized with the active scene, rollout condition, and scrubbed takeover request time $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$) and **Standalone R3B Parametric Mode** with interactive controls for vehicle speed (`m/s` or `km/h`), obstacle source (`Observed 3D Lead` vs. `Assumed Counterfactual d0`), policy branch (`P0`, `P1`, `P2`), road friction $\mu$ (`Dry 1.0`, `Wet 0.7`, `Rain 0.5`, `Snow 0.35`), human reaction delay $t_1 \in [1.15, 3.00]\text{ s}$, hydraulic delay $t_2$, ramp build-up $t_3$, max deceleration $a_{\max}$, and P2 supported deceleration $a_{\text{sup}}$.
+- **Three-Layer Provenance Architecture & Non-Safety Presentation Mapping (Never `"SAFE"`):**
+  - **Layer 1 — Observed / Recorded Evidence:** Scene token, logged ego $t_0$ kinematics, observed 3D in-lane annotation, and AutoVLA pose at $\tau_{\text{req}}$.
+  - **Layer 2 — Assumed Counterfactual & Model Inputs:** Assumed obstacle distance $d_0$ (if counterfactual), exogenous takeover delay $\tau_{\text{req}}$, surface $\mu$, policy branch `P0`/`P1`/`P2`, and human/brake parameters.
+  - **Layer 3 — Derived R3B Model Conclusions:** 4-phase stopping distance breakdown ($d_{\text{pre}}, d_{\text{delay}}, d_{\text{brake}}, +2.0\text{ m}$ standstill margin), available vs. required stopping distance/time, point margin, frozen R3B parameter-box interval, and causal explanation mapped strictly to five non-safety labels:
+
+| Presentation Status Label | Underlying R3B / Verifier Classification | Technical Meaning |
+| :--- | :--- | :--- |
+| `NECESSARY_CONDITION_SATISFIED` | `ROBUSTLY SATISFIED` / `UNIFORMLY_POSITIVE` ($\Delta D \ge 0$) | Available 1D stopping distance/time meets or exceeds required stopping distance/time (including $+2.0\text{ m}$ standstill margin). Necessary condition only; **never** a guarantee of real-world safety. |
+| `NECESSARY_CONDITION_VIOLATED` | `ROBUSTLY UNSATISFIED` / `UNIFORMLY_VIOLATED` ($\Delta D < 0$) | Required 1D stopping distance/time exceeds available obstacle distance/time under the selected assumptions. |
+| `PARAMETER_SENSITIVE` | `PARAMETER-SENSITIVE` / `PARAMETER_SENSITIVE` | Optimistic R3B parameter-box corner satisfies the bound while conservative corner violates it ($\min \Delta T < 0 < \max \Delta T$). |
+| `NOT_APPLICABLE` | `INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE` (Corridor Exit / Stationary) | State lies outside the validated 1D R3B domain ($v \le 0.05\text{ m/s}$, $|y| > 1.75\text{ m}$, $|\psi| > 0.35\text{ rad}$, $d_{\text{rem}} \le 0\text{ m}$, or $\tau_{\text{req}} > 3.0\text{ s}$). Numerical margins are withheld. |
+| `INSUFFICIENT_EVIDENCE` | `INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE` (No Obstacle Geometry) | No observed 3D in-lane obstacle exists in the dataset annotations and no counterfactual $d_0$ was supplied. |
+
+---
+
+## 8. Interactive English Dashboard, Screenshots & Landscape PDF Report
 
 - **Interactive HTML Dashboard:** [`artifacts/report/index.html`](./artifacts/report/index.html)
 - **Landscape PDF Export:** [`artifacts/report/vla_handover_feasibility_report.pdf`](./artifacts/report/vla_handover_feasibility_report.pdf)
 
 ### Dashboard Screenshots
+
+![Screenshot 07: Interactive AutoVLA Trajectory Explorer and Coupled R3B Human Takeover Simulator](./artifacts/report/screenshots/07_interactive_r3b_and_trajectory_explorer.png)
+*Screenshot 07: Interactive Demonstrator Workspace showing Capability 1 (AutoVLA Trajectory & Step-Aware C1–C10 Physics Explorer on Scene 02 `keep forward` vs `turn left` at $t = 1.5\text{ s}$) coupled live to Capability 2 (4-Phase R3B Human Takeover Feasibility Simulator across `P0`/`P1`/`P2` with 3-Layer Provenance and non-safety status mapping).*
 
 ![Screenshot 01: Executive Findings, Methodological Leakage Disclosure, and Overview](./artifacts/report/screenshots/01_executive_findings_and_overview.png)
 *Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C08`), driving-command leakage disclosure banner, interactive control bar, and Scene 01 overview.*
@@ -171,9 +202,15 @@ To test whether the `scene_05_active_braking_deceleration` `C10_LONGITUDINAL_ACC
 ![Screenshot 04: Scene 01 Counterfactual Obstacle Provenance Badge Verification](./artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png)
 *Screenshot 04: Scene 01 counterfactual $d_0 = 45.00\text{ m}$ schedule explicitly badged as `Observed Ego (t0) + Assumed Obstacle (d0)` at $\tau_{\text{req}} = 0.0\text{ s}$ and `Hypothetical VLA + Assumed Obstacle (d0)` at $\tau_{\text{req}} > 0$.*
 
+![Screenshot 05: RQ1 Controlled Driving-Command Sensitivity (Scenes 02 & 06)](./artifacts/report/screenshots/05_scene_02_06_command_sensitivity.png)
+*Screenshot 05: RQ1 Controlled Driving-Command Sensitivity (`turn left` $\to$ `keep forward`, `EXT-VLA-C07`) on Scenes 02 and 06 with token-level divergence and R3B corridor admissibility impact.*
+
+![Screenshot 06: RQ2 Scene 05 C10 Numerical Robustness Matrix](./artifacts/report/screenshots/06_scene_05_c10_robustness_matrix.png)
+*Screenshot 06: RQ2 Scene 05 `C10` Numerical Robustness Audit (`EXT-VLA-C08`) across 5 discrete derivative estimators (`E1`–`E5`), 5 temporal windows, and 3 diagnostic thresholds.*
+
 ---
 
-## 8. Licensing, Data Redistribution Policy & Reproducible Commands
+## 9. Licensing, Data Redistribution Policy & Reproducible Commands
 
 ### Licensing & External Data Availability
 
@@ -201,7 +238,7 @@ To test whether the `scene_05_active_braking_deceleration` `C10_LONGITUDINAL_ACC
 # 4. Regenerate the Self-Contained Interactive English HTML Dashboard:
 .venv/bin/python -m extensions.vla_handover_feasibility.report_generator
 
-# 5. Run the 19-Test Extension Verification Suite:
+# 5. Run the 21-Test Extension Verification Suite:
 .venv/bin/pytest extensions/vla_handover_feasibility/tests -v
 
 # 6. Optional: Stream & Verify the 84 Raw Camera JPEGs from OpenDriveLab/OpenScene for Live Inference:
@@ -213,7 +250,7 @@ To test whether the `scene_05_active_braking_deceleration` `C10_LONGITUDINAL_ACC
 
 ### Test & Baseline Regression Summary
 
-- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`19 passed`** (`test_vla_handover_extension.py`).
+- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`21 passed`** (`test_vla_handover_extension.py`).
 - **Original Repository Test Suite ([`artifacts/baseline_pytest_output.txt`](./artifacts/baseline_pytest_output.txt)):** **`430 passed, 1 skipped, 1 deselected, 4 failed`** when audited against squashed pre-release git history (`all 27 R3B tests in tests/test_r3b.py and tests/test_r6a_figures.py::test_scientific_results_unchanged passing`):
   1. `tests/test_r2a.py::test_r2a_provenance`, `tests/test_r2b.py::test_r2b_provenance`, and `tests/test_r2c_lite.py::test_r2c_provenance` failed with `git diff` exit code `128` (`fatal: bad object 9d1c41d01a5a141f07020610c58879b76b214d11`) prior to the `tests/provenance_dependencies.py` content-hash verifier on `main`.
   2. `tests/test_r6a_figures.py::test_deterministic_rendering` fails on `FA2_participant_exposure_slopes.pdf` byte-level SHA-256 comparison due to Matplotlib / Python `3.14` PDF font stream metadata differences against the frozen PDF generated during release.

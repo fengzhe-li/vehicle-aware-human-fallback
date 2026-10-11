@@ -916,3 +916,295 @@ def test_rq2_scene_05_c10_numerical_robustness_audit(tmp_path: Path) -> None:
     assert sanity["quantization_vs_persistent_reversal_check"]["positive_accel_step_count"] == 9
     assert sanity["quantization_vs_persistent_reversal_check"]["is_single_step_quantization_artifact"] is False
 
+
+# =============================================================================
+# 14. Interactive R3B Simulator, Step Physics Explorer & Coupled Handover Tests
+# =============================================================================
+
+
+def test_interactive_r3b_simulator_analytical_parity_and_monotonic_sensitivity() -> None:
+    from extensions.vla_handover_feasibility.interactive_explorer import (
+        PRESENTATION_MAPPING_SPEC,
+        compute_r3b_point_phase_breakdown,
+        evaluate_interactive_r3b,
+        kmh_to_mps,
+        mps_to_kmh,
+    )
+    from src.experiments.r3b_braking_bounds import SUCCESS, t_required
+    from src.metrics.oracle import stopping_distance_r3b_analytical
+    from src.vehicle.models import GRAVITY, effective_braking_deceleration
+
+    # 1. Verify presentation statuses never use "SAFE"
+    assert set(PRESENTATION_MAPPING_SPEC.keys()) == {
+        "NECESSARY_CONDITION_SATISFIED",
+        "NECESSARY_CONDITION_VIOLATED",
+        "PARAMETER_SENSITIVE",
+        "NOT_APPLICABLE",
+        "INSUFFICIENT_EVIDENCE",
+    }
+    for status_key, status_meta in PRESENTATION_MAPPING_SPEC.items():
+        assert status_key != "SAFE"
+        assert "underlying_r3b_labels" in status_meta and "meaning" in status_meta
+
+    # 2. Verify exact unit conversion m/s <-> km/h
+    for v_mps in (0.0, 6.95, 13.58, 25.0, 35.0):
+        v_kmh = mps_to_kmh(v_mps)
+        assert math.isclose(v_kmh, v_mps * 3.6, rel_tol=1e-12, abs_tol=1e-12)
+        assert math.isclose(kmh_to_mps(v_kmh), v_mps, rel_tol=1e-12, abs_tol=1e-12)
+
+    # 3. Verify exact analytical parity against src.metrics.oracle & src.experiments.r3b_braking_bounds
+    for v0 in (1.5, 5.5, 13.58, 22.0):
+        for mu in (1.0, 0.7, 0.5, 0.35):
+            for t1 in (1.15, 1.65, 3.0):
+                t2, t3, a_max, a_drag, a_sup = 0.10, 0.60, 8.00, 0.25, 2.00
+                a_eff = effective_braking_deceleration(a_max, float(SUCCESS["u_brake"]), mu)
+                assert math.isclose(a_eff, min(a_max, mu * GRAVITY), rel_tol=1e-12)
+
+                for branch_id, r3b_key, t_auth, a_bef, a_aft in (
+                    ("P0", "P0|AUTH_AT_EFFECTIVE", t1, 0.0, a_drag),
+                    ("P1", "P1", 0.0, a_drag, a_drag),
+                    ("P2", "P2|AUTH_AT_EFFECTIVE", t1, a_sup, a_drag),
+                ):
+                    bd = compute_r3b_point_phase_breakdown(
+                        v0_mps=v0,
+                        mu=mu,
+                        branch_id=branch_id,
+                        t1_s=t1,
+                        t2_s=t2,
+                        t3_s=t3,
+                        a_max_mps2=a_max,
+                        a_drag_mps2=a_drag,
+                        a_sup_mps2=a_sup,
+                    )
+                    oracle_d_stop = stopping_distance_r3b_analytical(
+                        v0=v0,
+                        a_max=a_max,
+                        t_effective=t1,
+                        t_delay=t2,
+                        t_buildup=t3,
+                        t_authority=t_auth,
+                        a_before_authority=a_bef,
+                        a_after_authority=a_aft,
+                        u_brake=float(SUCCESS["u_brake"]),
+                        road_friction=mu,
+                    )
+                    oracle_t_req = t_required(
+                        v0,
+                        mu,
+                        r3b_key,
+                        {
+                            "t1": t1,
+                            "t2": t2,
+                            "t3": t3,
+                            "a_max": a_max,
+                            "a_drag": a_drag,
+                            "a_sup": a_sup,
+                            "f_auth": 1.0,
+                        },
+                    )
+                    assert math.isclose(bd["d_stop_m"], oracle_d_stop, abs_tol=1e-3)
+                    assert math.isclose(bd["d_req_m"], oracle_d_stop + 2.0, abs_tol=1e-3)
+                    assert math.isclose(bd["t_req_s"], oracle_t_req, abs_tol=1e-3)
+
+    # 4. Monotonic sensitivity checks and P0 >= P1 >= P2 stopping distance ordering
+    res_low_v = evaluate_interactive_r3b(v0_mps=10.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=1.5)
+    res_high_v = evaluate_interactive_r3b(v0_mps=18.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=1.5)
+    assert res_low_v["valid_inputs"] is True and res_high_v["valid_inputs"] is True
+    for b in ("P0", "P1", "P2"):
+        assert res_high_v["point_results_by_branch"][b]["d_req_m"] > (
+            res_low_v["point_results_by_branch"][b]["d_req_m"]
+        )
+        assert res_high_v["point_results_by_branch"][b]["margin_m"] < (
+            res_low_v["point_results_by_branch"][b]["margin_m"]
+        )
+
+    # P0 > P1 > P2 required stopping distance
+    b_low = res_low_v["point_results_by_branch"]
+    assert b_low["P0"]["d_req_m"] > b_low["P1"]["d_req_m"] > b_low["P2"]["d_req_m"]
+    assert b_low["P0"]["margin_m"] < b_low["P1"]["margin_m"] < b_low["P2"]["margin_m"]
+
+    # Lower friction (snow mu=0.35 vs dry mu=1.0) increases required stopping distance
+    res_snow = evaluate_interactive_r3b(v0_mps=14.0, obstacle_distance_d0_m=45.0, mu=0.35, t1_s=1.5)
+    res_dry = evaluate_interactive_r3b(v0_mps=14.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=1.5)
+    assert res_snow["point_results_by_branch"]["P1"]["d_req_m"] > (
+        res_dry["point_results_by_branch"]["P1"]["d_req_m"]
+    )
+    assert res_snow["point_results_by_branch"]["P1"]["is_friction_capped"] is True
+    assert res_dry["point_results_by_branch"]["P1"]["is_friction_capped"] is False
+
+    # Longer reaction time t1 increases pre-braking distance and total required distance
+    res_fast_t1 = evaluate_interactive_r3b(v0_mps=14.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=1.15)
+    res_slow_t1 = evaluate_interactive_r3b(v0_mps=14.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=2.80)
+    assert res_slow_t1["point_results_by_branch"]["P1"]["d_pre_control_m"] > (
+        res_fast_t1["point_results_by_branch"]["P1"]["d_pre_control_m"]
+    )
+    assert res_slow_t1["point_results_by_branch"]["P1"]["d_req_m"] > (
+        res_fast_t1["point_results_by_branch"]["P1"]["d_req_m"]
+    )
+
+    # 5. Status transitions across NECESSARY_CONDITION_SATISFIED, PARAMETER_SENSITIVE, NECESSARY_CONDITION_VIOLATED
+    sat = evaluate_interactive_r3b(v0_mps=8.0, obstacle_distance_d0_m=60.0, mu=1.0)
+    assert sat["presentation_status"] == "NECESSARY_CONDITION_SATISFIED"
+    assert sat["interval_presentation_status"] == "NECESSARY_CONDITION_SATISFIED"
+    assert sat["interval_results_by_branch"]["P1"]["interval_classification"] == "UNIFORMLY_POSITIVE"
+
+    sens = evaluate_interactive_r3b(v0_mps=13.58, obstacle_distance_d0_m=45.0, mu=1.0)
+    assert sens["interval_presentation_status"] == "PARAMETER_SENSITIVE"
+    assert sens["interval_results_by_branch"]["P1"]["interval_classification"] == "PARAMETER_SENSITIVE"
+
+    viol = evaluate_interactive_r3b(v0_mps=25.0, obstacle_distance_d0_m=20.0, mu=0.5)
+    assert viol["presentation_status"] == "NECESSARY_CONDITION_VIOLATED"
+    assert viol["interval_presentation_status"] == "NECESSARY_CONDITION_VIOLATED"
+    assert viol["interval_results_by_branch"]["P1"]["interval_classification"] == "UNIFORMLY_VIOLATED"
+
+    # 6. Invalid input guardrails
+    bad_neg_v = evaluate_interactive_r3b(v0_mps=-2.0, obstacle_distance_d0_m=45.0, mu=1.0)
+    assert bad_neg_v["valid_inputs"] is False
+    assert any("Negative vehicle speed" in e for e in bad_neg_v["validation_errors"])
+
+    bad_mu = evaluate_interactive_r3b(v0_mps=10.0, obstacle_distance_d0_m=45.0, mu=0.0)
+    assert bad_mu["valid_inputs"] is False
+    assert any("friction" in e.lower() for e in bad_mu["validation_errors"])
+
+    bad_unit_sync = evaluate_interactive_r3b(v0_mps=10.0, v0_kmh=50.0, obstacle_distance_d0_m=45.0, mu=1.0)
+    assert bad_unit_sync["valid_inputs"] is False
+    assert any("Inconsistent speed inputs" in e for e in bad_unit_sync["validation_errors"])
+
+
+def test_trajectory_explorer_catalog_step_checks_and_coupled_r3b(tmp_path: Path) -> None:
+    from extensions.vla_handover_feasibility.interactive_explorer import (
+        build_trajectory_explorer_catalog,
+        evaluate_interactive_r3b,
+    )
+
+    catalog = build_trajectory_explorer_catalog()
+    assert catalog["total_scenes"] == 7
+    assert catalog["total_conditions"] == 10
+    assert len(catalog["scene_condition_map"]) == 7
+    assert len(catalog["epa_coastdown_table"]) == 4
+
+    # Verify all 10 conditions exist and have 11 steps (t=0.0s + k=1..10)
+    expected_keys = {
+        "scene_01_high_speed_open_road__canonical",
+        "scene_02_stationary_lead_obstacle__canonical",
+        "scene_02_stationary_lead_obstacle__intervention_keep_forward",
+        "scene_03_close_urban_lead_following__canonical",
+        "scene_04_fast_arterial_lead_vehicle__canonical",
+        "scene_05_active_braking_deceleration__canonical",
+        "scene_05_active_braking_deceleration__ablation_signed_accel",
+        "scene_06_intersection_turn_maneuver__canonical",
+        "scene_06_intersection_turn_maneuver__intervention_keep_forward",
+        "scene_07_stationary_ego_baseline__canonical",
+    }
+    assert set(catalog["conditions"].keys()) == expected_keys
+
+    for cond_key, cond in catalog["conditions"].items():
+        steps_dry = cond["steps_dry_mu1_0"]
+        assert len(steps_dry) == 11, f"{cond_key} expected 11 steps (0..10)"
+        t0_step = steps_dry[0]
+        assert t0_step["step"] == 0 and math.isclose(t0_step["t_s"], 0.0, abs_tol=1e-9)
+        assert t0_step["is_initial_observed_t0"] is True
+        assert t0_step["is_recorded_prediction_step"] is False
+
+        # Verify C1 is TRAJECTORY_WIDE at t=0 while C2..C10 are TIME_LOCAL_STEP with NOT_DEFINED_AT_T0
+        c1_t0 = next(c for c in t0_step["checks"] if c["check_id"] == "C1_TIMESTAMP_AND_HORIZON_CONTINUITY")
+        assert c1_t0["evaluation_scope"] == "TRAJECTORY_WIDE"
+        assert c1_t0["step_status"] == "TRAJECTORY_WIDE_PASS"
+        for c in t0_step["checks"]:
+            if c["check_id"] != "C1_TIMESTAMP_AND_HORIZON_CONTINUITY":
+                assert c["evaluation_scope"] == "TIME_LOCAL_STEP"
+                assert c["step_status"] == "NOT_DEFINED_AT_T0"
+
+        # Verify steps k=1..10 evaluate TIME_LOCAL_STEP checks explicitly
+        for s_idx in range(1, 11):
+            st = steps_dry[s_idx]
+            assert st["step"] == s_idx
+            assert math.isclose(st["t_s"], 0.5 * s_idx, abs_tol=1e-9)
+            assert st["is_initial_observed_t0"] is False
+            assert st["is_recorded_prediction_step"] is True
+            assert len(st["checks"]) == 10
+
+    # Verify Scene 05 canonical C10 step-level diagnostics:
+    # Step 1 (t=0.5s) has |0.1811 - (-1.5525)| = 1.7336 <= 3.00 (SATISFIED at step 1),
+    # while Steps 3 and 4 (t=1.5s, 2.0s) have |1.6852 - (-1.5525)| = 3.2377 > 3.00 (VIOLATED at steps [3, 4]).
+    s05_can_steps = catalog["conditions"]["scene_05_active_braking_deceleration__canonical"]["steps_dry_mu1_0"]
+    s05_c10_can_s1 = next(
+        c for c in s05_can_steps[1]["checks"] if c["check_id"] == "C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY"
+    )
+    assert s05_c10_can_s1["step_status"] == "SATISFIED"
+    assert s05_c10_can_s1["trajectory_wide_passed"] is False
+    assert s05_c10_can_s1["trajectory_violation_steps"] == [3, 4]
+
+    s05_c10_can_s3 = next(
+        c for c in s05_can_steps[3]["checks"] if c["check_id"] == "C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY"
+    )
+    assert s05_c10_can_s3["step_status"] == "VIOLATED"
+    assert s05_c10_can_s3["step_measured_value"] > 3.00
+
+    s05_abl_step3 = catalog["conditions"]["scene_05_active_braking_deceleration__ablation_signed_accel"][
+        "steps_dry_mu1_0"
+    ][3]
+    s05_c10_abl_s3 = next(
+        c for c in s05_abl_step3["checks"] if c["check_id"] == "C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY"
+    )
+    assert s05_c10_abl_s3["step_status"] == "SATISFIED"
+    assert s05_c10_abl_s3["trajectory_wide_passed"] is True
+
+    # Verify coupled Trajectory-to-R3B transition on Scene 02:
+    # Control ('turn left') exits 1D corridor at step 3 (t=1.5s) -> NOT_APPLICABLE
+    # Intervention ('keep forward') stays in 1D corridor at step 3 (t=1.5s) -> NECESSARY_CONDITION_SATISFIED
+    s02_ctrl_step3 = catalog["conditions"]["scene_02_stationary_lead_obstacle__canonical"]["steps_dry_mu1_0"][3]
+    assert s02_ctrl_step3["within_longitudinal_corridor"] is False
+    s02_ctrl_r3b = evaluate_interactive_r3b(
+        v0_mps=s02_ctrl_step3["implied_speed_mps"],
+        obstacle_distance_d0_m=55.49,
+        mu=1.0,
+        tau_req_s=1.5,
+        ego_x_at_req_m=s02_ctrl_step3["x_m"],
+        ego_y_at_req_m=s02_ctrl_step3["y_m"],
+        ego_heading_at_req_rad=s02_ctrl_step3["heading_rad"],
+        obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+    )
+    assert s02_ctrl_r3b["presentation_status"] == "NOT_APPLICABLE"
+
+    s02_intv_step3 = catalog["conditions"][
+        "scene_02_stationary_lead_obstacle__intervention_keep_forward"
+    ]["steps_dry_mu1_0"][3]
+    assert s02_intv_step3["within_longitudinal_corridor"] is True
+    s02_intv_r3b = evaluate_interactive_r3b(
+        v0_mps=s02_intv_step3["implied_speed_mps"],
+        obstacle_distance_d0_m=55.49,
+        mu=1.0,
+        tau_req_s=1.5,
+        ego_x_at_req_m=s02_intv_step3["x_m"],
+        ego_y_at_req_m=s02_intv_step3["y_m"],
+        ego_heading_at_req_rad=s02_intv_step3["heading_rad"],
+        obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+    )
+    assert s02_intv_r3b["presentation_status"] == "NECESSARY_CONDITION_SATISFIED"
+    assert s02_intv_r3b["interval_presentation_status"] == "NECESSARY_CONDITION_SATISFIED"
+
+    # Verify open-road scene without observed in-lane obstacle returns INSUFFICIENT_EVIDENCE in observed mode
+    s01_cond = catalog["conditions"]["scene_01_high_speed_open_road__canonical"]
+    assert s01_cond["observed_in_lane_lead_obstacle"] is None
+    s01_obs_r3b = evaluate_interactive_r3b(
+        v0_mps=s01_cond["ego_initial_speed_mps"],
+        obstacle_distance_d0_m=None,
+        mu=1.0,
+        obstacle_source=ObstacleSourceType.NONE_INSUFFICIENT_EVIDENCE,
+    )
+    assert s01_obs_r3b["presentation_status"] == "INSUFFICIENT_EVIDENCE"
+
+    # Verify HTML report embeds VLA_INTERACTIVE_EXPLORER and both interactive demonstrator panels
+    html_out = generate_interactive_report(output_html_path=tmp_path / "interactive_report.html")
+    html_text = html_out.read_text(encoding="utf-8")
+    assert "window.VLA_INTERACTIVE_EXPLORER" in html_text
+    assert 'id="interactive-demonstrator-workspace"' in html_text
+    assert 'id="interactive-trajectory-explorer"' in html_text
+    assert 'id="interactive-r3b-simulator"' in html_text
+    assert "NECESSARY_CONDITION_SATISFIED" in html_text
+    assert "NOT_DEFINED_AT_T0" in html_text
+
+
+
+

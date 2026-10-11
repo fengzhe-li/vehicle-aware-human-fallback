@@ -79,13 +79,18 @@ def encode_camera_thumbnail_data_uri(
     return f"data:image/svg+xml;base64,{b64_svg}"
 
 
+from extensions.vla_handover_feasibility.interactive_explorer import (
+    build_trajectory_explorer_catalog,
+)
+
+
 def build_report_data_bundle(
     summary_path: str | Path = DEFAULT_SUMMARY_PATH,
     claim_register_path: str | Path = DEFAULT_CLAIM_REGISTER_PATH,
     data_dir: str | Path = DEFAULT_DATA_DIR,
     embed_raw_jpegs: bool = False,
 ) -> dict[str, Any]:
-    """Assemble deterministic JSON data bundle with camera sensor provenance cards for the interactive report."""
+    """Assemble deterministic JSON data bundle with camera sensor provenance cards and interactive explorer catalog."""
     with open(Path(summary_path), "r", encoding="utf-8") as f:
         summary = json.load(f)
 
@@ -133,9 +138,15 @@ def build_report_data_bundle(
             }
         rec["camera_thumbnails"] = thumb_cache[sid]
 
+    manifest_candidate = d_root / "scenes_manifest.json"
+    if not manifest_candidate.exists():
+        manifest_candidate = DEFAULT_DATA_DIR / "scenes_manifest.json"
+    explorer_catalog = build_trajectory_explorer_catalog(manifest_path=manifest_candidate)
+
     return {
         "summary": summary,
         "extension_claims": claims,
+        "interactive_explorer": explorer_catalog,
     }
 
 
@@ -370,6 +381,363 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs text-[var(--foreground)]">
         <strong class="text-amber-900">Methodological Limitation — Driving-Command Conditioning &amp; Future-Displacement Leakage Risk (<code>EXT-VLA-C06</code>):</strong>
         In <strong>Scene 02</strong> (<code>scene_02_stationary_lead_obstacle</code>, y<sub>GT</sub>(3.0 s) = +4.51 m, y<sub>GT</sub>(5.0 s) = +16.67 m) and <strong>Scene 06</strong> (<code>scene_06_intersection_turn_maneuver</code>, y<sub>GT</sub>(3.0 s) = +4.09 m, y<sub>GT</sub>(5.0 s) = +8.35 m), the effective <code>"turn left"</code> prompt command corresponds to future ground-truth lateral displacement rather than an independent pre-trip navigation signal (and when an unknown raw command is resolved from future lateral displacement, this constitutes future-information leakage). Recorded inference inputs are preserved unmodified for provenance integrity, and affected ADE/FDE metrics are bounded as command-conditioned evaluations rather than strictly leakage-free blind predictions.
+      </div>
+    </section>
+
+    <!-- ========================================================================================= -->
+    <!-- INTERACTIVE ENGINEERING DEMONSTRATOR WORKSPACE: R3B SIMULATOR + AUTOVLA TRAJECTORY EXPLORER -->
+    <!-- ========================================================================================= -->
+    <section id="interactive-demonstrator-workspace" class="bg-[var(--card)] border-2 border-blue-600/40 rounded-xl p-5 shadow-md space-y-5 print-avoid-break">
+      <div class="flex flex-wrap items-start justify-between gap-3 border-b border-[var(--border)] pb-3">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white">
+              Interactive Engineering Demonstrator
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">
+              10 Saved AutoVLA Trajectory Rollouts (7 Canonical + 2 Command Interventions + 1 Signed OOD Ablation)
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-900 border border-amber-500/30">
+              Exact R3B Analytical Oracle (Never Approximated &bull; Never Labelled "SAFE")
+            </span>
+          </div>
+          <h2 class="text-base font-bold text-[var(--foreground)]">
+            Interactive AutoVLA Step-Aware Physics Explorer &amp; Coupled R3B Human Takeover Feasibility Simulator
+          </h2>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Scrub or animate across the 5.0 s (10-step, &Delta;t = 0.5 s) trajectory horizon, inspect step-local vs. trajectory-wide C1&ndash;C10 vehicle-dynamics checks, and pipe any trajectory step directly into the 4-phase R3B braking-only human takeover model across Observed, Counterfactual, and Parametric conditions.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs no-print">
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/30 font-semibold text-blue-800 cursor-pointer">
+            <input id="chk-auto-sync-r3b" type="checkbox" checked class="accent-blue-600" />
+            <span>Auto-Couple Trajectory Step &rarr; R3B Simulator</span>
+          </label>
+          <button id="btn-send-step-to-r3b" type="button" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+            Send Current Step to R3B Simulator
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+
+        <!-- LEFT COLUMN (6 cols): CAPABILITY 1 — INTERACTIVE AUTOVLA TRAJECTORY & PHYSICS EXPLORER -->
+        <div id="interactive-trajectory-explorer" class="xl:col-span-6 bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-2.5">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-700">Capability 1 &mdash; Trajectory &amp; Step-Level Physics Explorer</span>
+              <h3 class="text-sm font-bold text-[var(--foreground)]">AutoVLA Action Rollout Playback, Command/Ablation Overlay &amp; Step C1&ndash;C10 Inspector</h3>
+            </div>
+            <span id="explorer-condition-role-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold"></span>
+          </div>
+
+          <!-- Trajectory Explorer Selectors -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+            <div class="sm:col-span-5">
+              <label for="select-explorer-scene" class="block font-semibold text-[var(--muted-foreground)] mb-1">Driving Scene (7 Real Scenes)</label>
+              <select id="select-explorer-scene" class="w-full rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] px-2.5 py-1.5 font-medium"></select>
+            </div>
+            <div class="sm:col-span-5">
+              <label for="select-explorer-condition" class="block font-semibold text-[var(--muted-foreground)] mb-1">Rollout Condition (10 Saved Rollouts)</label>
+              <select id="select-explorer-condition" class="w-full rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] px-2.5 py-1.5 font-medium"></select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="select-explorer-mu" class="block font-semibold text-[var(--muted-foreground)] mb-1">Verifier &mu;</label>
+              <select id="select-explorer-mu" class="w-full rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] px-2 py-1.5 font-medium">
+                <option value="1.0">Dry 1.0</option>
+                <option value="0.5">Wet 0.5</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Playback Scrubber & Overlay Toggles -->
+          <div class="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)] space-y-2.5 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5 no-print">
+                <button id="btn-explorer-play" type="button" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition">
+                  &#9654; Play
+                </button>
+                <button id="btn-explorer-prev" type="button" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-mono font-semibold">
+                  &larr; &minus;0.5s
+                </button>
+                <button id="btn-explorer-next" type="button" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-mono font-semibold">
+                  +0.5s &rarr;
+                </button>
+              </div>
+              <div class="font-mono text-xs">
+                <span class="text-[var(--muted-foreground)]">Active Horizon Time:</span>
+                <strong id="explorer-time-label" class="text-indigo-700 text-sm ml-1">t = 0.0 s (Step 0 / 10)</strong>
+              </div>
+              <span id="explorer-interp-badge" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">
+                RECORDED 0.5 s WAYPOINT
+              </span>
+            </div>
+
+            <div>
+              <label for="slider-explorer-time" class="sr-only">Trajectory Horizon Time Scrubber (0.0 to 5.0 seconds)</label>
+              <input id="slider-explorer-time" type="range" min="0.0" max="5.0" step="0.5" value="0.0" class="w-full accent-indigo-600 cursor-pointer" />
+              <div class="flex justify-between text-[10px] font-mono text-[var(--muted-foreground)] mt-0.5">
+                <span>0.0s (t<sub>0</sub>)</span>
+                <span>1.0s (k=2)</span>
+                <span>2.0s (k=4)</span>
+                <span>3.0s (k=6 / R3B max)</span>
+                <span>4.0s (k=8)</span>
+                <span>5.0s (k=10)</span>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-[var(--border)]">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input id="chk-explorer-overlay-gt" type="checkbox" checked class="accent-emerald-600" />
+                <span>Show Logged Human Trajectory (GT)</span>
+              </label>
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input id="chk-explorer-overlay-counterpart" type="checkbox" checked class="accent-purple-600" />
+                <span id="lbl-explorer-counterpart">Overlay Counterpart Rollout (Command / Ablation)</span>
+              </label>
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input id="chk-explorer-smooth" type="checkbox" class="accent-indigo-600" />
+                <span>Smooth 0.1 s Display Interpolation</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- GT / Condition Methodological Boundary Notice -->
+          <div id="explorer-gt-boundary-banner" class="p-2.5 rounded-lg text-xs border"></div>
+
+          <!-- Animated BEV Trajectory SVG -->
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+              <span class="font-semibold">Animated Bird's-Eye View (+x Forward [m], +y Left [m]) &amp; &pm;1.75 m R3B Corridor</span>
+              <span id="explorer-corridor-exit-summary" class="font-mono text-[11px] text-[var(--muted-foreground)]"></span>
+            </div>
+            <div id="svg-explorer-bev" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)] p-2"></div>
+          </div>
+
+          <!-- Synchronized Step Kinematics SVG -->
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+              <span class="font-semibold">Step-Indexed Speed v(t) [m/s] &amp; Longitudinal / Total Acceleration [m/s&sup2;]</span>
+              <span class="text-[11px] text-[var(--muted-foreground)]">Vertical cursor tracks scrubbed time t</span>
+            </div>
+            <div id="svg-explorer-kinematics" class="w-full rounded-lg bg-[var(--card)] border border-[var(--border)] p-2"></div>
+          </div>
+
+          <!-- Live Step Telemetry Readout Card -->
+          <div id="explorer-step-telemetry" class="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)] text-xs space-y-2"></div>
+
+          <!-- Step-Aware C1-C10 Physical Feasibility Diagnostics Table -->
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+              <span class="font-semibold">Step-Aware Physical Constraint Diagnostics (C1&ndash;C10 at Active Step vs. Trajectory-Wide)</span>
+              <span class="text-[11px] text-[var(--muted-foreground)]">Explicitly separates <code>TIME_LOCAL_STEP</code> (k=1..10) from <code>TRAJECTORY_WIDE</code></span>
+            </div>
+            <div class="table-wrapper rounded-lg border border-[var(--border)] bg-[var(--card)] max-h-64">
+              <table class="text-xs">
+                <thead class="bg-[var(--background)] text-[var(--muted-foreground)]">
+                  <tr>
+                    <th class="text-left p-2 border-b border-[var(--border)]">Check ID</th>
+                    <th class="text-left p-2 border-b border-[var(--border)]">Evaluation Scope</th>
+                    <th class="text-right p-2 border-b border-[var(--border)]">Step Value</th>
+                    <th class="text-right p-2 border-b border-[var(--border)]">Limit</th>
+                    <th class="text-left p-2 border-b border-[var(--border)]">Step Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-explorer-step-checks"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN (6 cols): CAPABILITY 2 — INTERACTIVE R3B HUMAN TAKEOVER FEASIBILITY SIMULATOR -->
+        <div id="interactive-r3b-simulator" class="xl:col-span-6 bg-[var(--background)] border border-[var(--border)] rounded-xl p-4 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-2.5">
+            <div>
+              <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800">Capability 2 &mdash; Interactive R3B Human Takeover Simulator</span>
+              <h3 class="text-sm font-bold text-[var(--foreground)]">4-Phase Braking-Only Necessary-Condition Model (P0 / P1 / P2) &amp; 3-Layer Provenance</h3>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs">
+              <label for="select-r3b-sim-mode" class="font-semibold text-[var(--muted-foreground)]">Mode:</label>
+              <select id="select-r3b-sim-mode" class="rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] px-2.5 py-1 font-semibold">
+                <option value="connected">Connected AutoVLA Trajectory Mode</option>
+                <option value="standalone">Standalone Parametric Explorer Mode</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Interactive Parameter Controls Card -->
+          <div class="p-3.5 rounded-lg bg-[var(--card)] border border-[var(--border)] space-y-3 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-2">
+              <span class="font-bold text-[var(--foreground)]">Interactive Vehicle, Obstacle, Surface &amp; Human-Response Controls</span>
+              <div class="flex items-center gap-2 no-print">
+                <label for="select-r3b-speed-unit" class="text-[11px] font-semibold text-[var(--muted-foreground)]">Speed Unit:</label>
+                <select id="select-r3b-speed-unit" class="rounded border border-[var(--border)] bg-[var(--background)] px-2 py-0.5 text-[11px] font-mono">
+                  <option value="mps">m/s (SI)</option>
+                  <option value="kmh">km/h</option>
+                </select>
+                <button id="btn-r3b-reset-defaults" type="button" class="px-2 py-0.5 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 text-[11px] font-semibold">
+                  Reset R3B Defaults
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <!-- Speed Control -->
+              <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between">
+                  <label for="input-r3b-speed" class="font-semibold">Speed at Takeover Request v(&tau;<sub>req</sub>)</label>
+                  <span id="r3b-speed-dual-readout" class="font-mono text-[11px] text-blue-700 font-bold"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input id="slider-r3b-speed" type="range" min="0.0" max="40.0" step="0.1" value="13.58" aria-label="Vehicle speed slider" class="w-full accent-blue-600 cursor-pointer" />
+                  <input id="input-r3b-speed" type="number" step="0.1" value="13.58" class="w-20 rounded border border-[var(--border)] bg-[var(--card)] px-2 py-1 font-mono text-right" />
+                </div>
+              </div>
+
+              <!-- Obstacle Source & Distance Control -->
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <label for="select-r3b-obstacle-mode" class="font-semibold">Obstacle Source &amp; Initial d<sub>0</sub> [m]</label>
+                  <select id="select-r3b-obstacle-mode" class="rounded border border-[var(--border)] bg-[var(--card)] px-1.5 py-0.5 text-[11px] font-semibold">
+                    <option value="observed">Observed 3D Lead (If Present)</option>
+                    <option value="counterfactual">Assumed Stationary d0 [m]</option>
+                  </select>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input id="slider-r3b-d0" type="range" min="5.0" max="120.0" step="0.5" value="45.0" aria-label="Initial obstacle distance d0 slider" class="w-full accent-pink-600 cursor-pointer" />
+                  <input id="input-r3b-d0" type="number" step="0.5" value="45.0" aria-label="Initial obstacle distance d0 in meters" class="w-20 rounded border border-[var(--border)] bg-[var(--card)] px-2 py-1 font-mono text-right" />
+                </div>
+              </div>
+
+              <!-- Takeover Request Delay tau_req Control -->
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between">
+                  <label for="input-r3b-tau" class="font-semibold">Takeover Request Delay &tau;<sub>req</sub> [s]</label>
+                  <span class="font-mono text-[11px] text-[var(--muted-foreground)]">Domain: 0.0 &ndash; 3.0 s</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input id="slider-r3b-tau" type="range" min="0.0" max="3.0" step="0.5" value="0.0" aria-label="Takeover request delay tau_req slider" class="w-full accent-indigo-600 cursor-pointer" />
+                  <input id="input-r3b-tau" type="number" step="0.5" value="0.0" class="w-20 rounded border border-[var(--border)] bg-[var(--card)] px-2 py-1 font-mono text-right" />
+                </div>
+              </div>
+
+              <!-- Policy Branch Selector -->
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <label for="select-r3b-policy" class="block font-semibold">Pre-Control Transition Policy (During t<sub>1</sub>)</label>
+                <select id="select-r3b-policy" class="w-full rounded border border-[var(--border)] bg-[var(--card)] px-2.5 py-1.5 font-semibold">
+                  <option value="P0">P0 &mdash; Unmitigated Hold-Speed (0.0 m/s&sup2; in t1)</option>
+                  <option value="P1" selected>P1 &mdash; Passive Throttle-Off EPA Drag in t1</option>
+                  <option value="P2">P2 &mdash; System-Supported Pre-Decel (a_sup in t1)</option>
+                </select>
+              </div>
+
+              <!-- Road Friction mu Control + Presets -->
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <label for="input-r3b-mu" class="font-semibold">Road Friction &mu; (&mu;&middot;g Cap)</label>
+                  <div class="flex items-center gap-1 no-print">
+                    <button type="button" data-mu-preset="1.0" class="px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[10px] font-mono hover:bg-blue-500/10">Dry 1.0</button>
+                    <button type="button" data-mu-preset="0.7" class="px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[10px] font-mono hover:bg-blue-500/10">Wet 0.7</button>
+                    <button type="button" data-mu-preset="0.5" class="px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[10px] font-mono hover:bg-blue-500/10">Rain 0.5</button>
+                    <button type="button" data-mu-preset="0.35" class="px-1.5 py-0.5 rounded bg-[var(--card)] border border-[var(--border)] text-[10px] font-mono hover:bg-blue-500/10">Snow 0.35</button>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input id="slider-r3b-mu" type="range" min="0.15" max="1.10" step="0.05" value="1.00" aria-label="Road friction mu slider" class="w-full accent-amber-600 cursor-pointer" />
+                  <input id="input-r3b-mu" type="number" step="0.05" value="1.00" class="w-20 rounded border border-[var(--border)] bg-[var(--card)] px-2 py-1 font-mono text-right" />
+                </div>
+              </div>
+
+              <!-- Human Takeover Reaction Time t1 Control -->
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] space-y-1">
+                <div class="flex items-center justify-between">
+                  <label for="input-r3b-t1" class="font-semibold">Human Reaction Delay t<sub>1</sub> [s]</label>
+                  <span class="font-mono text-[10px] text-[var(--muted-foreground)]">R3B Box: [1.15, 3.00] s</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input id="slider-r3b-t1" type="range" min="0.50" max="4.00" step="0.05" value="1.65" aria-label="Human reaction time t1 slider" class="w-full accent-emerald-600 cursor-pointer" />
+                  <input id="input-r3b-t1" type="number" step="0.05" value="1.65" class="w-20 rounded border border-[var(--border)] bg-[var(--card)] px-2 py-1 font-mono text-right" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Secondary Physical Parameters Row (t2, t3, a_max, a_sup) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[var(--border)]">
+              <div>
+                <label for="input-r3b-t2" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">Hydraulic Delay t<sub>2</sub> [s]</label>
+                <input id="input-r3b-t2" type="number" step="0.01" value="0.10" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
+                <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B: [0.05, 0.17]</div>
+              </div>
+              <div>
+                <label for="input-r3b-t3" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">Brake Ramp t<sub>3</sub> [s]</label>
+                <input id="input-r3b-t3" type="number" step="0.05" value="0.60" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
+                <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B: [0.30, 1.20]</div>
+              </div>
+              <div>
+                <label for="input-r3b-amax" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">Max Decel a<sub>max</sub> [m/s&sup2;]</label>
+                <input id="input-r3b-amax" type="number" step="0.1" value="8.00" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
+                <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B: [6.43, 9.10]</div>
+              </div>
+              <div>
+                <label for="input-r3b-asup" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">P2 Decel a<sub>sup</sub> [m/s&sup2;]</label>
+                <input id="input-r3b-asup" type="number" step="0.1" value="2.00" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
+                <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B: [1.00, 3.00]</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EXPLICIT 3-LAYER PROVENANCE & OUTPUT ARCHITECTURE -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <!-- LAYER 1: Observed / Recorded Evidence -->
+            <div id="r3b-layer-observed" class="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/30 space-y-1"></div>
+            <!-- LAYER 2: Assumed Counterfactual Inputs -->
+            <div id="r3b-layer-assumed" class="p-3 rounded-lg bg-pink-500/5 border border-pink-500/30 space-y-1"></div>
+          </div>
+
+          <!-- LAYER 3: Derived Model Conclusions -->
+          <div id="r3b-layer-derived" class="p-3.5 rounded-lg bg-[var(--card)] border border-[var(--border)] space-y-3 text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-2.5">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-600">Layer 3 &mdash; Derived R3B Model Conclusions (Necessary Condition Only)</span>
+                <div id="r3b-sim-state-source-badge" class="mt-1"></div>
+              </div>
+              <div class="text-right">
+                <div id="r3b-sim-status-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold"></div>
+                <div id="r3b-sim-underlying-label" class="text-[10px] font-mono text-[var(--muted-foreground)] mt-0.5"></div>
+              </div>
+            </div>
+
+            <!-- Primary Numerical Readouts Grid -->
+            <div id="r3b-sim-metrics-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+
+            <!-- Phase-by-Phase Stopping Breakdown SVG Chart -->
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+                <span class="font-semibold">4-Phase Stopping Distance Breakdown across P0 / P1 / P2 vs. Available Distance D<sub>avail</sub> [m]</span>
+                <span class="text-[11px] font-mono text-[var(--muted-foreground)]">Includes +2.0 m Standstill Margin</span>
+              </div>
+              <div id="svg-r3b-sim-breakdown" class="w-full rounded-lg bg-[var(--background)] border border-[var(--border)] p-2"></div>
+            </div>
+
+            <!-- Plain-English Causal Explanation -->
+            <div id="r3b-sim-causal-explanation" class="p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/25 leading-relaxed"></div>
+
+            <!-- Presentation Status Mapping & Non-Safety Boundary Legend -->
+            <details class="rounded-lg bg-[var(--background)] border border-[var(--border)] p-2.5">
+              <summary class="font-semibold cursor-pointer text-[11px] text-[var(--muted-foreground)]">
+                Presentation Status Mapping to Underlying R3B Classifications &amp; Mandatory Non-Safety Boundary
+              </summary>
+              <div id="r3b-sim-status-legend" class="mt-2 space-y-1 text-[11px] text-[var(--muted-foreground)]">
+                <div>&bull; <code>NECESSARY_CONDITION_SATISFIED</code> &larr; <code>ROBUSTLY SATISFIED</code> / point margin M<sub>d</sub> &ge; 0 m (necessary 1D braking condition met; <strong>never labelled "SAFE"</strong>).</div>
+                <div>&bull; <code>NECESSARY_CONDITION_VIOLATED</code> &larr; <code>ROBUSTLY UNSATISFIED</code> / point margin M<sub>d</sub> &lt; 0 m (required stopping distance exceeds available obstacle distance).</div>
+                <div>&bull; <code>PARAMETER_SENSITIVE</code> &larr; <code>PARAMETER-SENSITIVE</code> (margin changes sign across the frozen R3B human/vehicle parameter box: t<sub>1</sub> &isin; [1.15, 3.00] s, t<sub>2</sub> &isin; [0.05, 0.17] s, t<sub>3</sub> &isin; [0.30, 1.20] s, a<sub>max</sub> &isin; [6.43, 9.10] m/s&sup2;).</div>
+                <div>&bull; <code>NOT_APPLICABLE</code> &larr; Stationary ego (v &le; 0.05 m/s), trajectory step outside the &pm;1.75 m / &pm;0.35 rad 1D longitudinal corridor, d<sub>rem</sub> &le; 0 m, or out-of-range inputs.</div>
+                <div>&bull; <code>INSUFFICIENT_EVIDENCE</code> &larr; No observed 3D in-corridor obstacle in dataset annotations and no counterfactual d<sub>0</sub> assumed (TTC is never inferred from camera pixels alone).</div>
+              </div>
+            </details>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1716,6 +2084,1078 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           html += `</tbody></table>`;
           tblEl.innerHTML = html;
         }
+      }
+
+      // =========================================================================================
+      // INTERACTIVE ENGINEERING DEMONSTRATOR CONTROLLER (TRAJECTORY EXPLORER + R3B SIMULATOR)
+      // =========================================================================================
+      const explorerCatalog = bundle.interactive_explorer || null;
+
+      if (explorerCatalog) {
+        const expSceneSel = document.getElementById("select-explorer-scene");
+        const expCondSel = document.getElementById("select-explorer-condition");
+        const expMuSel = document.getElementById("select-explorer-mu");
+        const expPlayBtn = document.getElementById("btn-explorer-play");
+        const expPrevBtn = document.getElementById("btn-explorer-prev");
+        const expNextBtn = document.getElementById("btn-explorer-next");
+        const expTimeSlider = document.getElementById("slider-explorer-time");
+        const expTimeLabel = document.getElementById("explorer-time-label");
+        const expInterpBadge = document.getElementById("explorer-interp-badge");
+        const expChkGt = document.getElementById("chk-explorer-overlay-gt");
+        const expChkCounterpart = document.getElementById("chk-explorer-overlay-counterpart");
+        const expChkSmooth = document.getElementById("chk-explorer-smooth");
+        const expAutoSync = document.getElementById("chk-auto-sync-r3b");
+        const expSendBtn = document.getElementById("btn-send-step-to-r3b");
+
+        const r3bModeSel = document.getElementById("select-r3b-sim-mode");
+        const r3bUnitSel = document.getElementById("select-r3b-speed-unit");
+        const r3bResetBtn = document.getElementById("btn-r3b-reset-defaults");
+        const r3bSpeedSlider = document.getElementById("slider-r3b-speed");
+        const r3bSpeedInput = document.getElementById("input-r3b-speed");
+        const r3bSpeedDual = document.getElementById("r3b-speed-dual-readout");
+        const r3bObsModeSel = document.getElementById("select-r3b-obstacle-mode");
+        const r3bD0Slider = document.getElementById("slider-r3b-d0");
+        const r3bD0Input = document.getElementById("input-r3b-d0");
+        const r3bTauSlider = document.getElementById("slider-r3b-tau");
+        const r3bTauInput = document.getElementById("input-r3b-tau");
+        const r3bPolicySel = document.getElementById("select-r3b-policy");
+        const r3bMuSlider = document.getElementById("slider-r3b-mu");
+        const r3bMuInput = document.getElementById("input-r3b-mu");
+        const r3bT1Slider = document.getElementById("slider-r3b-t1");
+        const r3bT1Input = document.getElementById("input-r3b-t1");
+        const r3bT2Input = document.getElementById("input-r3b-t2");
+        const r3bT3Input = document.getElementById("input-r3b-t3");
+        const r3bAmaxInput = document.getElementById("input-r3b-amax");
+        const r3bAsupInput = document.getElementById("input-r3b-asup");
+
+        const GRAVITY = 9.81;
+        const STANDSTILL_MARGIN_M = 2.0;
+        const MIN_SPEED_MPS = 0.05;
+        const CORR_HALF_WIDTH_M = 1.75;
+        const CORR_MAX_HEADING_RAD = 0.35;
+
+        let playTimer = null;
+
+        // Populate Scene Selector
+        const sceneIds = Object.keys(explorerCatalog.scene_condition_map || {});
+        sceneIds.forEach((sid) => {
+          const opt = document.createElement("option");
+          opt.value = sid;
+          const canonCond = explorerCatalog.conditions[`${sid}__canonical`];
+          const v0Str = canonCond ? canonCond.ego_initial_speed_mps.toFixed(2) : "0.00";
+          const nConds = (explorerCatalog.scene_condition_map[sid] || []).length;
+          opt.textContent = `${sid} (v0=${v0Str} m/s, ${nConds} rollout${nConds > 1 ? "s" : ""})`;
+          expSceneSel.appendChild(opt);
+        });
+
+        function populateExplorerConditionOptions(sceneId, preferredCondId) {
+          const condIds = explorerCatalog.scene_condition_map[sceneId] || [];
+          expCondSel.innerHTML = "";
+          condIds.forEach((cid) => {
+            const cObj = explorerCatalog.conditions[cid];
+            if (!cObj) return;
+            const opt = document.createElement("option");
+            opt.value = cid;
+            opt.textContent = cObj.condition_label;
+            expCondSel.appendChild(opt);
+          });
+          if (preferredCondId && condIds.includes(preferredCondId)) {
+            expCondSel.value = preferredCondId;
+          } else if (condIds.length > 0) {
+            expCondSel.value = condIds[0];
+          }
+        }
+
+        function wrapAngleRad(ang) {
+          return ((ang + Math.PI) % (2.0 * Math.PI) + 2.0 * Math.PI) % (2.0 * Math.PI) - Math.PI;
+        }
+
+        function epaDragIntervalForSpeedMps(speedMps) {
+          const rows = explorerCatalog.epa_coastdown_table || [];
+          if (!rows.length) return [0.16, 0.45];
+          const vKmh = Math.min(Math.max(speedMps * 3.6, rows[0].speed_kmh), rows[rows.length - 1].speed_kmh);
+          for (let i = 0; i < rows.length - 1; i++) {
+            const r0 = rows[i], r1 = rows[i + 1];
+            if (vKmh >= r0.speed_kmh - 1e-9 && vKmh <= r1.speed_kmh + 1e-9) {
+              const alpha = r1.speed_kmh > r0.speed_kmh ? (vKmh - r0.speed_kmh) / (r1.speed_kmh - r0.speed_kmh) : 0.0;
+              const lo = r0.p05_mps2 + alpha * (r1.p05_mps2 - r0.p05_mps2);
+              const hi = r0.p95_mps2 + alpha * (r1.p95_mps2 - r0.p95_mps2);
+              return [lo, hi];
+            }
+          }
+          const last = rows[rows.length - 1];
+          return [last.p05_mps2, last.p95_mps2];
+        }
+
+        function stoppingDistanceR3BExact(v0, aMax, t1, t2, t3, tAuth, aBefore, aAfter, mu) {
+          if (v0 <= 0.0) {
+            return {
+              dPre: 0.0, dDelay: 0.0, dBrake: 0.0, dStop: 0.0,
+              dReq: STANDSTILL_MARGIN_M, tReq: Infinity,
+              vAfterT1: 0.0, aEff: Math.min(aMax, mu * GRAVITY),
+              frictionCap: mu * GRAVITY, isFrictionCapped: aMax > mu * GRAVITY + 1e-6,
+            };
+          }
+          let vCurr = v0;
+          let dPre = 0.0;
+          let stoppedInPre = false;
+          const tAuthClamped = Math.min(Math.max(tAuth, 0.0), t1);
+          const intervals = [
+            [tAuthClamped, aBefore],
+            [Math.max(0.0, t1 - tAuthClamped), aAfter],
+          ];
+          for (let i = 0; i < intervals.length; i++) {
+            const dur = intervals[i][0];
+            const dec = intervals[i][1];
+            if (dur <= 0.0) continue;
+            if (dec > 0.0 && vCurr <= dec * dur) {
+              const tStop = vCurr / dec;
+              dPre += vCurr * tStop - 0.5 * dec * tStop * tStop;
+              vCurr = 0.0;
+              stoppedInPre = true;
+              break;
+            }
+            dPre += vCurr * dur - 0.5 * dec * dur * dur;
+            vCurr -= dec * dur;
+          }
+          const vAfterT1 = vCurr;
+          const frictionCap = mu * GRAVITY;
+          const aEff = Math.min(aMax, frictionCap);
+          let dDelay = 0.0;
+          let dBrake = 0.0;
+          if (!stoppedInPre) {
+            dDelay = vCurr * t2;
+            if (t3 > 0.0) {
+              const dvRamp = 0.5 * aEff * t3;
+              if (vCurr <= dvRamp) {
+                const tau = Math.sqrt((2.0 * vCurr * t3) / aEff);
+                dBrake = vCurr * tau - (aEff * Math.pow(tau, 3)) / (6.0 * t3);
+              } else {
+                dBrake = (vCurr * vCurr) / (2.0 * aEff) + (vCurr * t3) / 2.0 - (aEff * t3 * t3) / 24.0;
+              }
+            } else {
+              dBrake = (vCurr * vCurr) / (2.0 * aEff);
+            }
+          }
+          const dStop = dPre + dDelay + dBrake;
+          const dReq = dStop + STANDSTILL_MARGIN_M;
+          const tReq = dReq / v0;
+          return {
+            dPre, dDelay, dBrake, dStop, dReq, tReq,
+            vAfterT1, aEff, frictionCap, isFrictionCapped: aMax > frictionCap + 1e-6,
+          };
+        }
+
+        function evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, branchId) {
+          const tAvailS = dRemM / vReqMps;
+          const [dragLo, dragHi] = epaDragIntervalForSpeedMps(vReqMps);
+          const t1Vals = [1.15, 3.00];
+          const t2Vals = [0.05, 0.17];
+          const t3Vals = [0.30, 1.20];
+          const aMaxVals = [6.43, 9.10];
+          const preVals = branchId === "P0" ? [0.0] : (branchId === "P1" ? [dragLo, dragHi] : [1.00, 3.00]);
+          const tAuth = branchId === "P0" ? 0.0 : Infinity;
+
+          let tReqMin = Infinity;
+          let tReqMax = -Infinity;
+          for (const t1 of t1Vals) {
+            for (const t2 of t2Vals) {
+              for (const t3 of t3Vals) {
+                for (const aMax of aMaxVals) {
+                  for (const preDec of preVals) {
+                    const res = stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, tAuth, preDec, 0.0, mu);
+                    if (res.tReq < tReqMin) tReqMin = res.tReq;
+                    if (res.tReq > tReqMax) tReqMax = res.tReq;
+                  }
+                }
+              }
+            }
+          }
+          const marginMinS = tAvailS - tReqMax;
+          const marginMaxS = tAvailS - tReqMin;
+          const marginMinM = marginMinS * vReqMps;
+          const marginMaxM = marginMaxS * vReqMps;
+          let underlying = "PARAMETER-SENSITIVE";
+          let presStatus = "PARAMETER_SENSITIVE";
+          if (marginMinS >= 0.0) {
+            underlying = "ROBUSTLY SATISFIED";
+            presStatus = "NECESSARY_CONDITION_SATISFIED";
+          } else if (marginMaxS < 0.0) {
+            underlying = "ROBUSTLY UNSATISFIED";
+            presStatus = "NECESSARY_CONDITION_VIOLATED";
+          }
+          return {
+            branchId, tAvailS, dAvailM: dRemM,
+            tReqMin, tReqMax,
+            dReqMin: tReqMin * vReqMps, dReqMax: tReqMax * vReqMps,
+            marginMinS, marginMaxS, marginMinM, marginMaxM,
+            underlying, presStatus,
+          };
+        }
+
+        function getInterpolatedExplorerStep(condObj, tQueryS, muVal) {
+          const steps = muVal < 0.8 ? condObj.steps_wet_mu0_5 : condObj.steps_dry_mu1_0;
+          const tClamped = Math.min(Math.max(tQueryS, 0.0), 5.0);
+          const exactStep = steps.find((s) => Math.abs(s.t_s - tClamped) < 1e-4);
+          if (exactStep) {
+            return { ...exactStep, isInterpolatedDisplay: false };
+          }
+          const idxHi = steps.findIndex((s) => s.t_s >= tClamped);
+          const idxLo = Math.max(0, idxHi - 1);
+          const s0 = steps[idxLo];
+          const s1 = steps[idxHi];
+          const alpha = s1.t_s > s0.t_s ? (tClamped - s0.t_s) / (s1.t_s - s0.t_s) : 0.0;
+          const xM = s0.x_m + alpha * (s1.x_m - s0.x_m);
+          const yM = s0.y_m + alpha * (s1.y_m - s0.y_m);
+          const dHead = wrapAngleRad(s1.heading_rad - s0.heading_rad);
+          const headRad = wrapAngleRad(s0.heading_rad + alpha * dHead);
+          const withinCorr = Math.abs(yM) <= CORR_HALF_WIDTH_M && Math.abs(headRad) <= CORR_MAX_HEADING_RAD;
+          const timeSupported = tClamped <= 3.0 + 1e-6;
+          return {
+            ...s1,
+            t_s: Number(tClamped.toFixed(2)),
+            x_m: Number(xM.toFixed(4)),
+            y_m: Number(yM.toFixed(4)),
+            heading_rad: Number(headRad.toFixed(5)),
+            heading_deg: Number((headRad * 180.0 / Math.PI).toFixed(2)),
+            within_longitudinal_corridor: withinCorr,
+            r3b_time_horizon_supported: timeSupported,
+            r3b_corridor_applicable: withinCorr && timeSupported && s1.implied_speed_mps > MIN_SPEED_MPS,
+            isInterpolatedDisplay: true,
+          };
+        }
+
+        function renderExplorerBEV(condObj, currentStep, counterpartCond, showGt, showCounterpart) {
+          const container = document.getElementById("svg-explorer-bev");
+          if (!container) return;
+          const steps = condObj.steps_dry_mu1_0 || [];
+          const cpSteps = counterpartCond ? (counterpartCond.steps_dry_mu1_0 || []) : [];
+
+          const w = 520, h = 215, padL = 42, padR = 18, padT = 20, padB = 28;
+          let maxX = 40.0;
+          let maxAbsY = 4.5;
+          steps.forEach((s) => {
+            if (s.x_m + 5 > maxX) maxX = s.x_m + 5;
+            if (Math.abs(s.y_m) + 1.5 > maxAbsY) maxAbsY = Math.abs(s.y_m) + 1.5;
+            if (showGt && s.gt_x_m !== null && s.gt_x_m + 5 > maxX) maxX = s.gt_x_m + 5;
+            if (showGt && s.gt_y_m !== null && Math.abs(s.gt_y_m) + 1.5 > maxAbsY) maxAbsY = Math.abs(s.gt_y_m) + 1.5;
+          });
+          if (showCounterpart && cpSteps.length) {
+            cpSteps.forEach((s) => {
+              if (s.x_m + 5 > maxX) maxX = s.x_m + 5;
+              if (Math.abs(s.y_m) + 1.5 > maxAbsY) maxAbsY = Math.abs(s.y_m) + 1.5;
+            });
+          }
+          const obsLead = condObj.observed_in_lane_lead_obstacle;
+          if (obsLead && obsLead.x_m + 6 > maxX) maxX = obsLead.x_m + 6;
+          const minX = -3.0;
+
+          const xToPx = (x) => padL + ((x - minX) / (maxX - minX)) * (w - padL - padR);
+          const yToPx = (y) => padT + ((maxAbsY - y) / (2.0 * maxAbsY)) * (h - padT - padB);
+          const corrTop = yToPx(CORR_HALF_WIDTH_M);
+          const corrBot = yToPx(-CORR_HALF_WIDTH_M);
+          const y0 = yToPx(0);
+          const x0 = xToPx(0);
+
+          let svg = `<svg viewBox="0 0 ${w} ${h}" class="w-full h-auto">`;
+          svg += `<rect x="${x0}" y="${corrTop}" width="${xToPx(maxX) - x0}" height="${Math.max(6, corrBot - corrTop)}" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.32)" stroke-dasharray="4 3" />`;
+          svg += `<line x1="${padL}" y1="${y0}" x2="${w - padR}" y2="${y0}" stroke="currentColor" stroke-opacity="0.22" />`;
+
+          for (let xm = 0; xm <= maxX; xm += 10) {
+            const px = xToPx(xm);
+            svg += `<line x1="${px}" y1="${padT}" x2="${px}" y2="${h - padB}" stroke="currentColor" stroke-opacity="0.1" />`;
+            svg += `<text x="${px}" y="${h - 8}" text-anchor="middle" font-size="9.5" fill="currentColor" fill-opacity="0.7">${xm}m</text>`;
+          }
+          [-Math.round(maxAbsY * 0.7), 0, Math.round(maxAbsY * 0.7)].forEach((yv) => {
+            const py = yToPx(yv);
+            svg += `<text x="${padL - 4}" y="${py + 3}" text-anchor="end" font-size="8.5" fill="currentColor" fill-opacity="0.7">${yv >= 0 ? "+" : ""}${yv}m</text>`;
+          });
+
+          if (obsLead) {
+            const ox = xToPx(obsLead.x_m);
+            const oy = yToPx(obsLead.y_m || 0);
+            svg += `<line x1="${ox}" y1="${padT}" x2="${ox}" y2="${h - padB}" stroke="#d97706" stroke-width="1.8" stroke-dasharray="5 3" />`;
+            svg += `<rect x="${ox - 4}" y="${oy - 6}" width="8" height="12" rx="2" fill="#d97706" fill-opacity="0.6" />`;
+            svg += `<text x="${Math.min(w - padR - 4, ox - 5)}" y="${h - padB - 6}" text-anchor="end" font-size="9" font-weight="bold" fill="#d97706">Obs Lead d0=${obsLead.x_m.toFixed(1)}m</text>`;
+          }
+
+          if (showGt && steps.length > 1) {
+            const gtPts = steps.filter((s) => s.gt_x_m !== null).map((s) => `${xToPx(s.gt_x_m)},${yToPx(s.gt_y_m)}`).join(" ");
+            svg += `<polyline fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3" points="${gtPts}" />`;
+          }
+
+          if (showCounterpart && cpSteps.length > 1) {
+            const cpPts = cpSteps.map((s) => `${xToPx(s.x_m)},${yToPx(s.y_m)}`).join(" ");
+            svg += `<polyline fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="2 2" points="${cpPts}" />`;
+            cpSteps.slice(1).forEach((s) => {
+              svg += `<circle cx="${xToPx(s.x_m)}" cy="${yToPx(s.y_m)}" r="2.2" fill="#9333ea" />`;
+            });
+          }
+
+          const predPts = steps.map((s) => `${xToPx(s.x_m)},${yToPx(s.y_m)}`).join(" ");
+          svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="${predPts}" />`;
+          steps.forEach((s) => {
+            const hasViol = (s.checks || []).some((c) => c.evaluation_scope === "TIME_LOCAL_STEP" && c.step_status === "VIOLATED");
+            const ptColor = hasViol ? "#ef4444" : (s.within_longitudinal_corridor ? "#2563eb" : "#d97706");
+            svg += `<circle cx="${xToPx(s.x_m)}" cy="${yToPx(s.y_m)}" r="3.2" fill="${ptColor}" stroke="#ffffff" stroke-width="1" />`;
+          });
+
+          // Draw Active Ego Pose Marker + Heading Vector
+          const curX = xToPx(currentStep.x_m);
+          const curY = yToPx(currentStep.y_m);
+          const headLen = 18.0;
+          const hx = curX + headLen * Math.cos(currentStep.heading_rad);
+          const hy = curY - headLen * Math.sin(currentStep.heading_rad);
+          const stepColor = currentStep.within_longitudinal_corridor ? "#4f46e5" : "#e11d48";
+          svg += `<line x1="${curX}" y1="${curY}" x2="${hx}" y2="${hy}" stroke="${stepColor}" stroke-width="2.8" />`;
+          svg += `<circle cx="${curX}" cy="${curY}" r="6.5" fill="${stepColor}" stroke="#ffffff" stroke-width="2" />`;
+
+          svg += `<g transform="translate(${padL + 6}, ${padT + 10})" font-size="9" fill="currentColor">`;
+          svg += `<line x1="0" y1="-3" x2="12" y2="-3" stroke="#2563eb" stroke-width="2.5" /><text x="15" y="0">Active Rollout (${condObj.driving_command})</text>`;
+          if (showGt) {
+            svg += `<line x1="150" y1="-3" x2="162" y2="-3" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3" /><text x="165" y="0">Logged GT</text>`;
+          }
+          if (showCounterpart && counterpartCond) {
+            svg += `<line x1="230" y1="-3" x2="242" y2="-3" stroke="#9333ea" stroke-width="2" stroke-dasharray="2 2" /><text x="245" y="0">Counterpart (${counterpartCond.driving_command})</text>`;
+          }
+          svg += `</g></svg>`;
+          container.innerHTML = svg;
+        }
+
+        function renderExplorerKinematics(condObj, currentStep, muVal) {
+          const container = document.getElementById("svg-explorer-kinematics");
+          if (!container) return;
+          const steps = muVal < 0.8 ? condObj.steps_wet_mu0_5 : condObj.steps_dry_mu1_0;
+          const w = 520, h = 155, padL = 38, padR = 38, padT = 20, padB = 24;
+          const tToPx = (t) => padL + (t / 5.0) * (w - padL - padR);
+
+          let maxV = 18.0;
+          let maxAbsA = 5.0;
+          steps.forEach((s) => {
+            if (s.implied_speed_mps + 2 > maxV) maxV = s.implied_speed_mps + 2;
+            maxAbsA = Math.max(maxAbsA, Math.abs(s.a_lon_mps2) + 1.0, Math.abs(s.a_total_mps2 || 0) + 1.0);
+          });
+          const vToPx = (v) => padT + ((maxV - Math.max(0, v)) / maxV) * (h - padT - padB);
+          const aToPx = (a) => padT + ((maxAbsA - a) / (2.0 * maxAbsA)) * (h - padT - padB);
+
+          let svg = `<svg viewBox="0 0 ${w} ${h}" class="w-full h-auto">`;
+          const yZeroA = aToPx(0);
+          svg += `<line x1="${padL}" y1="${yZeroA}" x2="${w - padR}" y2="${yZeroA}" stroke="currentColor" stroke-opacity="0.2" stroke-dasharray="3 2" />`;
+
+          for (let tv = 0; tv <= 5; tv += 1) {
+            const px = tToPx(tv);
+            svg += `<line x1="${px}" y1="${padT}" x2="${px}" y2="${h - padB}" stroke="currentColor" stroke-opacity="0.1" />`;
+            svg += `<text x="${px}" y="${h - 6}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.7">${tv}.0s</text>`;
+          }
+          [0, Math.round(maxV / 2), Math.round(maxV)].forEach((vv) => {
+            const py = vToPx(vv);
+            svg += `<text x="${padL - 4}" y="${py + 3}" text-anchor="end" font-size="8.5" fill="#2563eb">${vv}m/s</text>`;
+          });
+          [-Math.round(maxAbsA), 0, Math.round(maxAbsA)].forEach((av) => {
+            const py = aToPx(av);
+            svg += `<text x="${w - padR + 4}" y="${py + 3}" text-anchor="start" font-size="8.5" fill="#d97706">${av >= 0 ? "+" : ""}${av}m/s²</text>`;
+          });
+
+          const vPts = steps.map((s) => `${tToPx(s.t_s)},${vToPx(s.implied_speed_mps)}`).join(" ");
+          const aLonPts = steps.map((s) => `${tToPx(s.t_s)},${aToPx(s.a_lon_mps2)}`).join(" ");
+          const aTotPts = steps.slice(1).map((s) => `${tToPx(s.t_s)},${aToPx(s.a_total_mps2 || 0)}`).join(" ");
+
+          svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.2" points="${vPts}" />`;
+          svg += `<polyline fill="none" stroke="#d97706" stroke-width="2" points="${aLonPts}" />`;
+          if (aTotPts) {
+            svg += `<polyline fill="none" stroke="#9333ea" stroke-width="1.6" stroke-dasharray="2 2" points="${aTotPts}" />`;
+          }
+
+          const curPx = tToPx(currentStep.t_s);
+          svg += `<line x1="${curPx}" y1="${padT}" x2="${curPx}" y2="${h - padB}" stroke="#4f46e5" stroke-width="2" />`;
+          svg += `<circle cx="${curPx}" cy="${vToPx(currentStep.implied_speed_mps)}" r="4" fill="#2563eb" stroke="#ffffff" stroke-width="1" />`;
+          svg += `<circle cx="${curPx}" cy="${aToPx(currentStep.a_lon_mps2)}" r="4" fill="#d97706" stroke="#ffffff" stroke-width="1" />`;
+
+          svg += `<g transform="translate(${padL + 6}, 12)" font-size="8.5" fill="currentColor">`;
+          svg += `<line x1="0" y1="-3" x2="10" y2="-3" stroke="#2563eb" stroke-width="2.2" /><text x="13" y="0">v(t) [m/s]</text>`;
+          svg += `<line x1="78" y1="-3" x2="88" y2="-3" stroke="#d97706" stroke-width="2" /><text x="91" y="0">a_lon(t) [m/s²]</text>`;
+          svg += `<line x1="175" y1="-3" x2="185" y2="-3" stroke="#9333ea" stroke-width="1.6" stroke-dasharray="2 2" /><text x="188" y="0">|a_tot(t)| [m/s²]</text>`;
+          svg += `</g></svg>`;
+          container.innerHTML = svg;
+        }
+
+        function syncStepToR3BSimulator(condObj, currentStep) {
+          r3bModeSel.value = "connected";
+          const unit = r3bUnitSel.value;
+          const vMps = currentStep.implied_speed_mps;
+          if (unit === "kmh") {
+            const vKmh = vMps * 3.6;
+            r3bSpeedSlider.max = "150.0";
+            r3bSpeedSlider.value = vKmh.toFixed(2);
+            r3bSpeedInput.value = vKmh.toFixed(2);
+          } else {
+            r3bSpeedSlider.max = "42.0";
+            r3bSpeedSlider.value = vMps.toFixed(2);
+            r3bSpeedInput.value = vMps.toFixed(2);
+          }
+          const tauClamped = Math.min(currentStep.t_s, 3.0);
+          r3bTauSlider.value = tauClamped.toFixed(1);
+          r3bTauInput.value = tauClamped.toFixed(1);
+
+          const obsLead = condObj.observed_in_lane_lead_obstacle;
+          if (obsLead && r3bObsModeSel.value === "observed") {
+            r3bD0Slider.value = obsLead.x_m.toFixed(2);
+            r3bD0Input.value = obsLead.x_m.toFixed(2);
+          } else if (!obsLead && r3bObsModeSel.value === "observed") {
+            // Keep observed selected so user sees explicit INSUFFICIENT_EVIDENCE unless they switch to counterfactual
+          }
+          renderR3BSimulator();
+        }
+
+        function renderExplorerView() {
+          const condId = expCondSel.value;
+          const condObj = explorerCatalog.conditions[condId];
+          if (!condObj) return;
+          const muVal = parseFloat(expMuSel.value || "1.0");
+          const tVal = parseFloat(expTimeSlider.value || "0.0");
+          const currentStep = getInterpolatedExplorerStep(condObj, tVal, muVal);
+
+          const roleBadge = document.getElementById("explorer-condition-role-badge");
+          if (condObj.is_canonical) {
+            roleBadge.textContent = "CANONICAL GENUINE AUTOVLA OUTPUT";
+            roleBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30";
+          } else if (condObj.condition_role === "CONTROLLED_COMMAND_INTERVENTION") {
+            roleBadge.textContent = "CONTROLLED COMMAND INTERVENTION (EXT-VLA-C07)";
+            roleBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-800 border border-indigo-500/30";
+          } else {
+            roleBadge.textContent = "CONTROLLED OOD SIGNED-ACCEL DIAGNOSTIC (EXT-VLA-C03)";
+            roleBadge.className = "px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-800 border border-rose-500/30";
+          }
+
+          expTimeLabel.textContent = currentStep.isInterpolatedDisplay
+            ? `t = ${currentStep.t_s.toFixed(2)} s (Between Step ${currentStep.step - 1} & ${currentStep.step})`
+            : `t = ${currentStep.t_s.toFixed(1)} s (Step ${currentStep.step} / 10)`;
+
+          if (currentStep.isInterpolatedDisplay) {
+            expInterpBadge.textContent = "DISPLAY INTERPOLATION BETWEEN RECORDED 0.5 s WAYPOINTS";
+            expInterpBadge.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/15 text-amber-900 border border-amber-500/30";
+          } else {
+            expInterpBadge.textContent = currentStep.step === 0
+              ? "RECORDED INITIAL EGO STATE (t0 = 0.0 s)"
+              : `RECORDED 0.5 s WAYPOINT (Step k = ${currentStep.step})`;
+            expInterpBadge.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30";
+          }
+
+          const gtBanner = document.getElementById("explorer-gt-boundary-banner");
+          if (!condObj.gt_comparison_meaningful) {
+            gtBanner.className = "p-2.5 rounded-lg text-xs bg-amber-500/15 border border-amber-500/35 text-amber-950";
+            gtBanner.innerHTML = `<strong>Command-Intervention GT Comparison Warning:</strong> ${condObj.gt_comparison_note}`;
+          } else {
+            gtBanner.className = "p-2.5 rounded-lg text-xs bg-blue-500/10 border border-blue-500/25 text-[var(--foreground)]";
+            gtBanner.innerHTML = `<strong>Rollout Provenance &amp; Ground-Truth Scope:</strong> ${condObj.gt_comparison_note}`;
+          }
+
+          const counterpartCond = condObj.comparison_counterpart_id
+            ? explorerCatalog.conditions[condObj.comparison_counterpart_id]
+            : null;
+          const cpLabel = document.getElementById("lbl-explorer-counterpart");
+          if (counterpartCond) {
+            cpLabel.textContent = `Overlay Counterpart: ${counterpartCond.condition_label}`;
+            expChkCounterpart.disabled = false;
+          } else {
+            cpLabel.textContent = "No Counterpart Rollout for This Scene";
+            expChkCounterpart.disabled = true;
+          }
+
+          const exitSum = document.getElementById("explorer-corridor-exit-summary");
+          exitSum.textContent = condObj.first_corridor_exit_tau_s !== null
+            ? `First 1D Corridor Exit: Step ${condObj.first_corridor_exit_step} (t = ${condObj.first_corridor_exit_tau_s.toFixed(1)} s)`
+            : "Remains within +-1.75 m / +-0.35 rad Corridor for all 5.0 s";
+
+          renderExplorerBEV(condObj, currentStep, counterpartCond, expChkGt.checked, expChkCounterpart.checked);
+          renderExplorerKinematics(condObj, currentStep, muVal);
+
+          // Step Telemetry Readout
+          const tokText = currentStep.step === 0
+            ? "Initial Observation (Prior to <action_1>)"
+            : `<action_${currentStep.action_codebook_index}> (Step ${currentStep.step})`;
+          const corrBadge = currentStep.within_longitudinal_corridor
+            ? `<span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-800 border border-emerald-500/30 font-semibold">WITHIN 1D CORRIDOR (|y|=${Math.abs(currentStep.y_m).toFixed(2)}m &le; 1.75m, |&psi;|=${Math.abs(currentStep.heading_rad).toFixed(2)}rad &le; 0.35rad)</span>`
+            : `<span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-800 border border-rose-500/30 font-bold">EXITED 1D CORRIDOR (|y|=${Math.abs(currentStep.y_m).toFixed(2)}m, |&psi;|=${Math.abs(currentStep.heading_rad).toFixed(2)}rad &rarr; 1D R3B Not Applicable)</span>`;
+
+          const gtErrStr = currentStep.l2_displacement_vs_logged_gt_m !== null && currentStep.l2_displacement_vs_logged_gt_m !== undefined
+            ? `${currentStep.l2_displacement_vs_logged_gt_m.toFixed(2)} m${condObj.gt_comparison_meaningful ? "" : " (vs. Logged Left Turn*)"}`
+            : "N/A";
+
+          document.getElementById("explorer-step-telemetry").innerHTML =
+            `<div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-1.5">` +
+            `<div><strong>Active Step Telemetry:</strong> <code class="font-mono text-indigo-700">${tokText}</code></div>` +
+            `<div>${corrBadge}</div>` +
+            `</div>` +
+            `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">` +
+            `<div><span class="text-[var(--muted-foreground)] block font-sans">Pose (x, y, &psi;)</span>(${currentStep.x_m.toFixed(2)}m, ${currentStep.y_m >= 0 ? "+" : ""}${currentStep.y_m.toFixed(2)}m, ${currentStep.heading_deg >= 0 ? "+" : ""}${currentStep.heading_deg.toFixed(1)}&deg;)</div>` +
+            `<div><span class="text-[var(--muted-foreground)] block font-sans">Implied Speed v(t)</span>${currentStep.implied_speed_mps.toFixed(2)} m/s (${currentStep.implied_speed_kmh.toFixed(1)} km/h)</div>` +
+            `<div><span class="text-[var(--muted-foreground)] block font-sans">a_lon / a_lat / |a_tot|</span>${currentStep.a_lon_mps2 >= 0 ? "+" : ""}${currentStep.a_lon_mps2.toFixed(2)} / ${currentStep.a_lat_mps2 !== null ? (currentStep.a_lat_mps2 >= 0 ? "+" : "") + currentStep.a_lat_mps2.toFixed(2) : "0.00"} / ${currentStep.a_total_mps2 !== null ? currentStep.a_total_mps2.toFixed(2) : Math.abs(currentStep.a_lon_mps2).toFixed(2)} m/s&sup2;</div>` +
+            `<div><span class="text-[var(--muted-foreground)] block font-sans">L2 Diff vs. Logged GT</span>${gtErrStr}</div>` +
+            `</div>`;
+
+          // Populate Step-Aware C1-C10 Table
+          const tbodyStepChecks = document.getElementById("tbody-explorer-step-checks");
+          tbodyStepChecks.innerHTML = (currentStep.checks || []).map((chk) => {
+            const isTimeLocal = chk.evaluation_scope === "TIME_LOCAL_STEP";
+            const scopeBadge = isTimeLocal
+              ? `<span class="px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-800 border border-indigo-500/25 font-mono text-[10px]">TIME_LOCAL_STEP</span>`
+              : `<span class="px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-800 border border-purple-500/25 font-mono text-[10px]">${chk.evaluation_scope}</span>`;
+            let stHtml = "";
+            if (chk.step_status === "NOT_DEFINED_AT_T0" || chk.step_status === "NOT_APPLICABLE_AT_STEP") {
+              stHtml = `<span class="text-slate-600 font-semibold">${chk.step_status}</span>`;
+            } else if (chk.step_status === "SATISFIED" || chk.step_status === "TRAJECTORY_WIDE_PASS") {
+              stHtml = `<span class="text-emerald-700 font-semibold">${chk.step_status}</span>`;
+            } else {
+              stHtml = `<span class="text-rose-700 font-bold">${chk.step_status} (Step ${currentStep.step})</span>`;
+            }
+            return `<tr class="border-b border-[var(--border)]">` +
+              `<th class="text-left p-1.5 bg-[var(--card)] font-mono text-[11px]">${chk.check_id}<div class="font-sans font-normal text-[10px] text-[var(--muted-foreground)]">${chk.step_note || ""}</div></th>` +
+              `<td class="p-1.5">${scopeBadge}</td>` +
+              `<td class="text-right p-1.5 font-mono">${chk.step_measured_value !== null && chk.step_measured_value !== undefined ? chk.step_measured_value + " " + chk.units : "N/A"}</td>` +
+              `<td class="text-right p-1.5 font-mono">${chk.limit_value !== null && chk.limit_value !== undefined ? chk.limit_value + " " + chk.units : "N/A"}</td>` +
+              `<td class="p-1.5">${stHtml}</td>` +
+              `</tr>`;
+          }).join("");
+
+          if (expAutoSync.checked && r3bModeSel.value === "connected") {
+            syncStepToR3BSimulator(condObj, currentStep);
+          }
+        }
+
+        function renderR3BStoppingBreakdownSvg(pointByBranch, dAvailM, selectedBranch) {
+          const container = document.getElementById("svg-r3b-sim-breakdown");
+          if (!container) return;
+          if (!pointByBranch || !pointByBranch.P0 || dAvailM === null || dAvailM <= 0) {
+            container.innerHTML =
+              `<div class="h-32 flex items-center justify-center text-xs text-amber-900 font-medium px-4 text-center bg-amber-500/5 rounded border border-amber-500/20">` +
+              `4-Phase Stopping Distance Breakdown Withheld: R3B 1D Braking-Only Model is Not Applicable or Lacks Obstacle Distance Evidence for the Active State.` +
+              `</div>`;
+            return;
+          }
+
+          const w = 520, h = 148, padL = 118, padR = 24, padT = 22, padB = 24;
+          const maxD = Math.max(
+            dAvailM * 1.15,
+            pointByBranch.P0.dReq * 1.12,
+            pointByBranch.P1.dReq * 1.12,
+            pointByBranch.P2.dReq * 1.12,
+            25.0
+          );
+          const xToPx = (d) => padL + (Math.max(0, d) / maxD) * (w - padL - padR);
+
+          let svg = `<svg viewBox="0 0 ${w} ${h}" class="w-full h-auto">`;
+          const stepGrid = Math.max(10, Math.round(maxD / 5 / 10) * 10);
+          for (let dm = 0; dm <= maxD; dm += stepGrid) {
+            const px = xToPx(dm);
+            svg += `<line x1="${px}" y1="${padT}" x2="${px}" y2="${h - padB}" stroke="currentColor" stroke-opacity="0.1" />`;
+            svg += `<text x="${px}" y="${h - 7}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.7">${dm}m</text>`;
+          }
+
+          const branches = ["P0", "P1", "P2"];
+          const labels = {
+            P0: "P0 (Hold Speed)",
+            P1: "P1 (Passive Drag)",
+            P2: "P2 (Supported Decel)",
+          };
+          branches.forEach((bid, idx) => {
+            const b = pointByBranch[bid];
+            const yRow = padT + 8 + idx * 30;
+            const barH = 18;
+            const isSel = bid === selectedBranch;
+            svg += `<text x="${padL - 6}" y="${yRow + 12}" text-anchor="end" font-size="9.5" font-weight="${isSel ? "bold" : "normal"}" fill="currentColor">${labels[bid]}</text>`;
+
+            const x0 = xToPx(0);
+            const x1 = xToPx(b.dPre);
+            const x2 = xToPx(b.dPre + b.dDelay);
+            const x3 = xToPx(b.dStop);
+            const x4 = xToPx(b.dReq);
+
+            svg += `<rect x="${x0}" y="${yRow}" width="${Math.max(0, x1 - x0)}" height="${barH}" fill="#f59e0b" />`;
+            svg += `<rect x="${x1}" y="${yRow}" width="${Math.max(0, x2 - x1)}" height="${barH}" fill="#9333ea" />`;
+            svg += `<rect x="${x2}" y="${yRow}" width="${Math.max(0, x3 - x2)}" height="${barH}" fill="#2563eb" />`;
+            svg += `<rect x="${x3}" y="${yRow}" width="${Math.max(0, x4 - x3)}" height="${barH}" fill="#64748b" />`;
+            if (isSel) {
+              svg += `<rect x="${x0}" y="${yRow - 1}" width="${Math.max(2, x4 - x0)}" height="${barH + 2}" fill="none" stroke="#0f172a" stroke-width="1.5" />`;
+            }
+            const marginM = dAvailM - b.dReq;
+            const mCol = marginM >= 0 ? "#047857" : "#be123c";
+            svg += `<text x="${Math.min(w - 4, x4 + 5)}" y="${yRow + 12}" font-size="8.5" font-family="monospace" font-weight="bold" fill="${mCol}">D_req=${b.dReq.toFixed(1)}m (${marginM >= 0 ? "+" : ""}${marginM.toFixed(1)}m)</text>`;
+          });
+
+          const availPx = xToPx(dAvailM);
+          svg += `<line x1="${availPx}" y1="${padT}" x2="${availPx}" y2="${h - padB}" stroke="#dc2626" stroke-width="2" stroke-dasharray="4 2" />`;
+          svg += `<text x="${Math.max(padL + 40, Math.min(w - padR - 4, availPx - 4))}" y="${padT - 5}" text-anchor="end" font-size="9" font-weight="bold" fill="#dc2626">D_avail = ${dAvailM.toFixed(2)} m</text>`;
+
+          svg += `<g transform="translate(${padL}, 12)" font-size="8.5" fill="currentColor">`;
+          svg += `<rect x="0" y="-7" width="8" height="7" fill="#f59e0b" /><text x="11" y="-1">d_pre (t1)</text>`;
+          svg += `<rect x="68" y="-7" width="8" height="7" fill="#9333ea" /><text x="79" y="-1">d_delay (t2)</text>`;
+          svg += `<rect x="148" y="-7" width="8" height="7" fill="#2563eb" /><text x="159" y="-1">d_brake (t3+a_eff)</text>`;
+          svg += `<rect x="255" y="-7" width="8" height="7" fill="#64748b" /><text x="266" y="-1">+2.0m Standstill</text>`;
+          svg += `</g></svg>`;
+          container.innerHTML = svg;
+        }
+
+        function badgeClassForPresentationStatus(st) {
+          if (st === "NECESSARY_CONDITION_SATISFIED") {
+            return "bg-emerald-500/15 text-emerald-800 border border-emerald-500/35";
+          }
+          if (st === "NECESSARY_CONDITION_VIOLATED") {
+            return "bg-rose-500/15 text-rose-800 border border-rose-500/35";
+          }
+          if (st === "PARAMETER_SENSITIVE") {
+            return "bg-amber-500/15 text-amber-900 border border-amber-500/35";
+          }
+          return "bg-slate-500/15 text-slate-800 border border-slate-500/35";
+        }
+
+        function renderR3BSimulator() {
+          const isConnected = r3bModeSel.value === "connected";
+          const condObj = explorerCatalog.conditions[expCondSel.value];
+          const unit = r3bUnitSel.value;
+          const rawSpeedVal = parseFloat(r3bSpeedInput.value);
+          const vReqMps = unit === "kmh" ? rawSpeedVal / 3.6 : rawSpeedVal;
+          const vReqKmh = vReqMps * 3.6;
+
+          r3bSpeedDual.textContent = Number.isFinite(vReqMps)
+            ? `${vReqMps.toFixed(2)} m/s (${vReqKmh.toFixed(1)} km/h)`
+            : "INVALID SPEED";
+
+          const obsMode = r3bObsModeSel.value;
+          const rawD0 = parseFloat(r3bD0Input.value);
+          const tauReq = parseFloat(r3bTauInput.value);
+          const mu = parseFloat(r3bMuInput.value);
+          const t1 = parseFloat(r3bT1Input.value);
+          const t2 = parseFloat(r3bT2Input.value);
+          const t3 = parseFloat(r3bT3Input.value);
+          const aMax = parseFloat(r3bAmaxInput.value);
+          const aSup = parseFloat(r3bAsupInput.value);
+          const selectedBranch = r3bPolicySel.value || "P1";
+
+          // Determine coupled ego pose if in connected mode
+          let egoX = 0.0, egoY = 0.0, egoHeadRad = 0.0;
+          let obsLead = null;
+          if (isConnected && condObj) {
+            const stepAtTau = getInterpolatedExplorerStep(condObj, Number.isFinite(tauReq) ? tauReq : 0.0, mu);
+            egoX = stepAtTau.x_m;
+            egoY = stepAtTau.y_m;
+            egoHeadRad = stepAtTau.heading_rad;
+            obsLead = condObj.observed_in_lane_lead_obstacle;
+          }
+
+          let effectiveD0 = null;
+          let obstacleSourceType = "COUNTERFACTUAL_ASSUMPTION";
+          if (isConnected && obsMode === "observed") {
+            if (obsLead) {
+              effectiveD0 = obsLead.x_m;
+              obstacleSourceType = "OBSERVED_IN_LANE_ANNOTATION";
+            } else {
+              effectiveD0 = null;
+              obstacleSourceType = "NONE_INSUFFICIENT_EVIDENCE";
+            }
+          } else {
+            effectiveD0 = rawD0;
+            obstacleSourceType = "COUNTERFACTUAL_ASSUMPTION";
+          }
+
+          // Validate inputs
+          const validationErrors = [];
+          if (!Number.isFinite(vReqMps) || vReqMps < 0.0 || vReqMps > 60.0) {
+            validationErrors.push(`Invalid or nonphysical speed v = ${rawSpeedVal} ${unit} (must be in [0, 60] m/s).`);
+          }
+          if (obstacleSourceType !== "NONE_INSUFFICIENT_EVIDENCE" && (!Number.isFinite(effectiveD0) || effectiveD0 <= 0.0 || effectiveD0 > 500.0)) {
+            validationErrors.push(`Invalid obstacle distance d0 = ${rawD0} m (must be in (0, 500] m).`);
+          }
+          if (!Number.isFinite(mu) || mu <= 0.05 || mu > 1.5) {
+            validationErrors.push(`Invalid road friction mu = ${mu} (must be in (0.05, 1.50]).`);
+          }
+          if (!Number.isFinite(tauReq) || tauReq < 0.0 || tauReq > 3.0) {
+            validationErrors.push(`Invalid takeover request delay tau_req = ${tauReq} s (supported domain is [0.0, 3.0] s).`);
+          }
+          if (!Number.isFinite(t1) || t1 < 0.0 || t1 > 10.0) {
+            validationErrors.push(`Invalid human reaction delay t1 = ${t1} s (must be in [0.0, 10.0] s).`);
+          }
+          if (!Number.isFinite(t2) || t2 < 0.0 || t2 > 2.0) {
+            validationErrors.push(`Invalid hydraulic actuation delay t2 = ${t2} s (must be in [0.0, 2.0] s).`);
+          }
+          if (!Number.isFinite(t3) || t3 < 0.0 || t3 > 5.0) {
+            validationErrors.push(`Invalid brake ramp buildup t3 = ${t3} s (must be in [0.0, 5.0] s).`);
+          }
+          if (!Number.isFinite(aMax) || aMax <= 0.5 || aMax > 15.0) {
+            validationErrors.push(`Invalid max deceleration a_max = ${aMax} m/s^2 (must be in (0.5, 15.0] m/s^2).`);
+          }
+          if (!Number.isFinite(aSup) || aSup < 0.0 || aSup > 6.0) {
+            validationErrors.push(`Invalid P2 pre-deceleration a_sup = ${aSup} m/s^2 (must be in [0.0, 6.0] m/s^2).`);
+          }
+
+          // Render Layer 1 (Observed / Recorded Evidence) & Layer 2 (Assumed Counterfactual Inputs)
+          const layerObsEl = document.getElementById("r3b-layer-observed");
+          const layerAssEl = document.getElementById("r3b-layer-assumed");
+          if (isConnected && condObj) {
+            const obsLeadTxt = obsLead
+              ? `Observed 3D Lead at d<sub>0</sub> = ${obsLead.x_m.toFixed(2)} m (v<sub>lead</sub> = ${obsLead.speed_mps.toFixed(2)} m/s)`
+              : "None in &pm;1.75 m Corridor (Open Road)";
+            layerObsEl.innerHTML =
+              `<div class="font-bold text-emerald-900">Layer 1 &mdash; Observed / Recorded Evidence</div>` +
+              `<div><strong>Scene &amp; Token:</strong> <code>${condObj.scene_id}</code> (<code>${condObj.frame_token}</code>)</div>` +
+              `<div><strong>Logged Ego t<sub>0</sub>:</strong> v<sub>0</sub> = ${condObj.ego_initial_speed_mps.toFixed(2)} m/s (${condObj.ego_initial_speed_kmh.toFixed(1)} km/h), a<sub>x,0</sub> = ${condObj.ego_initial_accel_mps2.toFixed(2)} m/s&sup2;</div>` +
+              `<div><strong>Dataset 3D Lead:</strong> ${obsLeadTxt}</div>` +
+              `<div><strong>AutoVLA Pose @ &tau;<sub>req</sub>=${Number.isFinite(tauReq) ? tauReq.toFixed(1) : "?"}s:</strong> x=${egoX.toFixed(2)}m, y=${egoY >= 0 ? "+" : ""}${egoY.toFixed(2)}m, &psi;=${(egoHeadRad * 180 / Math.PI).toFixed(1)}&deg;</div>`;
+          } else {
+            layerObsEl.innerHTML =
+              `<div class="font-bold text-emerald-900">Layer 1 &mdash; Observed / Recorded Evidence</div>` +
+              `<div><strong>Mode:</strong> Standalone Parametric R3B Exploration (Decoupled from specific camera scene)</div>` +
+              `<div><strong>Reference Coastdown Data:</strong> Empirical EPA coastdown table (60&ndash;130 km/h)</div>` +
+              `<div><strong>Frozen R3B Baseline:</strong> 42 original research claims preserved unmodified</div>`;
+          }
+
+          const d0AssumedNote = obstacleSourceType === "OBSERVED_IN_LANE_ANNOTATION"
+            ? (obsLead && Math.abs(obsLead.speed_mps) > 0.1
+              ? `Static-target R3B projection of moving lead at d<sub>0</sub> = ${effectiveD0.toFixed(2)} m (v<sub>lead</sub> = ${obsLead.speed_mps.toFixed(2)} m/s)`
+              : `Observed stationary 3D obstacle at d<sub>0</sub> = ${effectiveD0.toFixed(2)} m (no counterfactual d<sub>0</sub> needed)`)
+            : (obstacleSourceType === "NONE_INSUFFICIENT_EVIDENCE"
+              ? "No obstacle assumed (Observed mode on open-road scene &rarr; Insufficient Evidence)"
+              : `Counterfactual stationary obstacle at d<sub>0</sub> = ${Number.isFinite(effectiveD0) ? effectiveD0.toFixed(2) : "?"} m`);
+
+          layerAssEl.innerHTML =
+            `<div class="font-bold text-pink-900">Layer 2 &mdash; Assumed Counterfactual &amp; Model Inputs</div>` +
+            `<div><strong>Obstacle Target:</strong> ${d0AssumedNote}</div>` +
+            `<div><strong>Takeover Timing:</strong> &tau;<sub>req</sub> = ${Number.isFinite(tauReq) ? tauReq.toFixed(2) : "?"} s (AutoVLA does not emit a TOR)</div>` +
+            `<div><strong>Surface &amp; Policy:</strong> &mu; = ${Number.isFinite(mu) ? mu.toFixed(2) : "?"} (&mu;&middot;g = ${Number.isFinite(mu) ? (mu * GRAVITY).toFixed(2) : "?"} m/s&sup2;) | Branch <strong>${selectedBranch}</strong></div>` +
+            `<div><strong>Human/Brake Params:</strong> t<sub>1</sub>=${Number.isFinite(t1) ? t1.toFixed(2) : "?"}s, t<sub>2</sub>=${Number.isFinite(t2) ? t2.toFixed(2) : "?"}s, t<sub>3</sub>=${Number.isFinite(t3) ? t3.toFixed(2) : "?"}s, a<sub>max</sub>=${Number.isFinite(aMax) ? aMax.toFixed(2) : "?"}m/s&sup2;</div>`;
+
+          const statusBadgeEl = document.getElementById("r3b-sim-status-badge");
+          const underlyingEl = document.getElementById("r3b-sim-underlying-label");
+          const stateBadgeEl = document.getElementById("r3b-sim-state-source-badge");
+          const metricsGridEl = document.getElementById("r3b-sim-metrics-grid");
+          const causalEl = document.getElementById("r3b-sim-causal-explanation");
+
+          if (validationErrors.length > 0) {
+            statusBadgeEl.textContent = "NOT_APPLICABLE";
+            statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("NOT_APPLICABLE");
+            underlyingEl.textContent = "Underlying R3B: INVALID_PARAMETERS (Withheld)";
+            stateBadgeEl.innerHTML = `<span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-800 border border-rose-500/30 font-semibold">Input Validation Guardrail Triggered</span>`;
+            metricsGridEl.innerHTML = `<div class="col-span-4 p-2.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-900 font-medium">${validationErrors.join(" ")}</div>`;
+            renderR3BStoppingBreakdownSvg(null, null, selectedBranch);
+            causalEl.className = "p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-950 leading-relaxed";
+            causalEl.innerHTML = `<strong>Invalid / Out-of-Range Parameters Rejected:</strong> ${validationErrors.join(" ")} Numerical R3B margins are never fabricated for nonphysical inputs.`;
+            return;
+          }
+
+          // Check Insufficient Evidence (no observed obstacle in observed mode)
+          if (obstacleSourceType === "NONE_INSUFFICIENT_EVIDENCE") {
+            statusBadgeEl.textContent = "INSUFFICIENT_EVIDENCE";
+            statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("INSUFFICIENT_EVIDENCE");
+            underlyingEl.textContent = "Underlying R3B: INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE";
+            stateBadgeEl.innerHTML = formatStateSourceBadge(tauReq <= 1e-6 ? "OBSERVED_EGO_T0_NO_CREDIBLE_OBSTACLE" : "HYPOTHETICAL_VLA_STATE_NO_CREDIBLE_OBSTACLE");
+            metricsGridEl.innerHTML =
+              `<div class="col-span-4 p-2.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-950">` +
+              `<strong>Insufficient Evidence:</strong> No observed 3D in-corridor obstacle exists in the dataset annotations for <code>${condObj ? condObj.scene_id : "this scene"}</code>. Switch Obstacle Source to <strong>"Assumed Stationary d0 [m]"</strong> to evaluate a counterfactual obstacle.` +
+              `</div>`;
+            renderR3BStoppingBreakdownSvg(null, null, selectedBranch);
+            causalEl.className = "p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-950 leading-relaxed";
+            causalEl.innerHTML = `<strong>Why Evaluation is Withheld (<code>INSUFFICIENT_EVIDENCE</code>):</strong> Obstacle distance and time-to-collision (TTC) cannot be inferred from monocular/multi-view camera pixels alone without a 3D bounding-box track inside the &pm;1.75 m ego corridor or an explicit counterfactual d<sub>0</sub> assumption.`;
+            return;
+          }
+
+          // Check Non-Applicability (stationary speed, corridor exit, or d_rem <= 0)
+          const nonAppReasons = [];
+          if (vReqMps <= MIN_SPEED_MPS) {
+            nonAppReasons.push(`Vehicle speed v = ${vReqMps.toFixed(3)} m/s (${vReqKmh.toFixed(2)} km/h) is stationary or near-zero (<= ${MIN_SPEED_MPS} m/s); the 1D R3B stopping model requires forward motion.`);
+          }
+          if (isConnected && (Math.abs(egoY) > CORR_HALF_WIDTH_M || Math.abs(egoHeadRad) > CORR_MAX_HEADING_RAD)) {
+            nonAppReasons.push(`At tau_req = ${tauReq.toFixed(1)} s, the AutoVLA trajectory state (|y| = ${Math.abs(egoY).toFixed(2)} m, |psi| = ${Math.abs(egoHeadRad).toFixed(2)} rad) exits the validated +-1.75 m / +-0.35 rad 1D longitudinal corridor during a turning maneuver.`);
+          }
+          const dRemM = isConnected ? (effectiveD0 - egoX) : effectiveD0;
+          if (dRemM <= 0.0) {
+            nonAppReasons.push(`Remaining obstacle distance d_rem = ${dRemM.toFixed(2)} m <= 0.0 m (ego longitudinal progress x = ${egoX.toFixed(2)} m has already reached or passed initial obstacle position d0 = ${effectiveD0.toFixed(2)} m).`);
+          }
+
+          let stateSourceToken = "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0";
+          if (obstacleSourceType === "OBSERVED_IN_LANE_ANNOTATION") {
+            const isMoving = obsLead && Math.abs(obsLead.speed_mps) > 0.1;
+            if (tauReq <= 1e-6) {
+              stateSourceToken = isMoving ? "OBSERVED_EGO_T0_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE";
+            } else {
+              stateSourceToken = isMoving ? "HYPOTHETICAL_VLA_STATE_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE";
+            }
+          } else {
+            stateSourceToken = tauReq <= 1e-6 ? "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0" : "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0";
+          }
+          stateBadgeEl.innerHTML = formatStateSourceBadge(stateSourceToken);
+
+          if (nonAppReasons.length > 0) {
+            statusBadgeEl.textContent = "NOT_APPLICABLE";
+            statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("NOT_APPLICABLE");
+            underlyingEl.textContent = "Underlying R3B: INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE";
+            metricsGridEl.innerHTML =
+              `<div class="col-span-4 p-2.5 rounded bg-slate-500/10 border border-slate-500/30 text-slate-800">` +
+              `<strong>1D Braking-Only R3B Not Applicable:</strong> ${nonAppReasons.join(" ")}` +
+              `</div>`;
+            renderR3BStoppingBreakdownSvg(null, null, selectedBranch);
+            causalEl.className = "p-2.5 rounded-lg bg-slate-500/10 border border-slate-500/30 text-slate-900 leading-relaxed";
+            causalEl.innerHTML = `<strong>Why Evaluation is Withheld (<code>NOT_APPLICABLE</code>):</strong> ${nonAppReasons.join(" ")}`;
+            return;
+          }
+
+          // Valid 1D R3B State -> Compute exact 4-phase point breakdown and 16/32-corner interval box
+          const [dragLo, dragHi] = epaDragIntervalForSpeedMps(vReqMps);
+          const dragMid = 0.5 * (dragLo + dragHi);
+          const pointByBranch = {
+            P0: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, 0.0, 0.0, 0.0, mu),
+            P1: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, Infinity, dragMid, 0.0, mu),
+            P2: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, Infinity, aSup, 0.0, mu),
+          };
+          const intervalByBranch = {
+            P0: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P0"),
+            P1: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P1"),
+            P2: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P2"),
+          };
+
+          const selPt = pointByBranch[selectedBranch];
+          const selIv = intervalByBranch[selectedBranch];
+          const tAvailS = dRemM / vReqMps;
+          const marginM = dRemM - selPt.dReq;
+          const marginS = tAvailS - selPt.tReq;
+          const pointPresStatus = marginS >= 0.0 ? "NECESSARY_CONDITION_SATISFIED" : "NECESSARY_CONDITION_VIOLATED";
+
+          statusBadgeEl.textContent = pointPresStatus;
+          statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus(pointPresStatus);
+          underlyingEl.textContent = `Point: ${marginS >= 0 ? "SATISFIED" : "VIOLATED"} | Frozen Box Interval: ${selIv.presStatus} (${selIv.underlying})`;
+
+          metricsGridEl.innerHTML =
+            `<div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]">` +
+            `<div class="text-[11px] text-[var(--muted-foreground)]">Available D<sub>avail</sub> / TTC</div>` +
+            `<div class="font-mono font-bold text-sm mt-0.5">${dRemM.toFixed(2)} m</div>` +
+            `<div class="font-mono text-[11px] text-[var(--muted-foreground)]">T<sub>avail</sub> = ${tAvailS.toFixed(2)} s</div>` +
+            `</div>` +
+            `<div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]">` +
+            `<div class="text-[11px] text-[var(--muted-foreground)]">Required D<sub>req</sub> (${selectedBranch})</div>` +
+            `<div class="font-mono font-bold text-sm mt-0.5">${selPt.dReq.toFixed(2)} m</div>` +
+            `<div class="font-mono text-[11px] text-[var(--muted-foreground)]">T<sub>req</sub> = ${selPt.tReq.toFixed(2)} s (+2.0m margin)</div>` +
+            `</div>` +
+            `<div class="p-2 rounded border ${badgeClassForPresentationStatus(pointPresStatus)}">` +
+            `<div class="text-[11px] opacity-85">Point Margin (${selectedBranch})</div>` +
+            `<div class="font-mono font-bold text-sm mt-0.5">${marginM >= 0 ? "+" : ""}${marginM.toFixed(2)} m</div>` +
+            `<div class="font-mono text-[11px]">${marginS >= 0 ? "+" : ""}${marginS.toFixed(2)} s</div>` +
+            `</div>` +
+            `<div class="p-2 rounded border ${badgeClassForPresentationStatus(selIv.presStatus)}">` +
+            `<div class="text-[11px] opacity-85">R3B Parameter Box (${selectedBranch})</div>` +
+            `<div class="font-mono font-bold text-xs mt-0.5">[${selIv.marginMinM.toFixed(1)}, ${selIv.marginMaxM.toFixed(1)}] m</div>` +
+            `<div class="font-mono text-[10px]">${selIv.presStatus}</div>` +
+            `</div>`;
+
+          renderR3BStoppingBreakdownSvg(pointByBranch, dRemM, selectedBranch);
+
+          const capExplain = selPt.isFrictionCapped
+            ? `road friction &mu;&middot;g = ${selPt.frictionCap.toFixed(2)} m/s&sup2; caps chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2;`
+            : `chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2; is below the road-friction cap &mu;&middot;g = ${selPt.frictionCap.toFixed(2)} m/s&sup2;`;
+          const p2SavingM = pointByBranch.P0.dReq - pointByBranch.P2.dReq;
+
+          causalEl.className = "p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/25 text-[var(--foreground)] leading-relaxed";
+          causalEl.innerHTML =
+            `<strong>Causal 4-Phase Breakdown (${selectedBranch}):</strong> At v = <strong>${vReqMps.toFixed(2)} m/s (${vReqKmh.toFixed(1)} km/h)</strong> and remaining obstacle distance D<sub>avail</sub> = <strong>${dRemM.toFixed(2)} m</strong> (T<sub>avail</sub> = ${tAvailS.toFixed(2)} s), policy <strong>${selectedBranch}</strong> travels <strong>${selPt.dPre.toFixed(2)} m</strong> during human reaction delay t<sub>1</sub> = ${t1.toFixed(2)} s (reaching v<sub>1</sub> = ${selPt.vAfterT1.toFixed(2)} m/s), <strong>${selPt.dDelay.toFixed(2)} m</strong> during hydraulic delay t<sub>2</sub> = ${t2.toFixed(2)} s, and <strong>${selPt.dBrake.toFixed(2)} m</strong> during brake ramp/full braking (where ${capExplain}, giving a<sub>eff</sub> = ${selPt.aEff.toFixed(2)} m/s&sup2;). Including the mandatory <strong>+2.0 m</strong> standstill margin yields D<sub>req</sub> = <strong>${selPt.dReq.toFixed(2)} m</strong> (T<sub>req</sub> = ${selPt.tReq.toFixed(2)} s) and a point margin of <strong>${marginM >= 0 ? "+" : ""}${marginM.toFixed(2)} m (${marginS >= 0 ? "+" : ""}${marginS.toFixed(2)} s &rarr; <code>${pointPresStatus}</code>)</strong>. Across policies at these parameters, system-supported pre-deceleration (<code>P2</code>) reduces required stopping distance by <strong>${p2SavingM.toFixed(2)} m</strong> compared to unmitigated hold-speed (<code>P0</code>). <em>Note: Satisfying this 1D braking-only necessary condition does not establish collision avoidance or safety.</em>`;
+        }
+
+        // Event Listeners for Trajectory Explorer
+        expSceneSel.addEventListener("change", () => {
+          populateExplorerConditionOptions(expSceneSel.value);
+          renderExplorerView();
+        });
+        expCondSel.addEventListener("change", renderExplorerView);
+        expMuSel.addEventListener("change", () => {
+          r3bMuSlider.value = expMuSel.value;
+          r3bMuInput.value = parseFloat(expMuSel.value).toFixed(2);
+          renderExplorerView();
+          renderR3BSimulator();
+        });
+        expChkGt.addEventListener("change", renderExplorerView);
+        expChkCounterpart.addEventListener("change", renderExplorerView);
+        expChkSmooth.addEventListener("change", () => {
+          expTimeSlider.step = expChkSmooth.checked ? "0.1" : "0.5";
+          if (!expChkSmooth.checked) {
+            const snapped = Math.round(parseFloat(expTimeSlider.value) * 2.0) / 2.0;
+            expTimeSlider.value = snapped.toFixed(1);
+          }
+          renderExplorerView();
+        });
+        expTimeSlider.addEventListener("input", renderExplorerView);
+
+        expPrevBtn.addEventListener("click", () => {
+          const cur = parseFloat(expTimeSlider.value || "0.0");
+          const next = Math.max(0.0, Math.round((cur - 0.5) * 2.0) / 2.0);
+          expTimeSlider.value = next.toFixed(1);
+          renderExplorerView();
+        });
+        expNextBtn.addEventListener("click", () => {
+          const cur = parseFloat(expTimeSlider.value || "0.0");
+          const next = Math.min(5.0, Math.round((cur + 0.5) * 2.0) / 2.0);
+          expTimeSlider.value = next.toFixed(1);
+          renderExplorerView();
+        });
+        expPlayBtn.addEventListener("click", () => {
+          if (playTimer) {
+            clearInterval(playTimer);
+            playTimer = null;
+            expPlayBtn.innerHTML = "&#9654; Play";
+            return;
+          }
+          expPlayBtn.innerHTML = "&#9208; Pause";
+          const dtStep = expChkSmooth.checked ? 0.1 : 0.5;
+          playTimer = setInterval(() => {
+            let cur = parseFloat(expTimeSlider.value || "0.0");
+            if (cur >= 5.0 - 1e-4) {
+              cur = 0.0;
+            } else {
+              cur = Math.min(5.0, Number((cur + dtStep).toFixed(2)));
+            }
+            expTimeSlider.value = String(cur);
+            renderExplorerView();
+          }, expChkSmooth.checked ? 120 : 450);
+        });
+
+        expSendBtn.addEventListener("click", () => {
+          const condObj = explorerCatalog.conditions[expCondSel.value];
+          if (!condObj) return;
+          const muVal = parseFloat(expMuSel.value || "1.0");
+          const tVal = parseFloat(expTimeSlider.value || "0.0");
+          const currentStep = getInterpolatedExplorerStep(condObj, tVal, muVal);
+          syncStepToR3BSimulator(condObj, currentStep);
+        });
+
+        // Event Listeners for R3B Simulator Controls
+        r3bModeSel.addEventListener("change", () => {
+          if (r3bModeSel.value === "connected") {
+            const condObj = explorerCatalog.conditions[expCondSel.value];
+            const currentStep = getInterpolatedExplorerStep(condObj, parseFloat(expTimeSlider.value || "0.0"), parseFloat(expMuSel.value || "1.0"));
+            syncStepToR3BSimulator(condObj, currentStep);
+          } else {
+            renderR3BSimulator();
+          }
+        });
+
+        r3bUnitSel.addEventListener("change", () => {
+          const prevVal = parseFloat(r3bSpeedInput.value || "0.0");
+          if (r3bUnitSel.value === "kmh") {
+            const kmh = prevVal * 3.6;
+            r3bSpeedSlider.max = "150.0";
+            r3bSpeedSlider.value = kmh.toFixed(1);
+            r3bSpeedInput.value = kmh.toFixed(1);
+          } else {
+            const mps = prevVal / 3.6;
+            r3bSpeedSlider.max = "42.0";
+            r3bSpeedSlider.value = mps.toFixed(2);
+            r3bSpeedInput.value = mps.toFixed(2);
+          }
+          renderR3BSimulator();
+        });
+
+        r3bSpeedSlider.addEventListener("input", () => {
+          r3bSpeedInput.value = r3bSpeedSlider.value;
+          r3bModeSel.value = "standalone";
+          renderR3BSimulator();
+        });
+        r3bSpeedInput.addEventListener("input", () => {
+          if (Number.isFinite(parseFloat(r3bSpeedInput.value))) {
+            r3bSpeedSlider.value = r3bSpeedInput.value;
+          }
+          r3bModeSel.value = "standalone";
+          renderR3BSimulator();
+        });
+
+        r3bObsModeSel.addEventListener("change", renderR3BSimulator);
+        r3bD0Slider.addEventListener("input", () => {
+          r3bD0Input.value = r3bD0Slider.value;
+          r3bObsModeSel.value = "counterfactual";
+          renderR3BSimulator();
+        });
+        r3bD0Input.addEventListener("input", () => {
+          if (Number.isFinite(parseFloat(r3bD0Input.value))) {
+            r3bD0Slider.value = r3bD0Input.value;
+          }
+          r3bObsModeSel.value = "counterfactual";
+          renderR3BSimulator();
+        });
+
+        r3bTauSlider.addEventListener("input", () => {
+          r3bTauInput.value = r3bTauSlider.value;
+          if (r3bModeSel.value === "connected") {
+            expTimeSlider.value = r3bTauSlider.value;
+            renderExplorerView();
+          } else {
+            renderR3BSimulator();
+          }
+        });
+        r3bTauInput.addEventListener("input", () => {
+          if (Number.isFinite(parseFloat(r3bTauInput.value))) {
+            r3bTauSlider.value = r3bTauInput.value;
+          }
+          renderR3BSimulator();
+        });
+
+        r3bPolicySel.addEventListener("change", renderR3BSimulator);
+
+        r3bMuSlider.addEventListener("input", () => {
+          r3bMuInput.value = parseFloat(r3bMuSlider.value).toFixed(2);
+          renderR3BSimulator();
+        });
+        r3bMuInput.addEventListener("input", () => {
+          if (Number.isFinite(parseFloat(r3bMuInput.value))) {
+            r3bMuSlider.value = r3bMuInput.value;
+          }
+          renderR3BSimulator();
+        });
+        document.querySelectorAll("[data-mu-preset]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const m = parseFloat(btn.getAttribute("data-mu-preset"));
+            r3bMuSlider.value = m.toFixed(2);
+            r3bMuInput.value = m.toFixed(2);
+            renderR3BSimulator();
+          });
+        });
+
+        r3bT1Slider.addEventListener("input", () => {
+          r3bT1Input.value = parseFloat(r3bT1Slider.value).toFixed(2);
+          renderR3BSimulator();
+        });
+        r3bT1Input.addEventListener("input", () => {
+          if (Number.isFinite(parseFloat(r3bT1Input.value))) {
+            r3bT1Slider.value = r3bT1Input.value;
+          }
+          renderR3BSimulator();
+        });
+
+        [r3bT2Input, r3bT3Input, r3bAmaxInput, r3bAsupInput].forEach((inp) => {
+          inp.addEventListener("input", renderR3BSimulator);
+        });
+
+        r3bResetBtn.addEventListener("click", () => {
+          r3bMuSlider.value = "1.00";
+          r3bMuInput.value = "1.00";
+          r3bT1Slider.value = "1.65";
+          r3bT1Input.value = "1.65";
+          r3bT2Input.value = "0.10";
+          r3bT3Input.value = "0.60";
+          r3bAmaxInput.value = "8.00";
+          r3bAsupInput.value = "2.00";
+          r3bPolicySel.value = "P1";
+          renderR3BSimulator();
+        });
+
+        // Expose programmatic API on window for automated headless browser verification
+        window.VLA_INTERACTIVE_EXPLORER = {
+          catalog: explorerCatalog,
+          stoppingDistanceR3BExact,
+          evaluateR3BIntervalForBranch,
+          renderExplorerView,
+          renderR3BSimulator,
+        };
+
+        // Initialize Trajectory Explorer & R3B Simulator on Scene 02 (which has both an observed stationary obstacle d0=55.49m AND a command intervention!)
+        expSceneSel.value = "scene_02_stationary_lead_obstacle";
+        populateExplorerConditionOptions("scene_02_stationary_lead_obstacle");
+        r3bObsModeSel.value = "observed";
+        renderExplorerView();
       }
 
       renderScene05AblationChart();

@@ -15,14 +15,17 @@ In Level 3 (conditionally automated) driving, when an automated driving system e
 ### 2. What I Built
 This repository provides a two-part open-source safety-engineering and AI-verification codebase:
 - **Core Recoverability & Identifiability Framework (`src/`, `research/`, `results/`):** A signal-processing audit of 513 conditionally automated takeover simulator trials (TU Delft D003), EPA coastdown road-load calibration, and a closed-form interval-bounded braking recoverability solver (**Phase R3B**) across 150 scenario–friction–policy slices (`P0`, `P1`, `P2`), governed by **42 frozen claims** ([`research/R5A_CLAIM_LEDGER.csv`](research/R5A_CLAIM_LEDGER.csv)).
-- **VLA-Informed Handover Feasibility Extension ([`extensions/vla_handover_feasibility/`](extensions/vla_handover_feasibility/)):** An end-to-end physical verification pipeline that runs genuine **AutoVLA** (`Qwen2.5-VL-3B-Instruct` + `2,048` physical `<action_k>` tokens) on 7 multi-view nuPlan/OpenScene driving scenes, audits decoded SE(2) trajectories against 10 vehicle-dynamics constraints (`C1`–`C10`), computes counterfactual R3B human takeover stopping margins (`[m]` and `[s]`) across takeover request horizons $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$, enforces an **11-point cryptographic provenance auditor**, and generates a self-contained interactive English HTML/PDF dashboard.
+- **VLA-Informed Handover Feasibility Extension & Interactive Demonstrator ([`extensions/vla_handover_feasibility/`](extensions/vla_handover_feasibility/)):** An end-to-end physical verification pipeline and interactive engineering demonstrator (`interactive_explorer.py`, `report_generator.py`) that runs genuine **AutoVLA** (`Qwen2.5-VL-3B-Instruct` + `2,048` physical `<action_k>` tokens) on 7 multi-view nuPlan/OpenScene driving scenes (`10` total saved rollouts including controlled command and signed-acceleration interventions), audits decoded SE(2) trajectories against 10 vehicle-dynamics constraints (`C1`–`C10`), couples step-by-step trajectory playback directly to an interactive **4-Phase R3B Human Takeover Feasibility Simulator**, enforces an **11-point cryptographic provenance auditor**, and generates a self-contained interactive English HTML/PDF dashboard.
 
 ### 3. Technologies Used
 - **AI & Multimodal Inference:** PyTorch, Hugging Face `transformers` (`Qwen2.5-VL`, `bfloat16` `safetensors` with exact `825/825` `strict=True` state-dict bijection), `qwen-vl-utils`, AutoVLA physical action codebook (`2,048` tokens).
 - **Scientific Computing & Verification:** Python 3.10+, NumPy, SciPy, Pandas, SymPy (symbolic monotonicity verification), Matplotlib.
-- **Quality Assurance & Reproducibility:** Pytest (`19` VLA extension tests + `424` public-clone baseline tests), SHA-256 artifact & sensor-manifest auditing, Headless Chromium visual QA, GitHub Actions CI.
+- **Quality Assurance & Reproducibility:** Pytest (`21` VLA extension tests + `424` public-clone baseline tests), SHA-256 artifact & sensor-manifest auditing, Headless Chromium CDP visual QA, GitHub Actions CI.
 
 ### 4. What the System Demonstrates
+- **Interactive R3B Human Takeover Feasibility Simulator & AutoVLA Trajectory Explorer ([`interactive_explorer.py`](extensions/vla_handover_feasibility/interactive_explorer.py)):**
+  - **Capability 1 — Interactive AutoVLA Trajectory & Step-Aware Physics Explorer:** Scrubs or animates all `10` saved AutoVLA rollouts across the `7` real driving scenes (`t = 0.0 s` observed state + `10` discrete steps $k \in \{1..10\}$ at `0.5 s` resolution, plus optional `0.1 s` display interpolation clearly badged as interpolated), overlays logged human trajectories and controlled command/ablation counterparts in Bird's-Eye View (`+x` forward, `+y` left, $\pm 1.75\text{ m}$ R3B corridor), and inspects step-level `C1`–`C10` physical constraints while strictly separating `TIME_LOCAL_STEP` interval checks (`C2`–`C10`, marked `NOT_DEFINED_AT_T0` at $t = 0.0\text{ s}$) from `TRAJECTORY_WIDE` checks (`C1`).
+  - **Capability 2 — Coupled & Standalone R3B Human Takeover Simulator:** Evaluates the exact validated 4-phase analytical R3B stopping equations (`stopping_distance_r3b_analytical`, `t_required`, `effective_braking_deceleration`) across policy branches `P0` (Hold Speed), `P1` (EPA Coastdown Drag), and `P2` (Supported Decel $a_{\text{sup}} \in [1.0, 3.0]\text{ m/s}^2$) with live controls for speed (`m/s` $\leftrightarrow$ `km/h`), obstacle source/distance $d_0$, takeover delay $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$, friction $\mu$ (`Dry 1.0`, `Wet 0.7`, `Rain 0.5`, `Snow 0.35`), and human/brake parameters ($t_1, t_2, t_3, a_{\max}, a_{\text{sup}}$). Explicitly separates **Layer 1 Observed Evidence**, **Layer 2 Assumed Counterfactual Inputs**, and **Layer 3 Derived Model Conclusions** using five non-safety presentation labels (`NECESSARY_CONDITION_SATISFIED`, `NECESSARY_CONDITION_VIOLATED`, `PARAMETER_SENSITIVE`, `NOT_APPLICABLE`, `INSUFFICIENT_EVIDENCE` — never `"SAFE"`).
 - **Genuine VLA Trajectory Decoding & Physical Auditing:** Sub-meter highway tracking (`scene_01`: `ADE = 0.36 m`, `FDE = 0.76 m`) alongside automatic detection of wet-pavement lateral acceleration violations (`scene_02`: $|a_{\text{lat}}| = 2.27\text{ m/s}^2 > 2.00\text{ m/s}^2$ at $\mu = 0.5$, triggering `C7_LATERAL_ACCELERATION_LIMIT`).
 - **Active-Braking Prompt Vulnerability (`scene_05`, `EXT-VLA-C03`):** In `scene_05_active_braking_deceleration`, the ego vehicle is actively braking ($a_{x,0} = -1.5525\text{ m/s}^2$, $v_0 = 4.3103\text{ m/s}$). Because AutoVLA's upstream prompt encodes acceleration as an unsigned scalar norm (`1.56 m/s^2`), the model reverses into strong positive acceleration (`+1.5442 m/s^2` at $t = 1.5\text{ s}$, `FDE = 12.90 m`), violating `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` (`3.10 m/s^2 > 2.50 m/s^2`) and eroding counterfactual R3B stopping margins as takeover is delayed.
 - **Controlled Single-Variable Signed-Acceleration Ablation (`scene_05`, `EXT-VLA-C03`):** Holding the checkpoint, 12 camera frames, velocity, command, and greedy decoding identical while replacing `"1.56 m/s^2"` with signed `"-1.55 m/s^2"` ([`ablation_scene_05_signed_accel.json`](extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json)) sustains deceleration and reduces `0.0–2.0 s` braking-phase ADE by **88.1%** (`1.2131 m` $\to$ `0.1448 m`; full `5.0 s` ADE `6.2543 m` $\to$ `2.4210 m`), while exposing single-scene out-of-distribution (OOD) token jitter at standstill ($t = 4.5\text{ s}$).
@@ -50,13 +53,16 @@ flowchart LR
     B --> C["Action Decoding<br/>(10 &lt;action_k&gt; Tokens &rarr;<br/>5.0s SE(2) Trajectory)"]
     C --> D["Physical Feasibility Verifier<br/>(C1&ndash;C10 Kinematics, Friction<br/>&mu;&middot;g &amp; State Continuity)"]
     D --> E["R3B Counterfactual Evaluation<br/>(Braking-Only Margins [m]/[s]<br/>Policies P0/P1/P2, &tau;_req 0..3s)"]
-    E --> F["Interactive Research Dashboard<br/>(11-Point SHA-256 Provenance,<br/>HTML/PDF Report &amp; Claim Ledger)"]
+    E --> F["Interactive Demonstrator &amp; Report<br/>(Trajectory Explorer + R3B Simulator,<br/>11-Point SHA-256 Provenance, HTML/PDF)"]
 ```
 
-### 7. Interactive English Research Dashboard Preview
+### 7. Interactive English Research Dashboard & Demonstrator Preview
+
+![Screenshot 07: Interactive AutoVLA Trajectory Explorer and Coupled R3B Human Takeover Simulator](extensions/vla_handover_feasibility/artifacts/report/screenshots/07_interactive_r3b_and_trajectory_explorer.png)
+*Screenshot 07: Interactive Demonstrator Workspace showing Capability 1 (AutoVLA Trajectory & Step-Aware C1–C10 Physics Explorer on Scene 02 `keep forward` vs `turn left` at $t = 1.5\text{ s}$) coupled live to Capability 2 (4-Phase R3B Human Takeover Feasibility Simulator across `P0`/`P1`/`P2` with 3-Layer Provenance and non-safety status mapping).*
 
 ![Screenshot 01: Executive Findings, Methodological Leakage Disclosure, and Overview](extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_findings_and_overview.png)
-*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C06`), driving-command leakage disclosure banner (`EXT-VLA-C06`), interactive control bar, and Scene 01 overview.*
+*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C08`), driving-command leakage disclosure banner (`EXT-VLA-C06`), interactive control bar, and Scene 01 overview.*
 
 ![Screenshot 02: Scene 05 Active-Braking Violation and Controlled Signed-Acceleration Ablation](extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png)
 *Screenshot 02: Scene 05 `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` violation (`+1.5442 m/s^2` vs `-1.5525 m/s^2`) and single-variable signed-acceleration prompt ablation (`-1.55 m/s^2`) with OOD causal boundary notices.*
@@ -66,6 +72,12 @@ flowchart LR
 
 ![Screenshot 04: Scene 01 Counterfactual Obstacle Provenance Badge Verification](extensions/vla_handover_feasibility/artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png)
 *Screenshot 04: Scene 01 counterfactual $d_0 = 45.00\text{ m}$ schedule explicitly badged as `Observed Ego (t0) + Assumed Obstacle (d0)` at $\tau_{\text{req}} = 0.0\text{ s}$ and `Hypothetical VLA + Assumed Obstacle (d0)` at $\tau_{\text{req}} > 0$.*
+
+![Screenshot 05: RQ1 Controlled Driving-Command Sensitivity (Scenes 02 & 06)](extensions/vla_handover_feasibility/artifacts/report/screenshots/05_scene_02_06_command_sensitivity.png)
+*Screenshot 05: RQ1 Controlled Driving-Command Sensitivity (`turn left` $\to$ `keep forward`, `EXT-VLA-C07`) on Scenes 02 and 06 with token-level divergence and R3B corridor admissibility impact.*
+
+![Screenshot 06: RQ2 Scene 05 C10 Numerical Robustness Matrix](extensions/vla_handover_feasibility/artifacts/report/screenshots/06_scene_05_c10_robustness_matrix.png)
+*Screenshot 06: RQ2 Scene 05 `C10` Numerical Robustness Audit (`EXT-VLA-C08`) across 5 discrete derivative estimators (`E1`–`E5`), 5 temporal windows, and 3 diagnostic thresholds.*
 
 ### 8. Audited 7-Scene VLA Summary & Epistemic Boundaries
 
@@ -188,7 +200,7 @@ To maintain strict scientific and assurance integrity, this project explicitly d
 │   └── vla_handover_feasibility/   # Audited AutoVLA trajectory & R3B handover feasibility pipeline
 │       ├── artifacts/        # Evaluation summaries, claim register, command sensitivity, C10 robustness, HTML/PDF report & screenshots
 │       ├── data/             # Scene manifest, SHA-256 camera digest, AutoVLA action codebook (agent_vocab.pkl)
-│       ├── tests/            # 19 unit, synthetic-fixture, R3B-adapter, RQ1/RQ2 sensitivity, demo, and provenance tests
+│       ├── tests/            # 21 unit, synthetic-fixture, R3B-adapter, RQ1/RQ2 sensitivity, interactive explorer, demo, and provenance tests
 │       ├── action_tokenizer.py     # Action token regex parser & SE(2) trajectory rollout decoder
 │       ├── browser_qa.py           # Headless Chromium visual QA & screenshot generator
 │       ├── c10_robustness.py       # RQ2 Scene 05 C10 numerical robustness audit (5 estimators x 5 windows x 3 thresholds)
@@ -197,9 +209,10 @@ To maintain strict scientific and assurance integrity, this project explicitly d
 │       ├── demo.py                 # One-command offline evaluation & interactive dashboard launcher
 │       ├── experiment_runner.py    # End-to-end evaluation & R3B counterfactual pipeline
 │       ├── extract_navsim_scenes.py # On-demand OpenScene camera frame extractor & SHA-256 verifier
+│       ├── interactive_explorer.py # Interactive R3B Simulator & Step-Aware AutoVLA Trajectory/Physics Explorer engine
 │       ├── provenance_audit.py     # 11-point cryptographic & numerical provenance auditor
 │       ├── r3b_adapter.py          # Adapter into unchanged src/vehicle and src/handover modules
-│       ├── report_generator.py     # License-compliant English HTML/PDF dashboard generator
+│       ├── report_generator.py     # License-compliant English HTML/PDF dashboard & interactive demonstrator generator
 │       ├── schemas.py              # Strongly typed dataclasses for scenes, trajectories, and R3B slices
 │       ├── trajectory_verifier.py  # Independent C1-C10 physical feasibility verifier & synthetic fixtures
 │       └── vla_inference.py        # Sequential batch_size=1 AutoVLA inference runner
@@ -270,7 +283,7 @@ The VLA extension is 100% reproducible offline from a fresh Git clone using only
 # Run the one-command offline evaluation, provenance audit, and dashboard generator
 python -m extensions.vla_handover_feasibility.demo --no-open
 
-# Run the 19 extension unit, synthetic-fixture, R3B-adapter, RQ1/RQ2, demo, and provenance tests
+# Run the 21 extension unit, synthetic-fixture, R3B-adapter, RQ1/RQ2, interactive explorer, demo, and provenance tests
 pytest extensions/vla_handover_feasibility/tests -v
 
 # Or invoke the individual pipeline stages directly:
@@ -283,7 +296,7 @@ python -m extensions.vla_handover_feasibility.provenance_audit
 
 **Expected Extension Test Output:**
 ```text
-================= 19 passed in ~1.8s =================
+================= 21 passed in ~1.8s =================
 ```
 
 ### 2. Core Baseline Test Suite

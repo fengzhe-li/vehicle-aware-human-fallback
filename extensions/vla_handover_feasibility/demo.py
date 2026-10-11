@@ -226,6 +226,16 @@ def run_offline_demo(
                 f"{gvc.get('canonical_unsigned_total_cells', 75)} violated "
                 f"(sensitive to early windows <= 1.0s and to E4/E5 smoothing at 3.0 m/s^2; D5 signed OOD rollout has 0/75 active-motion violations)."
             )
+        print("-" * 108)
+        print(
+            "Interactive Demonstrator Workspace (Capability 1 & Capability 2 in HTML Dashboard):\n"
+            "  * Capability 1 (AutoVLA Trajectory & Step-Aware Physics Explorer): 10 saved rollouts across 7 scenes\n"
+            "    (7 canonical + 2 RQ1 command interventions + 1 Scene 05 signed OOD ablation), 11 steps (t=0.0..5.0s),\n"
+            "    explicitly separating TIME_LOCAL_STEP C2-C10 checks (NOT_DEFINED_AT_T0 at t=0) from TRAJECTORY_WIDE C1.\n"
+            "  * Capability 2 (Coupled & Standalone R3B Simulator): Exact 4-phase analytical R3B engine (P0 / P1 / P2),\n"
+            "    3-layer provenance (Observed / Assumed / Derived), m/s <-> km/h toggle, and 5 non-safety labels\n"
+            "    (NECESSARY_CONDITION_SATISFIED, NECESSARY_CONDITION_VIOLATED, PARAMETER_SENSITIVE, NOT_APPLICABLE, INSUFFICIENT_EVIDENCE)."
+        )
         print("=" * 108)
         print(f"Interactive HTML Dashboard : {report_path}")
         if pdf_path.exists():
@@ -250,6 +260,8 @@ def run_offline_demo(
         "report_html_path": str(report_path),
         "report_pdf_path": str(pdf_path) if pdf_path.exists() else None,
         "verified_scenes_count": audit["verified_scenes_count"],
+        "interactive_explorer_conditions_count": 10,
+        "interactive_explorer_steps_per_condition": 11,
         "total_csv_evaluation_rows": summary["summary_counts"]["total_csv_evaluation_rows"],
         "command_sensitivity_verified": audit["offline_reproducible_from_public_artifacts"]["controlled_command_sensitivity_interventions_verified"],
         "c10_robustness_verified": audit["offline_reproducible_from_public_artifacts"]["scene_05_c10_robustness_matrix_verified"],

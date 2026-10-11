@@ -332,7 +332,129 @@ def run_browser_qa() -> dict[str, Any]:
             if not item["camFrontOk"] or not item["bevHasSvg"] or not item["speedHasSvg"] or not item["accelHasSvg"] or item["checksRows"] < 10:
                 raise RuntimeError(f"Scene render check failed for {item['key']}: {item}")
 
-        # 6. Export Landscape PDF with @media print styling
+        # 6. Verify Interactive AutoVLA Trajectory Explorer & Interactive R3B Simulator (Priority Interactive Demonstrator QA)
+        interactive_qa = cdp.eval_js(
+            """(() => {
+                const expScene = document.getElementById('select-explorer-scene');
+                const expCond = document.getElementById('select-explorer-condition');
+                const expSlider = document.getElementById('slider-explorer-time');
+                const r3bStatus = document.getElementById('r3b-sim-status-badge');
+                const r3bMetrics = document.getElementById('r3b-sim-metrics-grid');
+                const r3bSpeedUnit = document.getElementById('select-r3b-speed-unit');
+                const r3bSpeedInput = document.getElementById('input-r3b-speed');
+                const r3bMuInput = document.getElementById('input-r3b-mu');
+                const r3bPolicy = document.getElementById('select-r3b-policy');
+
+                // A. Check t=0.0s step checks: TIME_LOCAL_STEP must be NOT_DEFINED_AT_T0, C1 must be TRAJECTORY_WIDE
+                expScene.value = 'scene_02_stationary_lead_obstacle';
+                expScene.dispatchEvent(new Event('change'));
+                expSlider.value = '0.0';
+                expSlider.dispatchEvent(new Event('input'));
+                const t0StepRows = Array.from(document.querySelectorAll('#tbody-explorer-step-checks tr')).map(tr => tr.innerText);
+                const t0HasNotApp = t0StepRows.filter(txt => txt.includes('TIME_LOCAL_STEP') && txt.includes('NOT_DEFINED_AT_T0')).length;
+                const t0HasTrajWide = t0StepRows.filter(txt => txt.includes('C1_TIMESTAMP_AND_HORIZON_CONTINUITY') && txt.includes('TRAJECTORY_WIDE')).length;
+
+                // B. Scrub Scene 02 canonical ('turn left') to t = 1.5s -> Exits 1D corridor -> R3B NOT_APPLICABLE
+                expSlider.value = '1.5';
+                expSlider.dispatchEvent(new Event('input'));
+                const s02TurnLeftStatusAt15s = r3bStatus.innerText.trim();
+                const s02TurnLeftTelemetry = document.getElementById('explorer-step-telemetry').innerText;
+
+                // C. Switch Scene 02 to 'keep forward' intervention at t = 1.5s -> Remains in 1D corridor -> NECESSARY_CONDITION_SATISFIED
+                expCond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
+                expCond.dispatchEvent(new Event('change'));
+                const s02KeepForwardStatusAt15s = r3bStatus.innerText.trim();
+                const s02KeepForwardMetrics = r3bMetrics.innerText;
+
+                // D. Verify speed unit toggle (m/s -> km/h) updates input and dual readout
+                const speedMpsBefore = parseFloat(r3bSpeedInput.value);
+                r3bSpeedUnit.value = 'kmh';
+                r3bSpeedUnit.dispatchEvent(new Event('change'));
+                const speedKmhAfter = parseFloat(r3bSpeedInput.value);
+                r3bSpeedUnit.value = 'mps';
+                r3bSpeedUnit.dispatchEvent(new Event('change'));
+
+                // E. Verify policy branch P0 vs P2 changes required stopping distance
+                r3bPolicy.value = 'P0';
+                r3bPolicy.dispatchEvent(new Event('change'));
+                const p0MetricsTxt = r3bMetrics.innerText;
+                r3bPolicy.value = 'P2';
+                r3bPolicy.dispatchEvent(new Event('change'));
+                const p2MetricsTxt = r3bMetrics.innerText;
+
+                // F. Verify invalid input guardrail (negative speed -5 m/s) returns NOT_APPLICABLE without fabricating margin
+                const savedSpeed = r3bSpeedInput.value;
+                r3bSpeedInput.value = '-5.0';
+                r3bSpeedInput.dispatchEvent(new Event('input'));
+                const invalidStatus = r3bStatus.innerText.trim();
+                const invalidMetricsTxt = r3bMetrics.innerText;
+
+                // Restore clean Scene 02 keep_forward state at t=1.5s in Connected Mode for screenshot
+                expScene.value = 'scene_02_stationary_lead_obstacle';
+                expScene.dispatchEvent(new Event('change'));
+                expCond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
+                expCond.dispatchEvent(new Event('change'));
+                expSlider.value = '1.5';
+                expSlider.dispatchEvent(new Event('input'));
+                document.getElementById('select-r3b-obstacle-mode').value = 'observed';
+                document.getElementById('btn-r3b-reset-defaults').click();
+                document.getElementById('btn-send-step-to-r3b').click();
+
+                return {
+                    t0HasNotApp,
+                    t0HasTrajWide,
+                    s02TurnLeftStatusAt15s,
+                    s02TurnLeftExitedCorridor: s02TurnLeftTelemetry.includes('EXITED 1D CORRIDOR'),
+                    s02KeepForwardStatusAt15s,
+                    s02KeepForwardMetrics,
+                    speedMpsBefore,
+                    speedKmhAfter,
+                    p0MetricsTxt,
+                    p2MetricsTxt,
+                    invalidStatus,
+                    invalidRejected: invalidMetricsTxt.includes('Invalid or nonphysical speed'),
+                };
+            })()"""
+        )
+        if interactive_qa["t0HasNotApp"] != 9 or interactive_qa["t0HasTrajWide"] != 1:
+            raise RuntimeError(f"Step check scope verification at t=0 failed: {interactive_qa}")
+        if interactive_qa["s02TurnLeftStatusAt15s"] != "NOT_APPLICABLE" or not interactive_qa["s02TurnLeftExitedCorridor"]:
+            raise RuntimeError(f"Scene 02 turn-left corridor exit check at t=1.5s failed: {interactive_qa}")
+        if interactive_qa["s02KeepForwardStatusAt15s"] != "NECESSARY_CONDITION_SATISFIED":
+            raise RuntimeError(f"Scene 02 keep-forward R3B coupling at t=1.5s failed: {interactive_qa}")
+        if abs(interactive_qa["speedMpsBefore"] * 3.6 - interactive_qa["speedKmhAfter"]) > 0.25:
+            raise RuntimeError(f"Speed unit conversion check failed: {interactive_qa}")
+        if interactive_qa["p0MetricsTxt"] == interactive_qa["p2MetricsTxt"]:
+            raise RuntimeError("Changing policy branch P0 -> P2 did not update R3B metrics")
+        if interactive_qa["invalidStatus"] != "NOT_APPLICABLE" or not interactive_qa["invalidRejected"]:
+            raise RuntimeError(f"Invalid speed guardrail check failed: {interactive_qa}")
+
+        # Capture Screenshot 07: Interactive AutoVLA Trajectory Explorer & Coupled R3B Simulator
+        cdp.call(
+            "Emulation.setDeviceMetricsOverride",
+            {"width": 1600, "height": 1850, "deviceScaleFactor": 2, "mobile": False},
+        )
+        cdp.eval_js("document.getElementById('interactive-trajectory-explorer').scrollIntoView({behavior: 'instant'})")
+        time.sleep(0.25)
+        shot7_b64 = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})["data"]
+        shot7_path = screenshots_dir / "07_interactive_r3b_and_trajectory_explorer.png"
+        shot7_path.write_bytes(base64.b64decode(shot7_b64))
+        cdp.call("Emulation.clearDeviceMetricsOverride")
+
+        # Capture Screenshot 05 (RQ1 Command Sensitivity) & Screenshot 06 (RQ2 C10 Robustness Matrix)
+        cdp.eval_js("document.getElementById('rq1-command-sensitivity-section').scrollIntoView({behavior: 'instant'})")
+        time.sleep(0.2)
+        shot5_b64 = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})["data"]
+        shot5_path = screenshots_dir / "05_scene_02_06_command_sensitivity.png"
+        shot5_path.write_bytes(base64.b64decode(shot5_b64))
+
+        cdp.eval_js("document.getElementById('rq2-c10-robustness-section').scrollIntoView({behavior: 'instant'})")
+        time.sleep(0.2)
+        shot6_b64 = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})["data"]
+        shot6_path = screenshots_dir / "06_scene_05_c10_robustness_matrix.png"
+        shot6_path.write_bytes(base64.b64decode(shot6_b64))
+
+        # 7. Export Landscape PDF with @media print styling
         cdp.eval_js(
             """(() => {
                 document.querySelector('[data-jump-scene="scene_05_active_braking_deceleration"]').click();
@@ -363,14 +485,20 @@ def run_browser_qa() -> dict[str, Any]:
             "status": "BROWSER_QA_AND_PDF_EXPORT_PASSED",
             "overview_rows_verified": overview_rows,
             "scenes_interactively_tested": len(all_scenes_tested),
+            "interactive_explorer_verified": True,
             "scene_01_t0_badge": s01_check["firstRowBadge"],
             "scene_01_t05_badge": s01_check["secondRowBadge"],
             "scene_03_t0_badge": s03_check["firstBadge"],
+            "scene_02_turn_left_15s_r3b_status": interactive_qa["s02TurnLeftStatusAt15s"],
+            "scene_02_keep_forward_15s_r3b_status": interactive_qa["s02KeepForwardStatusAt15s"],
             "screenshots": [
                 str(shot1_path),
                 str(shot2_path),
                 str(shot3_path),
                 str(shot4_path),
+                str(shot5_path),
+                str(shot6_path),
+                str(shot7_path),
             ],
             "pdf_export_path": str(pdf_path),
             "pdf_size_kb": round(len(pdf_bytes) / 1024.0, 2),
