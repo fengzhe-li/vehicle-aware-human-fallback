@@ -42,10 +42,11 @@ jobs:
       - name: Verify dashboard, evaluation artifacts, and README screenshot links
         run: |
           test -s extensions/vla_handover_feasibility/artifacts/report/index.html
-          test -s extensions/vla_handover_feasibility/artifacts/eval/scene_evaluation_summary.csv
-          test -s extensions/vla_handover_feasibility/artifacts/eval/r3b_handover_comparison.csv
-          test -s extensions/vla_handover_feasibility/artifacts/eval/provenance_audit_report.json
-          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_overview.png
-          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_and_ablation.png
-          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/03_r3b_counterfactual_matrix.png
-          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/04_claims_and_provenance.png
+          test -s extensions/vla_handover_feasibility/artifacts/evaluation_summary.json
+          test -s extensions/vla_handover_feasibility/artifacts/counterfactual_comparison.csv
+          test -s extensions/vla_handover_feasibility/artifacts/extension_claim_register.csv
+          test -s extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_findings_and_overview.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/03_scene_03_urban_lead_r3b_handover.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png
