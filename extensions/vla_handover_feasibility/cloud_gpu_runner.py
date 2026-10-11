@@ -22,8 +22,6 @@ import argparse
 import json
 from pathlib import Path
 
-import torch
-
 from extensions.vla_handover_feasibility.experiment_runner import (
     DEFAULT_ARTIFACTS_DIR,
     evaluate_all_predictions_and_counterfactuals,
@@ -41,6 +39,8 @@ from extensions.vla_handover_feasibility.vla_inference import (
 
 def print_cloud_gpu_diagnostics() -> dict[str, object]:
     """Inspect CUDA availability and VRAM capacity without incurring any external API costs."""
+    import torch
+
     cuda_ok = bool(torch.cuda.is_available())
     info: dict[str, object] = {
         "cuda_available": cuda_ok,
@@ -56,6 +56,8 @@ def print_cloud_gpu_diagnostics() -> dict[str, object]:
 
 
 def main() -> None:
+    import torch
+
     parser = argparse.ArgumentParser(
         description="Reproducible zero-cost Cloud GPU runner for AutoVLA trajectory inference and R3B evaluation."
     )

@@ -1,13 +1,91 @@
-# Vehicle-Aware Human Fallback: Braking-Only Recoverability and Evidence-Boundary Analysis
+# Vehicle-Aware Human Fallback: Braking-Only Recoverability, Evidence Boundaries, and VLA Trajectory Verification
 
-**Repository:** `vehicle-aware-human-fallback`
-**Author:** Fengzhe Li
-**License:** MIT (Source Code)
+**Repository:** `vehicle-aware-human-fallback`  
+**Author:** Fengzhe Li  
+**License:** MIT (Source Code)  
 **Python Version:** Python >= 3.10 (tested on Python 3.14.5)
 
 ---
 
-## Research Question
+## Executive Overview
+
+### 1. The Engineering Problem
+In Level 3 (conditionally automated) driving, when an automated driving system encounters an operational design domain (ODD) limit or hazard, it issues a **Takeover Request (TOR)** to transfer control to the human driver. Evaluating whether a human handover is physically recoverable cannot rely on *Time-to-Collision (TTC)* or open-loop *Vision-Language-Action (VLA) trajectory error (ADE/FDE)* alone: a predicted trajectory may appear accurate in open-loop benchmarks while violating road-friction limits ($\mu g$), longitudinal state continuity during active braking, or leaving insufficient stopping distance once human reaction latency ($t_1 \in [1.15, 3.00]\text{ s}$) and brake actuation delays ($t_2, t_3$) are accounted for.
+
+### 2. What I Built
+This repository provides a two-part open-source safety-engineering and AI-verification codebase:
+- **Core Recoverability & Identifiability Framework (`src/`, `research/`, `results/`):** A signal-processing audit of 513 conditionally automated takeover simulator trials (TU Delft D003), EPA coastdown road-load calibration, and a closed-form interval-bounded braking recoverability solver (**Phase R3B**) across 150 scenario–friction–policy slices (`P0`, `P1`, `P2`), governed by **42 frozen claims** ([`research/R5A_CLAIM_LEDGER.csv`](research/R5A_CLAIM_LEDGER.csv)).
+- **VLA-Informed Handover Feasibility Extension ([`extensions/vla_handover_feasibility/`](extensions/vla_handover_feasibility/)):** An end-to-end physical verification pipeline that runs genuine **AutoVLA** (`Qwen2.5-VL-3B-Instruct` + `2,048` physical `<action_k>` tokens) on 7 multi-view nuPlan/OpenScene driving scenes, audits decoded SE(2) trajectories against 10 vehicle-dynamics constraints (`C1`–`C10`), computes counterfactual R3B human takeover stopping margins (`[m]` and `[s]`) across takeover request horizons $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$, enforces an **11-point cryptographic provenance auditor**, and generates a self-contained interactive English HTML/PDF dashboard.
+
+### 3. Technologies Used
+- **AI & Multimodal Inference:** PyTorch, Hugging Face `transformers` (`Qwen2.5-VL`, `bfloat16` `safetensors` with exact `825/825` `strict=True` state-dict bijection), `qwen-vl-utils`, AutoVLA physical action codebook (`2,048` tokens).
+- **Scientific Computing & Verification:** Python 3.10+, NumPy, SciPy, Pandas, SymPy (symbolic monotonicity verification), Matplotlib.
+- **Quality Assurance & Reproducibility:** Pytest (`17` VLA extension tests + `424` public-clone baseline tests), SHA-256 artifact & sensor-manifest auditing, Headless Chromium visual QA, GitHub Actions CI.
+
+### 4. What the System Demonstrates
+- **Genuine VLA Trajectory Decoding & Physical Auditing:** Sub-meter highway tracking (`scene_01`: `ADE = 0.36 m`, `FDE = 0.76 m`) alongside automatic detection of wet-pavement lateral acceleration violations (`scene_02`: $|a_{\text{lat}}| = 2.27\text{ m/s}^2 > 2.00\text{ m/s}^2$ at $\mu = 0.5$, triggering `C7_LATERAL_ACCELERATION_LIMIT`).
+- **Active-Braking Prompt Vulnerability (`scene_05`, `EXT-VLA-C02`):** In `scene_05_active_braking_deceleration`, the ego vehicle is actively braking ($a_{x,0} = -1.5525\text{ m/s}^2$, $v_0 = 4.3103\text{ m/s}$). Because AutoVLA's upstream prompt encodes acceleration as an unsigned scalar norm (`1.56 m/s^2`), the model reverses into strong positive acceleration (`+1.5442 m/s^2` at $t = 1.5\text{ s}$, `FDE = 12.90 m`), violating `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` (`3.10 m/s^2 > 2.50 m/s^2`) and eroding counterfactual R3B stopping margins as takeover is delayed.
+- **Controlled Single-Variable Signed-Acceleration Ablation (`scene_05`, `EXT-VLA-C05`):** Holding the checkpoint, 12 camera frames, velocity, command, and greedy decoding identical while replacing `"1.56 m/s^2"` with signed `"-1.55 m/s^2"` ([`ablation_scene_05_signed_accel.json`](extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json)) sustains deceleration and reduces `0.0–2.0 s` braking-phase ADE by **88.1%** (`1.2131 m` $\to$ `0.1448 m`; full `5.0 s` ADE `6.2543 m` $\to$ `2.4210 m`), while exposing single-scene out-of-distribution (OOD) token jitter at standstill ($t = 4.5\text{ s}$).
+- **Methodological Auditing of Driving-Command Leakage (`EXT-VLA-C06`):** Programmatically flags turning scenes (`scene_02` and `scene_06`, where `"turn left"` aligns with future ground-truth lateral displacement $y_{\text{GT}}(3.0\text{ s}) > 4.0\text{ m}$) so command-conditioned `ADE`/`FDE` metrics are never misreported as leakage-free blind predictions.
+
+### 5. One-Command Offline Demo (`< 1 second` after install, no GPU or restricted data required)
+
+```bash
+git clone https://github.com/fengzhe-li/vehicle-aware-human-fallback.git
+cd vehicle-aware-human-fallback
+python3 -m venv .venv && source .venv/bin/activate
+pip install --upgrade pip && pip install -r requirements.txt
+
+# Recompute all 7 VLA trajectory checks, R3B margins, provenance audit, and open the HTML dashboard:
+python -m extensions.vla_handover_feasibility.demo
+```
+*(In headless or CI environments, pass `--no-open`: `python -m extensions.vla_handover_feasibility.demo --no-open`. The offline demo uses the 7 committed genuine AutoVLA prediction artifacts and `agent_vocab.pkl` without loading the 8.14 GB model checkpoint or restricted camera JPEGs.)*
+
+### 6. End-to-End VLA Handover Verification Architecture
+
+```mermaid
+flowchart LR
+    A["Real Driving Observations<br/>(nuPlan / OpenScene Mini<br/>12 Camera Frames + Ego State)"] --> B["Pretrained AutoVLA<br/>(Qwen2.5-VL-3B + 2,048<br/>Physical Action Tokens)"]
+    B --> C["Action Decoding<br/>(10 &lt;action_k&gt; Tokens &rarr;<br/>5.0s SE(2) Trajectory)"]
+    C --> D["Physical Feasibility Verifier<br/>(C1&ndash;C10 Kinematics, Friction<br/>&mu;&middot;g &amp; State Continuity)"]
+    D --> E["R3B Counterfactual Evaluation<br/>(Braking-Only Margins [m]/[s]<br/>Policies P0/P1/P2, &tau;_req 0..3s)"]
+    E --> F["Interactive Research Dashboard<br/>(11-Point SHA-256 Provenance,<br/>HTML/PDF Report &amp; Claim Ledger)"]
+```
+
+### 7. Interactive English Research Dashboard Preview
+
+![Screenshot 01: Executive Findings, Methodological Leakage Disclosure, and Overview](extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_findings_and_overview.png)
+*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C06`), driving-command leakage disclosure banner (`EXT-VLA-C06`), interactive control bar, and Scene 01 overview.*
+
+![Screenshot 02: Scene 05 Active-Braking Violation and Controlled Signed-Acceleration Ablation](extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png)
+*Screenshot 02: Scene 05 `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` violation (`+1.5442 m/s^2` vs `-1.5525 m/s^2`) and single-variable signed-acceleration prompt ablation (`-1.55 m/s^2`) with OOD causal boundary notices.*
+
+![Screenshot 03: Scene 03 Urban Lead-Following R3B Counterfactual Handover Analysis](extensions/vla_handover_feasibility/artifacts/report/screenshots/03_scene_03_urban_lead_r3b_handover.png)
+*Screenshot 03: Scene 03 R3B braking-only stopping distance (`[m]`) and time (`[s]`) margins across takeover request times $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$ and policies `P0`, `P1`, and `P2`.*
+
+![Screenshot 04: Scene 01 Counterfactual Obstacle Provenance Badge Verification](extensions/vla_handover_feasibility/artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png)
+*Screenshot 04: Scene 01 counterfactual $d_0 = 45.00\text{ m}$ schedule explicitly badged as `Observed Ego (t0) + Assumed Obstacle (d0)` at $\tau_{\text{req}} = 0.0\text{ s}$ and `Hypothetical VLA + Assumed Obstacle (d0)` at $\tau_{\text{req}} > 0$.*
+
+### 8. Audited 7-Scene VLA Summary & Epistemic Boundaries
+
+Full technical documentation, step-wise kinematics, synthetic verifier stress fixtures (`SYNTHETIC_FIXTURE_ONLY`), and live vs. offline reproduction details are provided in [`extensions/vla_handover_feasibility/README.md`](extensions/vla_handover_feasibility/README.md):
+
+| Scene ID | nuPlan Token | $v_0$ ($\text{m/s}$) | $a_{x,0}$ ($\text{m/s}^2$) | Prompt $\|a_0\|$ ($\text{m/s}^2$) | Command (Leakage Audit) | ADE / FDE ($\text{m}$) | Nominal ($\mu=1.0$) | Wet ($\mu=0.5$) | R3B $P_1$ ($\mu=1.0$) Handover Summary ($\tau_{\text{req}} = 0\text{ s} \to 2\text{ s}$) |
+| :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :--- |
+| `scene_01_high_speed_open_road` | `5143e810d84656d0` | `13.58` | `-0.15` | `0.19` | `keep forward` (Clean) | `0.36` / `0.76` | `SATISFIED` | `SATISFIED` | `INSUFFICIENT_EVIDENCE` (Observed); Counterfactual $d_0=45\text{ m}$ badged separately |
+| `scene_02_stationary_lead_obstacle` | `3cacb287d398542f` | `6.95` | `+1.30` | `1.35` | `turn left` (**Leakage Flag**\*) | `2.42`\* / `3.47`\* | `SATISFIED` | **`VIOLATED` (`C7`)** | Observed ($d_0=55.5\text{ m}$): `ROBUSTLY_SATISFIED` $\to$ departs 1D corridor ($\ge 2.5\text{ s}$) |
+| `scene_03_close_urban_lead_following` | `7a524614561c54ef` | `13.05` | `+0.09` | `0.10` | `keep forward` (Clean) | `1.03` / `2.27` | `SATISFIED` | `SATISFIED` | Observed ($d_0=37.3\text{ m}$): `PARAMETER_SENSITIVE` $\to$ `ROBUSTLY_UNSATISFIED` |
+| `scene_04_fast_arterial_lead_vehicle` | `c48640204ad758c4` | `6.21` | `-0.07` | `0.07` | `keep forward` (Clean) | `0.54` / `2.09` | `SATISFIED` | `SATISFIED` | Observed ($d_0=68.0\text{ m}$): `ROBUSTLY_SATISFIED` across $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$ |
+| `scene_05_active_braking_deceleration` | `b49c80be2d0d5bb9` | `4.31` | `-1.55` | `1.56` | `keep forward` (Clean) | `6.25` / `12.90` | **`VIOLATED` (`C10`)** | **`VIOLATED` (`C10`)** | `INSUFFICIENT_EVIDENCE` (Observed); CF ($d_0=20\text{ m}$): `ROBUSTLY_SATISFIED` $\to$ `UNIFORMLY_VIOLATED` |
+| `scene_06_intersection_turn_maneuver` | `c9d4d04945e85ef8` | `8.78` | `-0.40` | `1.41` | `turn left` (**Leakage Flag**\*) | `0.66`\* / `1.88`\* | `SATISFIED` | `SATISFIED` | `INSUFFICIENT_EVIDENCE` (Turn scenario without in-lane corridor obstacle) |
+| `scene_07_stationary_ego_baseline` | `e9138a74627452c2` | `0.00` | `-0.02` | `0.02` | `keep forward` (Clean) | `3.93` / `10.10` | `INSUFFICIENT_EVIDENCE` | `INSUFFICIENT_EVIDENCE` | `INSUFFICIENT_EVIDENCE` (Stationary baseline $v_0 \le 0.05\text{ m/s}$) |
+
+- **\*Driving-Command Future-Displacement Leakage Disclosure (`EXT-VLA-C06`):** In `scene_02` ($y_{\text{GT}}(3.0\text{ s}) = +4.5128\text{ m}$) and `scene_06` ($y_{\text{GT}}(3.0\text{ s}) = +4.0889\text{ m}$), conditioning on `"turn left"` (or resolving an unknown raw approach command from future lateral displacement) conveys future maneuver direction. Their open-loop `ADE`/`FDE` values are **command-conditioned evaluations**, not leakage-free blind predictions.
+- **No Native VLA Takeover-Request Signal (`EXT-VLA-C01`):** AutoVLA predicts 10-step trajectories (`predicts_human_takeover_request = False`); all $\tau_{\text{req}} > 0$ evaluations represent counterfactual delays along hypothetical VLA states.
+
+---
+
+## Core Baseline Research Question
 
 > Under what combinations of vehicle dynamics, human driver capability, handover policy, and scenario criticality does human fallback remain an effective and physically recoverable safety mechanism during time-critical automated-driving takeovers?
 
@@ -32,6 +110,7 @@ This repository contains the complete open-source scientific codebase, verificat
 - **Identifiability Boundary Analysis:** Formal classification of what can and cannot be mathematically identified or causally linked using public simulator telemetry alone.
 - **Comprehensive Claim Ledger:** 42 formally audited, frozen claims ([`research/R5A_CLAIM_LEDGER.csv`](research/R5A_CLAIM_LEDGER.csv)) with explicit epistemic labels: 33 `EMPIRICAL_DESCRIPTIVE`, 2 `ANALYTICAL_CLOSED_FORM`, 3 `COUNTERFACTUAL_INTERVAL`, 4 `UNIDENTIFIABLE_OR_BLOCKED`.
 - **Deterministic Thesis Figures:** Reproduction pipeline rendering 12 publication figures ([F1–F10, FA1–FA2](thesis/figures/)) with bit-identical PDF and PNG hash verification.
+- **VLA-Informed Handover Feasibility Extension ([`extensions/vla_handover_feasibility/`](extensions/vla_handover_feasibility/)):** Genuine AutoVLA trajectory evaluation, C1–C10 physical feasibility verifier, R3B counterfactual handover adapter, Scene 05 signed-acceleration ablation, 11-point provenance auditor, and interactive English dashboard.
 
 ![Figure F1: Evidence and Model Architecture](thesis/figures/F1_evidence_architecture.png)
 *Figure F1: Four-layer research framework separating vehicle response, human control reacquisition, transition policy, and scenario criticality, supported by an empirical observation layer and constrained by identifiability gates.*
@@ -93,89 +172,26 @@ To maintain strict scientific and assurance integrity, this project explicitly d
 
 ---
 
-## Extension: VLA-Informed Handover Feasibility Analysis (`extensions/vla_handover_feasibility/`)
-
-Building upon the frozen baseline framework above, this repository includes a physically grounded research extension under [`extensions/vla_handover_feasibility/`](extensions/vla_handover_feasibility/) that evaluates how genuine driving Vision-Language-Action (VLA) trajectory predictions interact with vehicle-dynamics constraints (`C1`–`C10`) and the Phase R3B braking-only human fallback recoverability framework (`P0`, `P1`, `P2`).
-
-**Core Extension Research Question:**
-> *Under what conditions do VLA-generated driving trajectories violate specified vehicle-dynamics constraints, and how does the available braking-only human fallback margin change under explicitly defined takeover-request timing assumptions?*
-
-### Strict Epistemic Separation
-
-The extension enforces a strict four-way epistemic boundary across all code, artifacts (`EXT-VLA-C01` through `EXT-VLA-C06`), and visualizations:
-1. **Genuine Driving VLA Trajectory Predictions (`EMPIRICAL_MODEL_OUTPUT`):** Real neural network forward passes of **AutoVLA** (`Zewei-Zhou/AutoVLA` $\to$ `AutoVLA_PDMS_89.ckpt`, built on `Qwen/Qwen2.5-VL-3B-Instruct` with `2,048` physical `<action_k>` tokens, mapped with an exact `825 / 825` `strict=True` state-dict bijection to `transformers 5.x`) on 7 real multi-view driving scenes (`3 cameras × 4 history frames = 12 RGB images` per scene + ego kinematic state) extracted from the public `OpenDriveLab/OpenScene` (`navsim_logs/mini` + `sensor_blobs/mini`) nuPlan driving logs. AutoVLA outputs `10` discrete `<action_k>` tokens per scene decoded via `agent_vocab.pkl` into a `5.0 s`, `10-step` (`Δt = 0.5 s`) SE(2) trajectory `[x, y, heading]` in the ego-vehicle frame. **AutoVLA does not output a takeover request (TOR) signal (`predicts_human_takeover_request = False`).**
-2. **Independent Physical & Kinematic Feasibility Verification (`ANALYTICAL_CLOSED_FORM`):** Each predicted trajectory is audited against 10 explicit vehicle-dynamics checks (`C1`–`C10`, using central finite differences at interior steps and forward/backward differences at boundaries) under nominal (`μ = 1.0`) and wet (`μ = 0.5`) road friction assumptions, plus 4 clearly labelled **synthetic stress fixtures** (`SYNTHETIC_FIXTURE_ONLY`, never mixed with real VLA outputs).
-3. **Counterfactual R3B Human Takeover Analysis (`COUNTERFACTUAL_INTERVAL`):** Using the unchanged Phase R3B interval braking solver ([`src/experiments/r3b_braking_bounds.py`](src/experiments/r3b_braking_bounds.py) and [`src/handover/models.py`](src/handover/models.py)), the extension compares braking-only recoverability across policies `P0`, `P1`, and `P2` at two counterfactual request horizons:
-   - **Immediate TOR at $\tau_{\text{req}} = 0.0\text{ s}$:** Grounded in the **observed** ego speed $v_0$ and initial obstacle distance $d_0$.
-   - **Delayed TOR at $\tau_{\text{req}} \in \{0.5, 1.0, 1.5, 2.0, 2.5, 3.0\}\text{ s}$:** Evaluated at the **hypothetical** future ego speed and obstacle gap implied if the vehicle were to follow the AutoVLA trajectory up to $\tau_{\text{req}}$ before requesting human intervention. Both distance-based margins ($\Delta d_{\text{stop}} = d_{\text{obs}} - d_{\text{stop}}$ in metres) and time-based margins ($\Delta T = \text{TTC} - T_{\text{req}}$ in seconds) are reported.
-4. **Evidence Gaps & Methodological Boundaries (`INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE`):** Stationary baseline scenes (`scene_07`, $v_0 = 0.0019\text{ m/s} \le 0.05\text{ m/s}$), obstacle-free open-road scenes without an assumed counterfactual obstacle (`scene_01`, `scene_06`, `scene_07`), and steps departing the 1D longitudinal corridor ($|y| > 1.75\text{ m}$ or $|\psi| > 0.35\text{ rad}$) are explicitly gated out of longitudinal collision-recovery scoring.
-
-### Audited 7-Scene Empirical & Counterfactual Summary
-
-All 7 scenes are verified end-to-end by [`provenance_audit.py`](extensions/vla_handover_feasibility/provenance_audit.py) across `scenes_manifest.json`, SHA-256 digests of the 84 camera JPEGs (`camera_images_sha256.json`), cached AutoVLA action tokens (`artifacts/predictions/scene_*_fast.json`), `agent_vocab.pkl` decoding, `evaluation_summary.json`, and the interactive HTML/PDF report (`0` provenance mismatches):
-
-| Scene ID | nuPlan Token | $v_0$ ($\text{m/s}$) | $a_{x,0}$ ($\text{m/s}^2$) | Prompt $\|a_0\|$ ($\text{m/s}^2$) | Command (Source / Leakage Flag) | ADE ($\text{m}$) | FDE ($\text{m}$) | Nominal ($\mu=1.0$) | Wet ($\mu=0.5$) | R3B Counterfactual Summary ($P_1$, Nominal $\mu=1.0$) |
-| :--- | :--- | :---: | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :--- |
-| `scene_01_high_speed_open_road` | `5143e810d84656d0` | `13.58` | `-0.15` | `0.19` | `keep forward` (Clean) | `0.36` | `0.76` | `SATISFIED` | `SATISFIED` | `INSUFFICIENT_EVIDENCE` (Observed); Counterfactual $d_0=45\text{ m}$ schedule badged separately |
-| `scene_02_stationary_lead_obstacle` | `3cacb287d398542f` | `6.95` | `+1.30` | `1.35` | `turn left` (**Leakage Flag**) | `2.42`* | `3.47`* | `SATISFIED` | **`VIOLATED` (`C7`)** | `ROBUSTLY_SATISFIED` ($\tau_{\text{req}}\le 2.0\text{ s}$) $\to$ departs 1D corridor ($\tau_{\text{req}}\ge 2.5\text{ s}$) |
-| `scene_03_close_urban_lead_following` | `7a524614561c54ef` | `13.05` | `+0.09` | `0.10` | `keep forward` (Clean) | `1.03` | `2.27` | `SATISFIED` | `SATISFIED` | `PARAMETER_SENSITIVE` ($\tau_{\text{req}}\le 1.5\text{ s}$) $\to$ `ROBUSTLY_UNSATISFIED` ($\tau_{\text{req}}\ge 2.0\text{ s}$) |
-| `scene_04_fast_arterial_lead_vehicle` | `c48640204ad758c4` | `6.21` | `-0.07` | `0.07` | `keep forward` (Clean) | `0.54` | `2.09` | `SATISFIED` | `SATISFIED` | `ROBUSTLY_SATISFIED` across $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$ |
-| `scene_05_active_braking_deceleration` | `b49c80be2d0d5bb9` | `4.31` | `-1.55` | `1.56` | `keep forward` (Clean) | `6.25` | `12.90` | **`VIOLATED` (`C10`)** | **`VIOLATED` (`C10`)** | `ROBUSTLY_SATISFIED` ($\tau_{\text{req}}=0\text{ s}$, margin `[+6.60, +13.71] m`) $\to$ `PARAMETER_SENSITIVE` ($\tau_{\text{req}}=2.0\text{ s}$, `[-4.40, +5.46] m`) |
-| `scene_06_intersection_turn_maneuver` | `c9d4d04945e85ef8` | `8.78` | `-0.40` | `1.41` | `turn left` (**Leakage Flag**) | `0.66`* | `1.88`* | `SATISFIED` | `SATISFIED` | `INSUFFICIENT_EVIDENCE` (Turn scenario without corridor obstacle) |
-| `scene_07_stationary_ego_baseline` | `e9138a74627452c2` | `0.00` | `-0.02` | `0.02` | `keep forward` (Clean) | `3.93` | `10.10` | `INSUFFICIENT_EVIDENCE` | `INSUFFICIENT_EVIDENCE` | `INSUFFICIENT_EVIDENCE` (Stationary baseline $v_0 \le 0.05\text{ m/s}$) |
-
-*\*Note on `scene_02` and `scene_06` ADE/FDE (`EXT-VLA-C06`):* See the explicit methodological disclosure below regarding driving-command conditioning and future-displacement leakage.
-
-### Key Extension Findings & Methodological Disclosures
-
-1. **Active-Braking Longitudinal State Mismatch (`EXT-VLA-C02`, `scene_05`):**
-   In `scene_05_active_braking_deceleration`, the ego vehicle is actively braking at $a_{x,0} = -1.5525\text{ m/s}^2$ ($v_0 = 4.3103\text{ m/s}$). Because the upstream official AutoVLA NAVSIM prompt template (`autovla/vla-scripts/navsim_eval.py`) formats acceleration as the unsigned scalar norm $\sqrt{a_x^2 + a_y^2} = 1.56\text{ m/s}^2$, the model receives no sign indicating deceleration versus acceleration. While Step 1 ($t = 0.5\text{ s}$) decelerates mildly at $-0.8841\text{ m/s}^2$ from visual cues, Step 2 ($+0.7917\text{ m/s}^2$) and Step 3 ($+1.5442\text{ m/s}^2$) reverse into strong positive acceleration (`ADE = 6.2543 m`, `FDE = 12.8998 m`), triggering `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` ($|\hat{a}_{x,\text{early}} - a_{x,0}| = |+1.5442 - (-1.5525)| = 3.0967\text{ m/s}^2 > 2.50\text{ m/s}^2$). Under counterfactual R3B policy $P_1$ on dry pavement ($\mu = 1.0$), immediate takeover at $\tau_{\text{req}} = 0.0\text{ s}$ is `ROBUSTLY_SATISFIED` ($\Delta d_{\text{stop}} \in [+6.60, +13.71]\text{ m}$), whereas delaying takeover to $\tau_{\text{req}} = 2.0\text{ s}$ along the hypothetical accelerating VLA trajectory degrades recoverability to `PARAMETER_SENSITIVE` ($\Delta d_{\text{stop}} \in [-4.40, +5.46]\text{ m}$) and `ROBUSTLY_UNSATISFIED` by $\tau_{\text{req}} = 3.0\text{ s}$ (`[-11.83, -1.78] m`).
-2. **Single-Scene Controlled Signed-Acceleration Ablation (`EXT-VLA-C05`, `scene_05`):**
-   To test whether unsigned acceleration formatting contributes directly to the `scene_05` violation, we executed a single-variable controlled experiment holding the checkpoint, 12 camera images, greedy decoding (`do_sample=False`), velocity ($4.31\text{ m/s}$), and command (`keep forward`) strictly identical while replacing only `"1.56 m/s^2"` with signed `"-1.55 m/s^2"` ([`ablation_scene_05_signed_accel.json`](extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json)):
-   - Over the initial `0.0–2.0 s` braking phase (Steps 1–4), AutoVLA sustains continuous deceleration ($a_{\text{lon}} = -0.8841, -0.9854, -1.0846\text{ m/s}^2$) and brakes to a standstill at $x = 6.93\text{ m}$ (matching ground-truth stopping distance $x_{\text{GT}}(2.5\text{ s}) = 6.92\text{ m}$), reducing `0–2.0 s` braking-phase ADE by **88.1%** (`1.2131 m` $\to$ `0.1448 m`) and full `5.0 s` ADE by **61.3%** (`6.2543 m` $\to$ `2.4210 m`, `FDE = 8.7228 m`).
-   - **Explicit Scientific Limitation:** Because `AutoVLA_PDMS_89.ckpt` was trained exclusively on non-negative acceleration norms ($\|a\| \ge 0$), passing `"-1.55 m/s^2"` is a **single-scene, out-of-distribution (OOD) diagnostic intervention**, not a validated model fix. At Step 9 ($t = 4.5\text{ s}$), after coming to rest (`<action_0>` at Step 8), the OOD prompt emits a `5.8 cm` backward jitter token (`<action_126>`, $\Delta x = -0.058\text{ m}$). Fixing active-braking handover safety in driving VLAs requires **retaining signed longitudinal/lateral acceleration components (`a_lon, a_lat`) during VLA training** alongside an independent physical verifier (`Phase C`).
-3. **Wet-Surface Lateral Acceleration Violation (`EXT-VLA-C03`, `scene_02`):**
-   In `scene_02_stationary_lead_obstacle`, AutoVLA predicts an evasive left-turn trajectory reaching peak lateral acceleration $|a_{\text{lat}}| = 2.2721\text{ m/s}^2$, which is `SATISFIED` under nominal dry limits ($4.00\text{ m/s}^2$) but violates the conservative wet-surface lateral stability threshold `C7_LATERAL_ACCELERATION_LIMIT` on wet pavement ($\mu = 0.5$, threshold $2.00\text{ m/s}^2$).
-4. **Methodological Disclosure — Driving-Command Conditioning & Future-Displacement Leakage Risk (`EXT-VLA-C06`):**
-   AutoVLA requires a discrete high-level driving command (`turn left`, `turn right`, `keep forward`) in its input prompt. In the upstream NAVSIM/OpenScene evaluation convention, this command is derived from the recorded ground-truth route/trajectory rather than an independent pre-trip navigation system. Specifically:
-   - In **`scene_02_stationary_lead_obstacle`** (`3cacb287d398542f`), the ego vehicle approaches a stationary in-lane obstacle (`55.49 m` ahead) while the recorded human ground-truth trajectory executes a left turn / lane departure ($y_{\text{GT}}(3.0\text{ s}) = +4.5128\text{ m}$, $y_{\text{GT}}(5.0\text{ s}) = +16.6678\text{ m}$). When an unknown raw approach command is resolved to `"turn left"` from future ground-truth lateral displacement $y_{\text{GT}} > 2.0\text{ m}$ (matching the recorded OpenScene driving command bit `[1, 0, 0, 0]`), the VLA prompt is conditioned on the future lateral maneuver direction.
-   - In **`scene_06_intersection_turn_maneuver`** (`c9d4d04945e85ef8`), the `"turn left"` prompt command similarly corresponds to a trajectory with $y_{\text{GT}}(3.0\text{ s}) = +4.0889\text{ m}$.
-   - **Scientific Consequence:** While the remaining five scenes (`scene_01`, `scene_03`, `scene_04`, `scene_05`, `scene_07`) use `"keep forward"` commands with $|y_{\text{GT}}(3.0\text{ s})| < 0.10\text{ m}$, the open-loop `ADE`/`FDE` metrics on **`scene_02` (`2.42 m` / `3.47 m`)** and **`scene_06` (`0.66 m` / `1.88 m`)** are **command-conditioned evaluations** and must **not** be interpreted as strictly leakage-free, unconditioned maneuver-selection predictions. All original recorded inference inputs and cached prediction artifacts (`artifacts/predictions/scene_*_fast.json`) are preserved unmodified, and `provenance_audit.py` explicitly flags both scenes (`future_displacement_command_leakage_flag = True`).
-
-### Interactive English Research Dashboard Screenshots
-
-The extension includes a deterministic HTML/PDF report generator ([`report_generator.py`](extensions/vla_handover_feasibility/report_generator.py)) and automated headless Chromium visual QA inspector ([`browser_qa.py`](extensions/vla_handover_feasibility/browser_qa.py)):
-
-![Screenshot 01: Executive Findings, Methodological Leakage Disclosure, and Overview](extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_findings_and_overview.png)
-*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C06`), driving-command leakage disclosure banner, interactive control bar, and Scene 01 overview.*
-
-![Screenshot 02: Scene 05 Active-Braking Violation and Controlled Signed-Acceleration Ablation](extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png)
-*Screenshot 02: Scene 05 `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` violation (`+1.5442 m/s^2` vs `-1.5525 m/s^2`) and single-variable signed-acceleration prompt ablation (`-1.55 m/s^2`) with OOD causal boundary notices.*
-
-![Screenshot 03: Scene 03 Urban Lead-Following R3B Counterfactual Handover Analysis](extensions/vla_handover_feasibility/artifacts/report/screenshots/03_scene_03_urban_lead_r3b_handover.png)
-*Screenshot 03: Scene 03 R3B braking-only stopping distance (`[m]`) and time (`[s]`) margins across takeover request times $\tau_{\text{req}} \in [0.0, 3.0]\text{ s}$ and policies `P0`, `P1`, and `P2`.*
-
-![Screenshot 04: Scene 01 Counterfactual Obstacle Provenance Badge Verification](extensions/vla_handover_feasibility/artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png)
-*Screenshot 04: Scene 01 counterfactual $d_0 = 45.00\text{ m}$ schedule explicitly badged as `Observed Ego (t0) + Assumed Obstacle (d0)` at $\tau_{\text{req}} = 0.0\text{ s}$ and `Hypothetical VLA + Assumed Obstacle (d0)` at $\tau_{\text{req}} > 0$.*
-
----
-
 ## Repository Structure
 
 ```text
+├── .github/workflows/        # Automated GitHub Actions CI for offline VLA reproducibility & provenance
+│   └── vla_extension_verify.yml
 ├── docs/                     # Architectural baselines, decision records (D001-D038), audit logs
 │   ├── DECISIONS.md          # Chronological record of all project decisions
 │   ├── PROJECT_STATUS.md     # Phase ledger and milestone tracking
+│   ├── PROVENANCE.md         # Curated public-release provenance verification notes
 │   └── RESEARCH_ARCHITECTURE_V2.md # Four-layer closed-loop research framework
 ├── experiments/              # Legacy audit and analytical challenge documents (Phases A-H)
 ├── extensions/               # Research extensions preserving the frozen core baseline
 │   └── vla_handover_feasibility/   # Audited AutoVLA trajectory & R3B handover feasibility pipeline
 │       ├── artifacts/        # Evaluation summaries, claim register, ablation JSON, cached predictions, HTML/PDF report & PNG screenshots
 │       ├── data/             # Scene manifest, SHA-256 camera digest, AutoVLA action codebook (agent_vocab.pkl)
-│       ├── tests/            # 16 unit, synthetic-fixture, R3B-adapter, and provenance tests
+│       ├── tests/            # 17 unit, synthetic-fixture, R3B-adapter, demo, and provenance tests
 │       ├── action_tokenizer.py     # Action token regex parser & SE(2) trajectory rollout decoder
 │       ├── browser_qa.py           # Headless Chromium visual QA & screenshot generator
 │       ├── cloud_gpu_runner.py     # Optional cloud GPU execution wrapper
+│       ├── demo.py                 # One-command offline evaluation & interactive dashboard launcher
 │       ├── experiment_runner.py    # End-to-end evaluation & R3B counterfactual pipeline
 │       ├── extract_navsim_scenes.py # On-demand OpenScene camera frame extractor & SHA-256 verifier
 │       ├── provenance_audit.py     # 11-point cryptographic & numerical provenance auditor
@@ -205,7 +221,7 @@ The extension includes a deterministic HTML/PDF report generator ([`report_gener
 │   ├── metrics/              # Control activity detectors, analytical derivatives, margins
 │   ├── provenance/           # Structured metadata registries and report generators
 │   └── vehicle/              # Physical vehicle models, road load, braking kinematics
-├── tests/                    # Core automated pytest suite
+├── tests/                    # Core automated pytest suite (public clone: 424 passed, 11 skipped, 1 deselected)
 ├── thesis/
 │   └── figures/              # 12 canonical frozen publication figures (PNG and PDF)
 │       └── figure_manifest.json # Cryptographic SHA256 hashes of all figure outputs
@@ -243,25 +259,26 @@ pip install -r requirements.txt
 
 ## Running Tests & Offline Reproducibility
 
-### 1. VLA Handover Feasibility Extension Suite & Provenance Audit
+### 1. VLA Handover Feasibility Extension Suite & Offline Demo
 
-The VLA extension is 100% reproducible offline from a fresh Git clone without requiring raw camera JPEGs or the AutoVLA checkpoint:
+The VLA extension is 100% reproducible offline from a fresh Git clone using only `requirements.txt` (without requiring `torch`, `transformers`, raw camera JPEGs, or the AutoVLA checkpoint):
 
 ```bash
-# Run the 16 extension unit, synthetic-fixture, R3B-adapter, and provenance tests
+# Run the one-command offline evaluation, provenance audit, and dashboard generator
+python -m extensions.vla_handover_feasibility.demo --no-open
+
+# Run the 17 extension unit, synthetic-fixture, R3B-adapter, demo, and provenance tests
 pytest extensions/vla_handover_feasibility/tests -v
 
-# Re-run the physical verifier and R3B counterfactual pipeline from cached AutoVLA predictions
-python3 -m extensions.vla_handover_feasibility.experiment_runner --skip-inference
-
-# Re-generate the English HTML/PDF dashboard and run the strict provenance auditor
-python3 -m extensions.vla_handover_feasibility.report_generator
-python3 -m extensions.vla_handover_feasibility.provenance_audit
+# Or invoke the individual pipeline stages directly:
+python -m extensions.vla_handover_feasibility.experiment_runner --skip-inference
+python -m extensions.vla_handover_feasibility.report_generator
+python -m extensions.vla_handover_feasibility.provenance_audit
 ```
 
 **Expected Extension Test Output:**
 ```text
-================= 16 passed in ~3.0s =================
+================= 17 passed in ~1.2s =================
 ```
 
 ### 2. Core Baseline Test Suite
@@ -271,11 +288,9 @@ python3 -m extensions.vla_handover_feasibility.provenance_audit
 pytest tests/
 ```
 
-**Recorded Baseline Test Output (430 passed, 4 known pre-existing release/environment failures, 1 skipped, 1 deselected):**
-- `430 passed, 1 skipped, 1 deselected` across all mathematical, kinematic, D003 ingestion, R3B monotonicity (`27/27 passed`), and scientific-invariance (`test_scientific_results_unchanged`) tests.
-- The **4 known pre-existing baseline failures** (documented in [`extensions/vla_handover_feasibility/artifacts/baseline_pytest_output.txt`](extensions/vla_handover_feasibility/artifacts/baseline_pytest_output.txt)) are left untouched to preserve the frozen baseline:
-  1. `tests/test_r2a.py::test_r2a_provenance`, `tests/test_r2b.py::test_r2b_provenance`, and `tests/test_r2c_lite.py::test_r2c_provenance`: Fail with `git diff` exit code `128` (`fatal: bad object 9d1c41d01a5a141f07020610c58879b76b214d11`) because the initial public release squashed pre-release draft history referenced in frozen `results/R2*/provenance.json`.
-  2. `tests/test_r6a_figures.py::test_deterministic_rendering`: Fails on `FA2_participant_exposure_slopes.pdf` byte-level SHA-256 comparison due to Matplotlib / Python `3.14` PDF stream metadata differences against the frozen PDF generated during release (`test_scientific_results_unchanged` passes).
+**Expected Output on a Fresh Public Clone:**
+- **Curated Public-Release Provenance Tests (`test_r2a`, `test_r2b`, `test_r2c_lite`):** Verify run-relevant dependency hashes via `tests/provenance_dependencies.py` (see [`docs/PROVENANCE.md`](docs/PROVENANCE.md)), with 11 tests skipped when optional external D003/EPA archives and the embargoed thesis draft are absent (`1` test deselected via `-m "not r3b_study"`).
+- **Historical Audit Note ([`extensions/vla_handover_feasibility/artifacts/baseline_pytest_output.txt`](extensions/vla_handover_feasibility/artifacts/baseline_pytest_output.txt)):** Prior to the `tests/provenance_dependencies.py` content-hash adapter, running `pytest tests/` against squashed git history with local D003/EPA data on Python `3.14` recorded `430 passed, 1 skipped, 1 deselected, 4 failed` (`3` pre-release git commit SHA lookups in `test_r2a/r2b/r2c_lite` fixed on `main` via `provenance_dependencies.py`, and `1` byte-level PDF font stream metadata difference on `FA2_participant_exposure_slopes.pdf` under Python `3.14` Matplotlib while `test_scientific_results_unchanged` passes).
 
 ---
 

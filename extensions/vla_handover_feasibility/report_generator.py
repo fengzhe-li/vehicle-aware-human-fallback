@@ -27,9 +27,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-from PIL import Image
-
-
 EXT_ROOT = Path(__file__).resolve().parent
 DEFAULT_SUMMARY_PATH = EXT_ROOT / "artifacts" / "evaluation_summary.json"
 DEFAULT_CLAIM_REGISTER_PATH = EXT_ROOT / "artifacts" / "extension_claim_register.csv"
@@ -52,6 +49,8 @@ def encode_camera_thumbnail_data_uri(
     or a resized JPEG data URI when `embed_raw_jpegs=True` and raw JPEGs exist locally.
     """
     if embed_raw_jpegs and img_path.exists():
+        from PIL import Image
+
         with Image.open(img_path) as im:
             im_rgb = im.convert("RGB").resize((width, height), Image.Resampling.BILINEAR)
             buf = io.BytesIO()

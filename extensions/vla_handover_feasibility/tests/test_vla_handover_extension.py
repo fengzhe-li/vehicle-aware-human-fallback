@@ -731,3 +731,26 @@ def test_original_research_code_and_42_claim_ledger_preserved() -> None:
     assert len(rows) == 42
 
 
+def test_one_command_offline_demo_and_readme_assets() -> None:
+    import re
+
+    from extensions.vla_handover_feasibility.demo import run_offline_demo
+
+    res = run_offline_demo(open_browser=False, quiet=True)
+    assert res["status"] == "PROVENANCE_AND_CONSISTENCY_VERIFIED"
+    assert res["verified_scenes_count"] == 7
+    assert res["total_csv_evaluation_rows"] == 1011
+    assert res["opened_browser"] is False
+    assert Path(res["report_html_path"]).exists()
+    assert Path(res["report_html_path"]).stat().st_size > 100_000
+
+    # Verify all relative links and embedded screenshots in root README.md and extension README.md exist
+    for readme_path in (REPO_ROOT / "README.md", REPO_ROOT / "extensions" / "vla_handover_feasibility" / "README.md"):
+        assert readme_path.exists()
+        text = readme_path.read_text(encoding="utf-8")
+        for match in re.finditer(r"!?\[[^\]]*\]\(([^)]+)\)", text):
+            target = match.group(1).split("#")[0].strip()
+            if not target or target.startswith(("http://", "https://", "mailto:")):
+                continue
+            resolved = (readme_path.parent / target).resolve()
+            assert resolved.exists(), f"Broken link or image {target!r} in {readme_path} -> {resolved}"

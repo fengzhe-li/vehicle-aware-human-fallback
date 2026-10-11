@@ -22,11 +22,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-import torch
-import transformers
-from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
-from qwen_vl_utils import process_vision_info
-
 from extensions.vla_handover_feasibility.action_tokenizer import (
     ACTION_VOCAB_SIZE,
     BASE_QWEN_VOCAB_SIZE,
@@ -39,6 +34,22 @@ from extensions.vla_handover_feasibility.schemas import (
     TrajectoryWaypoint,
     VLAPredictionArtifact,
 )
+
+
+def _require_live_inference_deps() -> tuple[Any, Any, Any, Any, Any]:
+    """Import heavy live-inference dependencies (`torch`, `transformers`, `qwen_vl_utils`) on demand."""
+    try:
+        import torch
+        import transformers
+        from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
+        from qwen_vl_utils import process_vision_info
+    except ImportError as exc:
+        raise ImportError(
+            "Live AutoVLA neural-network inference requires `torch`, `transformers>=4.49.0`, "
+            "and `qwen-vl-utils`. For offline reproduction from saved genuine AutoVLA predictions, "
+            "use `--skip-inference` or `python -m extensions.vla_handover_feasibility.demo`."
+        ) from exc
+    return torch, transformers, AutoProcessor, Qwen2_5_VLForConditionalGeneration, process_vision_info
 
 
 DEFAULT_AUTOVLA_MODEL_DIR = Path(
@@ -72,6 +83,8 @@ def get_runtime_environment_metadata(device: str) -> dict[str, Any]:
     """Record software versions, hardware device, peak RSS, and swap metadata for reproducibility."""
     import resource
     import subprocess
+
+    torch, transformers, _, _, _ = _require_live_inference_deps()
 
     hw_model = platform.machine()
     swap_used_mb: float | None = None
@@ -211,6 +224,7 @@ class AutoVLAInferenceEngine:
         codebook_path: str | Path = DEFAULT_CODEBOOK_PATH,
         device: str | None = None,
     ) -> None:
+        torch, _, AutoProcessor, Qwen2_5_VLForConditionalGeneration, _ = _require_live_inference_deps()
         self.model_dir = Path(model_dir)
         if not self.model_dir.exists():
             raise FileNotFoundError(
@@ -266,6 +280,7 @@ class AutoVLAInferenceEngine:
         """Run a genuine single-scene (batch_size=1) AutoVLA forward pass on a real driving scene."""
         import gc
 
+        torch, _, _, _, process_vision_info = _require_live_inference_deps()
         root = Path(data_root)
         cams = scene_meta["camera_images"]
         front_imgs = [root / p for p in cams["front_camera"]]

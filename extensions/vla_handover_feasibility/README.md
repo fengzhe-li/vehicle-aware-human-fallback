@@ -156,6 +156,9 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 ### Reproducible CLI Workflow
 
 ```bash
+# 0. One-Command Offline Demo (recomputes evaluation, verifies provenance, and opens HTML dashboard):
+.venv/bin/python -m extensions.vla_handover_feasibility.demo
+
 # 1. Offline Provenance & Consistency Audit (runs out-of-the-box without external raw JPEGs):
 .venv/bin/python -m extensions.vla_handover_feasibility.provenance_audit
 
@@ -165,7 +168,7 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 # 3. Regenerate the Self-Contained Interactive English HTML Dashboard:
 .venv/bin/python -m extensions.vla_handover_feasibility.report_generator
 
-# 4. Run the 16-Test Extension Verification Suite:
+# 4. Run the 17-Test Extension Verification Suite:
 .venv/bin/pytest extensions/vla_handover_feasibility/tests -v
 
 # 5. Optional: Stream & Verify the 84 Raw Camera JPEGs from OpenDriveLab/OpenScene for Live Inference:
@@ -177,7 +180,7 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 
 ### Test & Baseline Regression Summary
 
-- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`16 passed`** (`test_vla_handover_extension.py`).
-- **Original Repository Test Suite ([`artifacts/baseline_pytest_output.txt`](./artifacts/baseline_pytest_output.txt)):** **`430 passed, 1 skipped, 1 deselected, 4 failed`**, with **all 27 R3B tests (`tests/test_r3b.py`) and `tests/test_r6a_figures.py::test_scientific_results_unchanged` passing**. The 4 failures in the untouched baseline repository are pre-existing release artifacts:
-  1. `tests/test_r2a.py::test_r2a_provenance`, `tests/test_r2b.py::test_r2b_provenance`, and `tests/test_r2c_lite.py::test_r2c_provenance` fail with `git diff` exit code `128` (`fatal: bad object 9d1c41d01a5a141f07020610c58879b76b214d11`) because the public release commit (`ec39bf0`) squashed pre-release draft history referenced in frozen `results/R2*/provenance.json`.
+- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`17 passed`** (`test_vla_handover_extension.py`).
+- **Original Repository Test Suite ([`artifacts/baseline_pytest_output.txt`](./artifacts/baseline_pytest_output.txt)):** **`430 passed, 1 skipped, 1 deselected, 4 failed`** when audited against squashed pre-release git history (`all 27 R3B tests in tests/test_r3b.py and tests/test_r6a_figures.py::test_scientific_results_unchanged passing`):
+  1. `tests/test_r2a.py::test_r2a_provenance`, `tests/test_r2b.py::test_r2b_provenance`, and `tests/test_r2c_lite.py::test_r2c_provenance` failed with `git diff` exit code `128` (`fatal: bad object 9d1c41d01a5a141f07020610c58879b76b214d11`) prior to the `tests/provenance_dependencies.py` content-hash verifier on `main`.
   2. `tests/test_r6a_figures.py::test_deterministic_rendering` fails on `FA2_participant_exposure_slopes.pdf` byte-level SHA-256 comparison due to Matplotlib / Python `3.14` PDF font stream metadata differences against the frozen PDF generated during release.

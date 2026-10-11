@@ -1,0 +1,51 @@
+name: VLA Handover Feasibility Extension Verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-vla-offline-reproducibility:
+    name: Verify VLA Extension (Offline Evaluation & Provenance Audit)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install lightweight offline evaluation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run VLA extension unit & integration tests
+        run: |
+          pytest extensions/vla_handover_feasibility/tests -v
+
+      - name: Run cryptographic provenance & consistency audit
+        run: |
+          python -m extensions.vla_handover_feasibility.provenance_audit
+
+      - name: Run one-command offline demo (recompute C1-C10, 1,011 R3B rows & regenerate dashboard)
+        run: |
+          python -m extensions.vla_handover_feasibility.demo --no-open
+
+      - name: Verify dashboard, evaluation artifacts, and README screenshot links
+        run: |
+          test -s extensions/vla_handover_feasibility/artifacts/report/index.html
+          test -s extensions/vla_handover_feasibility/artifacts/eval/scene_evaluation_summary.csv
+          test -s extensions/vla_handover_feasibility/artifacts/eval/r3b_handover_comparison.csv
+          test -s extensions/vla_handover_feasibility/artifacts/eval/provenance_audit_report.json
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_overview.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_and_ablation.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/03_r3b_counterfactual_matrix.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/04_claims_and_provenance.png
