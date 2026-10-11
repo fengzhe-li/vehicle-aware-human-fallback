@@ -1,0 +1,213 @@
+{
+  "scene_id": "scene_02_stationary_lead_obstacle",
+  "description": "Moving ego vehicle approaching an observed stationary in-lane obstacle; directly satisfies the R3B stationary-obstacle geometry assumption and exhibits takeover-margin transition across delayed request times.",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.06.09.14.58.55_veh-35_01894_02311.pkl",
+  "frame_index": 482,
+  "frame_token": "3cacb287d398542f",
+  "scene_name": "log-0019-scene-0013",
+  "map_location": "us-nv-las-vegas-strip",
+  "timestamp_us": 1623267496700990,
+  "ego_state": {
+    "vx_mps": 6.9456,
+    "vy_mps": -0.1408,
+    "ax_mps2": 1.3035,
+    "ay_mps2": 0.358,
+    "speed_mps": 6.947,
+    "accel_norm_mps2": 1.3518,
+    "raw_driving_command": "turn left",
+    "raw_driving_command_onehot": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "effective_driving_command": "turn left"
+  },
+  "camera_images": {
+    "front_camera": [
+      "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_F0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_F0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_F0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_F0.jpg"
+    ],
+    "front_left_camera": [
+      "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_L0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_L0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_L0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_L0.jpg"
+    ],
+    "front_right_camera": [
+      "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_R0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_R0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_R0.jpg",
+      "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_R0.jpg"
+    ]
+  },
+  "observed_in_lane_lead_obstacle": {
+    "index": 129,
+    "category": "vehicle",
+    "x_m": 55.486,
+    "y_m": -0.491,
+    "z_m": -0.573,
+    "length_m": 4.387,
+    "width_m": 1.965,
+    "height_m": 1.98,
+    "yaw_rad": -3.1984,
+    "vx_mps": 0.0,
+    "vy_mps": 0.0,
+    "speed_mps": 0.0,
+    "center_distance_m": 55.488,
+    "longitudinal_gap_approx_m": 53.293,
+    "in_ego_lane_corridor": true
+  },
+  "all_observed_obstacles_count": 197,
+  "observed_obstacles_in_corridor": [
+    {
+      "index": 129,
+      "category": "vehicle",
+      "x_m": 55.486,
+      "y_m": -0.491,
+      "z_m": -0.573,
+      "length_m": 4.387,
+      "width_m": 1.965,
+      "height_m": 1.98,
+      "yaw_rad": -3.1984,
+      "vx_mps": 0.0,
+      "vy_mps": 0.0,
+      "speed_mps": 0.0,
+      "center_distance_m": 55.488,
+      "longitudinal_gap_approx_m": 53.293,
+      "in_ego_lane_corridor": true
+    }
+  ],
+  "counterfactual_obstacle_distances_m": [
+    18.0,
+    24.0,
+    30.0,
+    38.0,
+    55.49
+  ],
+  "ground_truth_future_trajectory": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 3.5195,
+      "y_m": 0.0498,
+      "heading_rad": 0.0308,
+      "speed_mps": 7.2378,
+      "vx_mps": 7.2357,
+      "vy_mps": -0.1737,
+      "ax_mps2": 0.6572,
+      "ay_mps2": 0.2719
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 7.1471,
+      "y_m": 0.2441,
+      "heading_rad": 0.0855,
+      "speed_mps": 7.394,
+      "vx_mps": 7.3918,
+      "vy_mps": -0.1809,
+      "ax_mps2": 0.0557,
+      "ay_mps2": 1.0295
+    },
+    {
+      "step": 3,
+      "t_s": 1.5,
+      "x_m": 10.7851,
+      "y_m": 0.6782,
+      "heading_rad": 0.1621,
+      "speed_mps": 7.3767,
+      "vx_mps": 7.3739,
+      "vy_mps": -0.2023,
+      "ax_mps2": 0.3138,
+      "ay_mps2": 0.8134
+    },
+    {
+      "step": 4,
+      "t_s": 2.0,
+      "x_m": 14.3173,
+      "y_m": 1.4813,
+      "heading_rad": 0.285,
+      "speed_mps": 7.3185,
+      "vx_mps": 7.3167,
+      "vy_mps": -0.1619,
+      "ax_mps2": 0.2962,
+      "ay_mps2": 1.4759
+    },
+    {
+      "step": 5,
+      "t_s": 2.5,
+      "x_m": 17.7338,
+      "y_m": 2.7378,
+      "heading_rad": 0.4226,
+      "speed_mps": 7.463,
+      "vx_mps": 7.4615,
+      "vy_mps": -0.148,
+      "ax_mps2": 0.4078,
+      "ay_mps2": 2.3973
+    },
+    {
+      "step": 6,
+      "t_s": 3.0,
+      "x_m": 21.0011,
+      "y_m": 4.5128,
+      "heading_rad": 0.5702,
+      "speed_mps": 7.6662,
+      "vx_mps": 7.6656,
+      "vy_mps": -0.1025,
+      "ax_mps2": 0.2522,
+      "ay_mps2": 3.4609
+    },
+    {
+      "step": 7,
+      "t_s": 3.501,
+      "x_m": 24.0511,
+      "y_m": 6.819,
+      "heading_rad": 0.7226,
+      "speed_mps": 7.8753,
+      "vx_mps": 7.874,
+      "vy_mps": -0.1469,
+      "ax_mps2": 0.5173,
+      "ay_mps2": 2.0973
+    },
+    {
+      "step": 8,
+      "t_s": 4.0,
+      "x_m": 26.792,
+      "y_m": 9.6084,
+      "heading_rad": 0.8871,
+      "speed_mps": 8.0685,
+      "vx_mps": 8.0657,
+      "vy_mps": -0.2135,
+      "ax_mps2": 0.4415,
+      "ay_mps2": 2.9998
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": 29.074,
+      "y_m": 12.9082,
+      "heading_rad": 1.0689,
+      "speed_mps": 8.2714,
+      "vx_mps": 8.2676,
+      "vy_mps": -0.2491,
+      "ax_mps2": 0.6233,
+      "ay_mps2": 3.0474
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": 30.7328,
+      "y_m": 16.6678,
+      "heading_rad": 1.261,
+      "speed_mps": 8.5197,
+      "vx_mps": 8.5171,
+      "vy_mps": -0.2111,
+      "ax_mps2": 1.0733,
+      "ay_mps2": 3.2455
+    }
+  ]
+}

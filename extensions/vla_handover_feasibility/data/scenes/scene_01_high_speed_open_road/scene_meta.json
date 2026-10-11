@@ -1,0 +1,178 @@
+{
+  "scene_id": "scene_01_high_speed_open_road",
+  "description": "High-speed arterial cruise without an observed in-lane obstacle within +-1.75 m lateral corridor; tests high-speed trajectory feasibility, observed-only insufficient-evidence classification, and counterfactual obstacle takeover-timing sensitivity.",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.06.09.14.58.55_veh-35_01894_02311.pkl",
+  "frame_index": 743,
+  "frame_token": "5143e810d84656d0",
+  "scene_name": "log-0019-scene-0020",
+  "map_location": "us-nv-las-vegas-strip",
+  "timestamp_us": 1623267627200175,
+  "ego_state": {
+    "vx_mps": 13.5788,
+    "vy_mps": -0.2258,
+    "ax_mps2": -0.1456,
+    "ay_mps2": 0.1249,
+    "speed_mps": 13.5806,
+    "accel_norm_mps2": 0.1918,
+    "raw_driving_command": "keep forward",
+    "raw_driving_command_onehot": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "effective_driving_command": "keep forward"
+  },
+  "camera_images": {
+    "front_camera": [
+      "scenes/scene_01_high_speed_open_road/images/t0_CAM_F0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t1_CAM_F0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t2_CAM_F0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t3_CAM_F0.jpg"
+    ],
+    "front_left_camera": [
+      "scenes/scene_01_high_speed_open_road/images/t0_CAM_L0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t1_CAM_L0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t2_CAM_L0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t3_CAM_L0.jpg"
+    ],
+    "front_right_camera": [
+      "scenes/scene_01_high_speed_open_road/images/t0_CAM_R0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t1_CAM_R0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t2_CAM_R0.jpg",
+      "scenes/scene_01_high_speed_open_road/images/t3_CAM_R0.jpg"
+    ]
+  },
+  "observed_in_lane_lead_obstacle": null,
+  "all_observed_obstacles_count": 81,
+  "observed_obstacles_in_corridor": [],
+  "counterfactual_obstacle_distances_m": [
+    35.0,
+    45.0,
+    55.0,
+    65.0
+  ],
+  "ground_truth_future_trajectory": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 6.6633,
+      "y_m": -0.0054,
+      "heading_rad": 0.0007,
+      "speed_mps": 13.4719,
+      "vx_mps": 13.4693,
+      "vy_mps": -0.2659,
+      "ax_mps2": -0.1963,
+      "ay_mps2": -0.1667
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 13.2735,
+      "y_m": -0.0023,
+      "heading_rad": 0.0001,
+      "speed_mps": 13.3694,
+      "vx_mps": 13.3671,
+      "vy_mps": -0.2496,
+      "ax_mps2": -0.3563,
+      "ay_mps2": -0.0664
+    },
+    {
+      "step": 3,
+      "t_s": 1.501,
+      "x_m": 19.8179,
+      "y_m": -0.021,
+      "heading_rad": -0.0002,
+      "speed_mps": 13.2563,
+      "vx_mps": 13.2534,
+      "vy_mps": -0.277,
+      "ax_mps2": -0.2142,
+      "ay_mps2": 0.1258
+    },
+    {
+      "step": 4,
+      "t_s": 2.001,
+      "x_m": 26.2835,
+      "y_m": -0.0259,
+      "heading_rad": 0.001,
+      "speed_mps": 13.1061,
+      "vx_mps": 13.1034,
+      "vy_mps": -0.265,
+      "ax_mps2": -0.296,
+      "ay_mps2": 0.1054
+    },
+    {
+      "step": 5,
+      "t_s": 2.501,
+      "x_m": 32.6853,
+      "y_m": -0.0244,
+      "heading_rad": 0.0002,
+      "speed_mps": 12.9641,
+      "vx_mps": 12.9619,
+      "vy_mps": -0.2428,
+      "ax_mps2": -0.2713,
+      "ay_mps2": -0.1651
+    },
+    {
+      "step": 6,
+      "t_s": 3.001,
+      "x_m": 39.0359,
+      "y_m": -0.0358,
+      "heading_rad": -0.0002,
+      "speed_mps": 12.904,
+      "vx_mps": 12.9015,
+      "vy_mps": -0.2545,
+      "ax_mps2": 0.1133,
+      "ay_mps2": -0.27
+    },
+    {
+      "step": 7,
+      "t_s": 3.501,
+      "x_m": 45.3902,
+      "y_m": -0.0491,
+      "heading_rad": -0.0015,
+      "speed_mps": 12.9899,
+      "vx_mps": 12.9876,
+      "vy_mps": -0.2428,
+      "ax_mps2": 0.4866,
+      "ay_mps2": 0.016
+    },
+    {
+      "step": 8,
+      "t_s": 4.001,
+      "x_m": 51.8148,
+      "y_m": -0.0851,
+      "heading_rad": -0.0031,
+      "speed_mps": 13.132,
+      "vx_mps": 13.1289,
+      "vy_mps": -0.2862,
+      "ax_mps2": 0.5362,
+      "ay_mps2": -0.1177
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": 58.3011,
+      "y_m": -0.1355,
+      "heading_rad": -0.0047,
+      "speed_mps": 13.177,
+      "vx_mps": 13.174,
+      "vy_mps": -0.2803,
+      "ax_mps2": 0.214,
+      "ay_mps2": 0.1259
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": 64.7924,
+      "y_m": -0.1789,
+      "heading_rad": -0.0064,
+      "speed_mps": 13.1155,
+      "vx_mps": 13.1131,
+      "vy_mps": -0.254,
+      "ax_mps2": -0.2349,
+      "ay_mps2": 0.2141
+    }
+  ]
+}

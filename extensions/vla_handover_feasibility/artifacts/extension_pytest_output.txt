@@ -1,0 +1,26 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.5, pytest-9.1.1, pluggy-1.6.0 -- <repo_root>/.venv/bin/python3.14
+cachedir: .pytest_cache
+rootdir: <repo_root>
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collecting ... collected 16 items
+
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_model_output_parsing_fast_and_cot PASSED [  6%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_model_output_parsing_incomplete_and_out_of_range PASSED [ 12%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_build_autovla_user_message_structure PASSED [ 18%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_unit_and_coordinate_conversion_and_rollout PASSED [ 25%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_physical_constraint_calculations_satisfied_and_violated PASSED [ 31%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_missing_or_invalid_predictions_handling PASSED [ 37%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_synthetic_verifier_fixtures_c2_through_c10 PASSED [ 43%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_takeover_timing_assumptions_and_state_provenance PASSED [ 50%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_r3b_adapter_exact_mathematical_compatibility PASSED [ 56%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_boundary_and_interval_classifications PASSED [ 62%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_insufficient_evidence_classifications_in_r3b_adapter PASSED [ 68%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_saved_vla_prediction_artifacts_provenance PASSED [ 75%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_strict_provenance_audit_and_mismatch_detection PASSED [ 81%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_scene_05_active_braking_and_signed_accel_ablation_provenance PASSED [ 87%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_deterministic_evaluation_and_report_generation PASSED [ 93%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_original_research_code_and_42_claim_ledger_preserved PASSED [100%]
+
+============================== 16 passed in 3.55s ==============================

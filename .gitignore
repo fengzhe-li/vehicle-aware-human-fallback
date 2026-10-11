@@ -50,3 +50,12 @@ results/*
 !results/R4V_channel_authorship/**
 !results/R4V_steering_sequence/
 !results/R4V_steering_sequence/**
+
+# VLA extension: exclude restricted raw nuPlan/OpenScene camera JPEGs and large model weights
+extensions/vla_handover_feasibility/data/scenes/*/images/*.jpg
+extensions/vla_handover_feasibility/**/.chrome_qa_profile/
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+

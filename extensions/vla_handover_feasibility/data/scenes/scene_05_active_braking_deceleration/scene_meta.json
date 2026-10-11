@@ -1,0 +1,178 @@
+{
+  "scene_id": "scene_05_active_braking_deceleration",
+  "description": "Active longitudinal deceleration scene; evaluates whether AutoVLA continues or relaxes deceleration and how reduced future speed along the VLA trajectory alters delayed takeover braking margins.",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.06.09.14.58.55_veh-35_01894_02311.pkl",
+  "frame_index": 181,
+  "frame_token": "b49c80be2d0d5bb9",
+  "scene_name": "log-0019-scene-0006",
+  "map_location": "us-nv-las-vegas-strip",
+  "timestamp_us": 1623267346200808,
+  "ego_state": {
+    "vx_mps": 4.3097,
+    "vy_mps": -0.0731,
+    "ax_mps2": -1.5525,
+    "ay_mps2": 0.1831,
+    "speed_mps": 4.3103,
+    "accel_norm_mps2": 1.5633,
+    "raw_driving_command": "keep forward",
+    "raw_driving_command_onehot": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "effective_driving_command": "keep forward"
+  },
+  "camera_images": {
+    "front_camera": [
+      "scenes/scene_05_active_braking_deceleration/images/t0_CAM_F0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t1_CAM_F0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t2_CAM_F0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t3_CAM_F0.jpg"
+    ],
+    "front_left_camera": [
+      "scenes/scene_05_active_braking_deceleration/images/t0_CAM_L0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t1_CAM_L0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t2_CAM_L0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t3_CAM_L0.jpg"
+    ],
+    "front_right_camera": [
+      "scenes/scene_05_active_braking_deceleration/images/t0_CAM_R0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t1_CAM_R0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t2_CAM_R0.jpg",
+      "scenes/scene_05_active_braking_deceleration/images/t3_CAM_R0.jpg"
+    ]
+  },
+  "observed_in_lane_lead_obstacle": null,
+  "all_observed_obstacles_count": 51,
+  "observed_obstacles_in_corridor": [],
+  "counterfactual_obstacle_distances_m": [
+    15.0,
+    20.0,
+    28.0,
+    36.0
+  ],
+  "ground_truth_future_trajectory": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 1.8962,
+      "y_m": 0.0149,
+      "heading_rad": 0.0041,
+      "speed_mps": 3.5124,
+      "vx_mps": 3.5121,
+      "vy_mps": -0.045,
+      "ax_mps2": -1.6241,
+      "ay_mps2": -0.0619
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 3.3802,
+      "y_m": 0.0386,
+      "heading_rad": 0.0072,
+      "speed_mps": 2.7859,
+      "vx_mps": 2.7856,
+      "vy_mps": 0.0425,
+      "ax_mps2": -0.7626,
+      "ay_mps2": -0.3928
+    },
+    {
+      "step": 3,
+      "t_s": 1.501,
+      "x_m": 4.6154,
+      "y_m": 0.0542,
+      "heading_rad": 0.0079,
+      "speed_mps": 2.526,
+      "vx_mps": 2.5257,
+      "vy_mps": -0.0346,
+      "ax_mps2": -0.248,
+      "ay_mps2": 0.0986
+    },
+    {
+      "step": 4,
+      "t_s": 2.001,
+      "x_m": 5.7761,
+      "y_m": 0.068,
+      "heading_rad": 0.0095,
+      "speed_mps": 2.3834,
+      "vx_mps": 2.3826,
+      "vy_mps": -0.0617,
+      "ax_mps2": 0.2729,
+      "ay_mps2": 0.4284
+    },
+    {
+      "step": 5,
+      "t_s": 2.5,
+      "x_m": 6.9161,
+      "y_m": 0.0783,
+      "heading_rad": 0.012,
+      "speed_mps": 2.3458,
+      "vx_mps": 2.3456,
+      "vy_mps": -0.0262,
+      "ax_mps2": 0.3333,
+      "ay_mps2": -0.5773
+    },
+    {
+      "step": 6,
+      "t_s": 3.0,
+      "x_m": 8.1107,
+      "y_m": 0.0754,
+      "heading_rad": 0.0092,
+      "speed_mps": 2.6394,
+      "vx_mps": 2.6386,
+      "vy_mps": -0.0626,
+      "ax_mps2": 0.8901,
+      "ay_mps2": -0.2939
+    },
+    {
+      "step": 7,
+      "t_s": 3.5,
+      "x_m": 9.5521,
+      "y_m": 0.0764,
+      "heading_rad": 0.0083,
+      "speed_mps": 3.1732,
+      "vx_mps": 3.172,
+      "vy_mps": -0.0899,
+      "ax_mps2": 1.069,
+      "ay_mps2": -0.0337
+    },
+    {
+      "step": 8,
+      "t_s": 3.999,
+      "x_m": 11.2886,
+      "y_m": 0.0953,
+      "heading_rad": 0.0056,
+      "speed_mps": 3.751,
+      "vx_mps": 3.7505,
+      "vy_mps": -0.0601,
+      "ax_mps2": 1.173,
+      "ay_mps2": -0.0435
+    },
+    {
+      "step": 9,
+      "t_s": 4.499,
+      "x_m": 13.3123,
+      "y_m": 0.116,
+      "heading_rad": 0.0027,
+      "speed_mps": 4.3473,
+      "vx_mps": 4.3468,
+      "vy_mps": -0.0617,
+      "ax_mps2": 1.2278,
+      "ay_mps2": -0.1869
+    },
+    {
+      "step": 10,
+      "t_s": 4.999,
+      "x_m": 15.6481,
+      "y_m": 0.1294,
+      "heading_rad": 0.0009,
+      "speed_mps": 4.9335,
+      "vx_mps": 4.933,
+      "vy_mps": -0.0676,
+      "ax_mps2": 1.0911,
+      "ay_mps2": 0.3159
+    }
+  ]
+}

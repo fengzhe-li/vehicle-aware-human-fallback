@@ -1,0 +1,219 @@
+{
+  "scene_id": "scene_01_high_speed_open_road",
+  "inference_mode": "fast",
+  "model_name": "AutoVLA (Qwen2.5-VL-3B-Instruct + 2048 Physical Action Tokens)",
+  "checkpoint_repo": "Zewei-Zhou/AutoVLA",
+  "checkpoint_file": "AutoVLA_PDMS_89.ckpt",
+  "checkpoint_etag": "\"4b3c8ecc55826725ef30c91acf993335e1301ef292017b41ca73aad87cc9bcc1\"",
+  "base_vlm_architecture": "Qwen/Qwen2.5-VL-3B-Instruct",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.06.09.14.58.55_veh-35_01894_02311.pkl",
+  "frame_token": "5143e810d84656d0",
+  "scene_name": "log-0019-scene-0020",
+  "map_location": "us-nv-las-vegas-strip",
+  "timestamp_us": 1623267627200175,
+  "ego_initial_speed_mps": 13.5806,
+  "ego_initial_accel_mps2": -0.1456,
+  "ego_vx_mps": 13.5788,
+  "ego_vy_mps": -0.2258,
+  "ego_ax_mps2": -0.1456,
+  "ego_ay_mps2": 0.1249,
+  "driving_command": "keep forward",
+  "raw_driving_command": "keep forward",
+  "prompt_text": "Suppose you are driving, and I'm providing you with the image captured by the car's <FRONT VIEW>, <FRONT LEFT VIEW>, <FRONT RIGHT VIEW>, theego velocity is 13.58 m/s, the ego acceleration is 0.19 m/s^2, and the driving command is keep forward. Generate the planned trajectory for the next 5 seconds.",
+  "raw_generated_text": "<think>\nThis is a straightforward scenario, and a direct decision can be made.\n</think>\n<answer>\nThe final output action is: <action_21><action_127><action_266><action_896><action_1007><action_1256><action_1007><action_896><action_11><action_11>\n</answer>",
+  "cot_reasoning_text": "<think>\nThis is a straightforward scenario, and a direct decision can be made.\n</think>\n<answer>\nThe final output action is:",
+  "action_token_ids": [
+    151686,
+    151792,
+    151931,
+    152561,
+    152672,
+    152921,
+    152672,
+    152561,
+    151676,
+    151676
+  ],
+  "action_codebook_indices": [
+    21,
+    127,
+    266,
+    896,
+    1007,
+    1256,
+    1007,
+    896,
+    11,
+    11
+  ],
+  "prediction_valid": true,
+  "validity_notes": "Decoded 10 action tokens over 5.0s horizon.",
+  "coordinate_frame": "ego_vehicle_local_at_t0 (+x forward m, +y left m, heading rad CCW)",
+  "units": {
+    "t_s": "s",
+    "x_m": "m",
+    "y_m": "m",
+    "heading_rad": "rad",
+    "speed": "m/s",
+    "accel": "m/s^2"
+  },
+  "horizon_s": 5.0,
+  "dt_s": 0.5,
+  "predicted_waypoints": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 6.60419,
+      "y_m": -0.00849,
+      "heading_rad": -0.00158
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 13.13598,
+      "y_m": 0.01283,
+      "heading_rad": 0.0023
+    },
+    {
+      "step": 3,
+      "t_s": 1.5,
+      "x_m": 19.52755,
+      "y_m": 0.00744,
+      "heading_rad": -0.00126
+    },
+    {
+      "step": 4,
+      "t_s": 2.0,
+      "x_m": 25.95556,
+      "y_m": 0.04799,
+      "heading_rad": 0.00656
+    },
+    {
+      "step": 5,
+      "t_s": 2.5,
+      "x_m": 32.32961,
+      "y_m": 0.01973,
+      "heading_rad": -0.00965
+    },
+    {
+      "step": 6,
+      "t_s": 3.0,
+      "x_m": 38.7235,
+      "y_m": 0.06937,
+      "heading_rad": 0.01693
+    },
+    {
+      "step": 7,
+      "t_s": 3.5,
+      "x_m": 45.09751,
+      "y_m": 0.1072,
+      "heading_rad": 0.00072
+    },
+    {
+      "step": 8,
+      "t_s": 4.0,
+      "x_m": 51.52542,
+      "y_m": 0.16047,
+      "heading_rad": 0.00854
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": 57.84257,
+      "y_m": 0.20871,
+      "heading_rad": 0.00729
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": 64.15978,
+      "y_m": 0.24903,
+      "heading_rad": 0.00603
+    }
+  ],
+  "ground_truth_waypoints": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 6.6633,
+      "y_m": -0.0054,
+      "heading_rad": 0.0007
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 13.2735,
+      "y_m": -0.0023,
+      "heading_rad": 0.0001
+    },
+    {
+      "step": 3,
+      "t_s": 1.501,
+      "x_m": 19.8179,
+      "y_m": -0.021,
+      "heading_rad": -0.0002
+    },
+    {
+      "step": 4,
+      "t_s": 2.001,
+      "x_m": 26.2835,
+      "y_m": -0.0259,
+      "heading_rad": 0.001
+    },
+    {
+      "step": 5,
+      "t_s": 2.501,
+      "x_m": 32.6853,
+      "y_m": -0.0244,
+      "heading_rad": 0.0002
+    },
+    {
+      "step": 6,
+      "t_s": 3.001,
+      "x_m": 39.0359,
+      "y_m": -0.0358,
+      "heading_rad": -0.0002
+    },
+    {
+      "step": 7,
+      "t_s": 3.501,
+      "x_m": 45.3902,
+      "y_m": -0.0491,
+      "heading_rad": -0.0015
+    },
+    {
+      "step": 8,
+      "t_s": 4.001,
+      "x_m": 51.8148,
+      "y_m": -0.0851,
+      "heading_rad": -0.0031
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": 58.3011,
+      "y_m": -0.1355,
+      "heading_rad": -0.0047
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": 64.7924,
+      "y_m": -0.1789,
+      "heading_rad": -0.0064
+    }
+  ],
+  "inference_latency_ms": 162954.86,
+  "environment_metadata": {
+    "python_version": "3.14.5",
+    "platform": "macOS-26.3.2-arm64-arm-64bit-Mach-O",
+    "hardware": "Apple M5 (arm64)",
+    "device": "mps",
+    "torch_version": "2.14.1",
+    "transformers_version": "5.19.0",
+    "mps_available": true,
+    "cuda_available": false
+  },
+  "predicts_human_takeover_request": false
+}

@@ -1,0 +1,173 @@
+{
+  "scene_id": "scene_07_stationary_ego_baseline",
+  "description": "Stationary ego vehicle waiting at an intersection/queue (v0 = 0.00 m/s); verifies zero-speed boundary handling and explicit INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE classification in both the trajectory verifier and R3B adapter.",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.10.11.07.12.18_veh-50_00211_00304.pkl",
+  "frame_index": 26,
+  "frame_token": "e9138a74627452c2",
+  "scene_name": "log-0063-scene-0002",
+  "map_location": "sg-one-north",
+  "timestamp_us": 1633936694700070,
+  "ego_state": {
+    "vx_mps": -0.0014,
+    "vy_mps": -0.0013,
+    "ax_mps2": -0.0165,
+    "ay_mps2": -0.0091,
+    "speed_mps": 0.0019,
+    "accel_norm_mps2": 0.0188,
+    "raw_driving_command": "keep forward",
+    "raw_driving_command_onehot": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "effective_driving_command": "keep forward"
+  },
+  "camera_images": {
+    "front_camera": [
+      "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_F0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_F0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_F0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_F0.jpg"
+    ],
+    "front_left_camera": [
+      "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_L0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_L0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_L0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_L0.jpg"
+    ],
+    "front_right_camera": [
+      "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_R0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_R0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_R0.jpg",
+      "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_R0.jpg"
+    ]
+  },
+  "observed_in_lane_lead_obstacle": null,
+  "all_observed_obstacles_count": 0,
+  "observed_obstacles_in_corridor": [],
+  "counterfactual_obstacle_distances_m": [],
+  "ground_truth_future_trajectory": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": -0.0013,
+      "y_m": -0.0001,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0027,
+      "vx_mps": -0.0017,
+      "vy_mps": -0.002,
+      "ax_mps2": -0.0162,
+      "ay_mps2": -0.0031
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": -0.0025,
+      "y_m": -0.0002,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0022,
+      "vx_mps": -0.0015,
+      "vy_mps": -0.0016,
+      "ax_mps2": -0.0139,
+      "ay_mps2": -0.0148
+    },
+    {
+      "step": 3,
+      "t_s": 1.5,
+      "x_m": -0.0034,
+      "y_m": -0.0002,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0028,
+      "vx_mps": -0.0019,
+      "vy_mps": -0.002,
+      "ax_mps2": -0.0224,
+      "ay_mps2": -0.0201
+    },
+    {
+      "step": 4,
+      "t_s": 2.0,
+      "x_m": -0.0042,
+      "y_m": -0.0002,
+      "heading_rad": 0.0,
+      "speed_mps": 0.002,
+      "vx_mps": -0.0014,
+      "vy_mps": -0.0015,
+      "ax_mps2": -0.0053,
+      "ay_mps2": -0.0039
+    },
+    {
+      "step": 5,
+      "t_s": 2.5,
+      "x_m": -0.0049,
+      "y_m": -0.0002,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0023,
+      "vx_mps": -0.0015,
+      "vy_mps": -0.0017,
+      "ax_mps2": -0.0127,
+      "ay_mps2": -0.0245
+    },
+    {
+      "step": 6,
+      "t_s": 3.0,
+      "x_m": -0.0054,
+      "y_m": -0.0003,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0027,
+      "vx_mps": -0.0017,
+      "vy_mps": -0.0021,
+      "ax_mps2": -0.015,
+      "ay_mps2": -0.0218
+    },
+    {
+      "step": 7,
+      "t_s": 3.5,
+      "x_m": -0.0059,
+      "y_m": -0.0004,
+      "heading_rad": 0.0,
+      "speed_mps": 0.002,
+      "vx_mps": -0.0013,
+      "vy_mps": -0.0015,
+      "ax_mps2": -0.0134,
+      "ay_mps2": -0.0012
+    },
+    {
+      "step": 8,
+      "t_s": 4.0,
+      "x_m": -0.0064,
+      "y_m": -0.0004,
+      "heading_rad": -0.0,
+      "speed_mps": 0.0023,
+      "vx_mps": -0.0016,
+      "vy_mps": -0.0017,
+      "ax_mps2": -0.0129,
+      "ay_mps2": -0.0118
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": -0.0067,
+      "y_m": -0.0003,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0027,
+      "vx_mps": -0.0014,
+      "vy_mps": -0.0023,
+      "ax_mps2": -0.0124,
+      "ay_mps2": -0.0197
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": -0.0069,
+      "y_m": -0.0004,
+      "heading_rad": 0.0,
+      "speed_mps": 0.0025,
+      "vx_mps": -0.0013,
+      "vy_mps": -0.0021,
+      "ax_mps2": -0.0122,
+      "ay_mps2": -0.0194
+    }
+  ]
+}

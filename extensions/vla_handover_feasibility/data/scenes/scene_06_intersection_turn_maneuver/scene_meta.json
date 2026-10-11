@@ -1,0 +1,177 @@
+{
+  "scene_id": "scene_06_intersection_turn_maneuver",
+  "description": "Intersection turning maneuver in Singapore One-North; tests lateral acceleration, yaw-rate, and friction-circle verification on curved trajectories and demonstrates lateral-maneuver applicability boundaries for 1D longitudinal R3B analysis.",
+  "dataset_source": "nuPlan / OpenScene / NAVSIM mini split (OpenDriveLab/OpenScene)",
+  "log_file": "mini/2021.10.11.07.12.18_veh-50_00211_00304.pkl",
+  "frame_index": 174,
+  "frame_token": "c9d4d04945e85ef8",
+  "scene_name": "log-0063-scene-0005",
+  "map_location": "sg-one-north",
+  "timestamp_us": 1633936768699742,
+  "ego_state": {
+    "vx_mps": 8.7826,
+    "vy_mps": 0.0558,
+    "ax_mps2": -0.4007,
+    "ay_mps2": 1.3476,
+    "speed_mps": 8.7828,
+    "accel_norm_mps2": 1.4059,
+    "raw_driving_command": "turn left",
+    "raw_driving_command_onehot": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "effective_driving_command": "turn left"
+  },
+  "camera_images": {
+    "front_camera": [
+      "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_F0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_F0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_F0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_F0.jpg"
+    ],
+    "front_left_camera": [
+      "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_L0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_L0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_L0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_L0.jpg"
+    ],
+    "front_right_camera": [
+      "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_R0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_R0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_R0.jpg",
+      "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_R0.jpg"
+    ]
+  },
+  "observed_in_lane_lead_obstacle": null,
+  "all_observed_obstacles_count": 6,
+  "observed_obstacles_in_corridor": [],
+  "counterfactual_obstacle_distances_m": [
+    20.0,
+    28.0,
+    36.0
+  ],
+  "ground_truth_future_trajectory": [
+    {
+      "step": 1,
+      "t_s": 0.5,
+      "x_m": 4.294,
+      "y_m": 0.2352,
+      "heading_rad": 0.0777,
+      "speed_mps": 8.8458,
+      "vx_mps": 8.8449,
+      "vy_mps": 0.1242,
+      "ax_mps2": 0.2645,
+      "ay_mps2": 1.9384
+    },
+    {
+      "step": 2,
+      "t_s": 1.0,
+      "x_m": 8.5673,
+      "y_m": 0.7376,
+      "heading_rad": 0.1354,
+      "speed_mps": 8.8776,
+      "vx_mps": 8.8771,
+      "vy_mps": 0.0947,
+      "ax_mps2": 0.097,
+      "ay_mps2": 0.7942
+    },
+    {
+      "step": 3,
+      "t_s": 1.5,
+      "x_m": 12.8486,
+      "y_m": 1.444,
+      "heading_rad": 0.1687,
+      "speed_mps": 8.9929,
+      "vx_mps": 8.9924,
+      "vy_mps": 0.0937,
+      "ax_mps2": 0.5965,
+      "ay_mps2": 0.2325
+    },
+    {
+      "step": 4,
+      "t_s": 2.0,
+      "x_m": 17.2112,
+      "y_m": 2.2304,
+      "heading_rad": 0.1825,
+      "speed_mps": 9.3089,
+      "vx_mps": 9.3088,
+      "vy_mps": 0.0526,
+      "ax_mps2": 0.8988,
+      "ay_mps2": 0.2389
+    },
+    {
+      "step": 5,
+      "t_s": 2.501,
+      "x_m": 21.7738,
+      "y_m": 3.1038,
+      "heading_rad": 0.1922,
+      "speed_mps": 9.6451,
+      "vx_mps": 9.645,
+      "vy_mps": 0.012,
+      "ax_mps2": 0.433,
+      "ay_mps2": -0.0805
+    },
+    {
+      "step": 6,
+      "t_s": 3.001,
+      "x_m": 26.479,
+      "y_m": 4.0889,
+      "heading_rad": 0.201,
+      "speed_mps": 9.9027,
+      "vx_mps": 9.9026,
+      "vy_mps": 0.0254,
+      "ax_mps2": 0.2151,
+      "ay_mps2": 0.4695
+    },
+    {
+      "step": 7,
+      "t_s": 3.5,
+      "x_m": 31.2712,
+      "y_m": 5.1664,
+      "heading_rad": 0.2096,
+      "speed_mps": 9.9259,
+      "vx_mps": 9.9258,
+      "vy_mps": 0.0305,
+      "ax_mps2": -0.3494,
+      "ay_mps2": -0.0913
+    },
+    {
+      "step": 8,
+      "t_s": 4.0,
+      "x_m": 36.0304,
+      "y_m": 6.2572,
+      "heading_rad": 0.2156,
+      "speed_mps": 9.8781,
+      "vx_mps": 9.8778,
+      "vy_mps": 0.0715,
+      "ax_mps2": -0.1742,
+      "ay_mps2": 0.1732
+    },
+    {
+      "step": 9,
+      "t_s": 4.5,
+      "x_m": 40.7155,
+      "y_m": 7.3098,
+      "heading_rad": 0.2236,
+      "speed_mps": 9.6756,
+      "vx_mps": 9.6755,
+      "vy_mps": 0.026,
+      "ax_mps2": -0.8052,
+      "ay_mps2": 0.1631
+    },
+    {
+      "step": 10,
+      "t_s": 5.0,
+      "x_m": 45.2473,
+      "y_m": 8.3498,
+      "heading_rad": 0.228,
+      "speed_mps": 9.304,
+      "vx_mps": 9.304,
+      "vy_mps": -0.0002,
+      "ax_mps2": -0.7461,
+      "ay_mps2": 0.2973
+    }
+  ]
+}

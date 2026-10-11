@@ -1,0 +1,386 @@
+{
+  "description": "Cryptographic SHA-256 digests and byte sizes of the 84 real nuPlan / OpenScene multi-view camera JPEGs used in Phase B AutoVLA inference. Raw camera JPEGs are excluded from public Git redistribution under nuPlan / OpenScene dataset licensing terms.",
+  "source_blobs_url": "https://huggingface.co/datasets/OpenDriveLab/OpenScene/resolve/main/openscene-v1.1/openscene_sensor_mini_camera/openscene_sensor_mini_camera_5.tgz",
+  "source_blobs_etag": "\"4e33d3fedd8294cfd8072c7414beba05d2cf9ee8924702ce661db32155bc97ef\"",
+  "total_camera_jpeg_files": 84,
+  "scenes": {
+    "scene_01_high_speed_open_road": {
+      "frame_token": "5143e810d84656d0",
+      "camera_bundle_sha256": "254be082cfe6ce3c9f745020b78b9eb2c6898a065bdcd9fe33cf96653de052ec",
+      "files": {
+        "scenes/scene_01_high_speed_open_road/images/t0_CAM_F0.jpg": {
+          "sha256": "1c6eddc467b75fc946a799d883481fa5737210f55ef55ea46b5a6caa14a40fe6",
+          "size_bytes": 207524
+        },
+        "scenes/scene_01_high_speed_open_road/images/t1_CAM_F0.jpg": {
+          "sha256": "7e44505421b88392b86e0bad40117adbf92e1bf4bc3c9dc1b4cf04768df6bff5",
+          "size_bytes": 208098
+        },
+        "scenes/scene_01_high_speed_open_road/images/t2_CAM_F0.jpg": {
+          "sha256": "a9886ddc9503b647b04ca71519ff67fea872d3855f5380137c06e88e712373a6",
+          "size_bytes": 208107
+        },
+        "scenes/scene_01_high_speed_open_road/images/t3_CAM_F0.jpg": {
+          "sha256": "64208fbcc2959894d890cb39a0e20ab826a3c85c401663178f8e16c257b9ed50",
+          "size_bytes": 202915
+        },
+        "scenes/scene_01_high_speed_open_road/images/t0_CAM_L0.jpg": {
+          "sha256": "915d92d748034796df5c09a8f25bf580c122c1afa3701075957d6da197526e19",
+          "size_bytes": 266111
+        },
+        "scenes/scene_01_high_speed_open_road/images/t1_CAM_L0.jpg": {
+          "sha256": "d8f9153cf4e7a25ca25865da2854b7e178ad4bb23cd2ab0d428a54ea369a5f6d",
+          "size_bytes": 243924
+        },
+        "scenes/scene_01_high_speed_open_road/images/t2_CAM_L0.jpg": {
+          "sha256": "0c728e4f62ca81f6ea2b24e32ff49a39a3ad4933e2ef66adcf04e050e1298a87",
+          "size_bytes": 268666
+        },
+        "scenes/scene_01_high_speed_open_road/images/t3_CAM_L0.jpg": {
+          "sha256": "6c19cf38fc480bdba8a85b3d8dcb79082e9482742e27a052a8a32e7882520fb9",
+          "size_bytes": 245253
+        },
+        "scenes/scene_01_high_speed_open_road/images/t0_CAM_R0.jpg": {
+          "sha256": "36d0e8a97352725e3d3ef903c065e7f776f3f5559be1b624c26e46990a364b20",
+          "size_bytes": 216148
+        },
+        "scenes/scene_01_high_speed_open_road/images/t1_CAM_R0.jpg": {
+          "sha256": "dcd09b3f29bfdcf01cdc27f327109dbc6e67aa7daae306fa66717c40cf36d39c",
+          "size_bytes": 219763
+        },
+        "scenes/scene_01_high_speed_open_road/images/t2_CAM_R0.jpg": {
+          "sha256": "8d298b2e1ff5f3a700bb26763b70848250171c0e6d6fed240b4500528a3b651c",
+          "size_bytes": 214630
+        },
+        "scenes/scene_01_high_speed_open_road/images/t3_CAM_R0.jpg": {
+          "sha256": "0cca00d6d1881f60ba71718f7de19e17056e4063c3a42cc607ddc4b2e696a954",
+          "size_bytes": 203710
+        }
+      }
+    },
+    "scene_02_stationary_lead_obstacle": {
+      "frame_token": "3cacb287d398542f",
+      "camera_bundle_sha256": "538cf376208c5f461f2b1b3f26f6d0f4195b8dc49be512bcf344ffc2c8d6f6fd",
+      "files": {
+        "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_F0.jpg": {
+          "sha256": "86f6bb41c105eff278dd84bbc408fe353da121681d69dd8fbd4626f917f0a81c",
+          "size_bytes": 185126
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_F0.jpg": {
+          "sha256": "8fe6fab3bab6c7731cd617ad4003b05f8165b5c9b3fedefc423a747cb56d364d",
+          "size_bytes": 198024
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_F0.jpg": {
+          "sha256": "949a83d54eca5b39ab2404d07639b49dbacc855ccdc8b36b4a1c8e4f9509c8c6",
+          "size_bytes": 205371
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_F0.jpg": {
+          "sha256": "a7f1e9f1b9d9f74a1206354273fb64c6ccc8ac1461cad6be426f6817345db269",
+          "size_bytes": 210821
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_L0.jpg": {
+          "sha256": "d6b8577f813b481d10957d808871c613894e8286dbb89f0f7ef71ffa5b19697b",
+          "size_bytes": 201575
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_L0.jpg": {
+          "sha256": "d321394d0b953b275e4d1e5b0eead44f01ab1829dcb903e4468f52fbc8f9da4b",
+          "size_bytes": 202259
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_L0.jpg": {
+          "sha256": "3eec7fdddea054ffc45b659c8350685b590284b17997ecdcb114d82cdc6e6b65",
+          "size_bytes": 208639
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_L0.jpg": {
+          "sha256": "f22870f517dc641f4d5ffe82dfe6febec3635f91fcdc42a6557efe44fd5e03c8",
+          "size_bytes": 214320
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t0_CAM_R0.jpg": {
+          "sha256": "a847aa67038b7bfc11090e6367e0dc634fc7d7562c16f0f7f67f48881bf61bd3",
+          "size_bytes": 194486
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t1_CAM_R0.jpg": {
+          "sha256": "4bd1f71ac123936f6e00db2aba7715a59b7946210f43bb605c2057bba641dfac",
+          "size_bytes": 197946
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t2_CAM_R0.jpg": {
+          "sha256": "7b65483e412789153925a0fd3f70a460c1525fb4a7f85c9fd28288cca3596f3f",
+          "size_bytes": 203620
+        },
+        "scenes/scene_02_stationary_lead_obstacle/images/t3_CAM_R0.jpg": {
+          "sha256": "a7ff418c955a6cc31db8b70ccf278357cdb5325d8c9621b50a3116804e534618",
+          "size_bytes": 203100
+        }
+      }
+    },
+    "scene_03_close_urban_lead_following": {
+      "frame_token": "7a524614561c54ef",
+      "camera_bundle_sha256": "ca01375005e54b072b4d205686c270728e1380f585c69c8d6e9dbc1a7896356b",
+      "files": {
+        "scenes/scene_03_close_urban_lead_following/images/t0_CAM_F0.jpg": {
+          "sha256": "a5d08052e5c7ee462f22634623f9cd4919b2ae6849adbc320a4d564d8ff9ea83",
+          "size_bytes": 208730
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t1_CAM_F0.jpg": {
+          "sha256": "b216424ffee6f901b56facd1354a12c6e36bd7587d662d031d18873869d2e4c2",
+          "size_bytes": 209937
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t2_CAM_F0.jpg": {
+          "sha256": "afbca986454d873a7da6eb2019607f7eb1c12414a2d13302714516b1e0afe19d",
+          "size_bytes": 213338
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t3_CAM_F0.jpg": {
+          "sha256": "0649d8423503fcd2c37529140c3542d6f43924236a20b9ec8cc1ca7542f53207",
+          "size_bytes": 218430
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t0_CAM_L0.jpg": {
+          "sha256": "b5b2fcf6e9f731554597c8672580912e5a7259a79913d453a970138749b0a1db",
+          "size_bytes": 242543
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t1_CAM_L0.jpg": {
+          "sha256": "55ea9db21868c5a57d4d7fc0de8d17254f30c335a6a5d4e5e6419d39cd5e0665",
+          "size_bytes": 232231
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t2_CAM_L0.jpg": {
+          "sha256": "cf7d0b4ee2a9576591cadd116b6dd16245356cf7fdcd3791e66f1f4a03d5f920",
+          "size_bytes": 228858
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t3_CAM_L0.jpg": {
+          "sha256": "83591436db1f4696055dcc279c849ec2b756cf71c4584a145e64ea9ab4267eff",
+          "size_bytes": 230929
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t0_CAM_R0.jpg": {
+          "sha256": "bd1185bfcc6850868d7ad7a03b0ca5ca72db1ba8f41c1109ee02ff9203bb107e",
+          "size_bytes": 168849
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t1_CAM_R0.jpg": {
+          "sha256": "e039dda33e6ef1242c9e4fb8f8d79505dd7aed3bc11d4ce720246b3d1a0aaa19",
+          "size_bytes": 171986
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t2_CAM_R0.jpg": {
+          "sha256": "1bded4a8c42d380e98500465635a453c29e979070deaf3f9a07b3eb755c327cf",
+          "size_bytes": 173630
+        },
+        "scenes/scene_03_close_urban_lead_following/images/t3_CAM_R0.jpg": {
+          "sha256": "302858a9d3cf11eac8710149c069ea0cfc15d509d4b00cfd79c83c697c2d1806",
+          "size_bytes": 180541
+        }
+      }
+    },
+    "scene_04_fast_arterial_lead_vehicle": {
+      "frame_token": "c48640204ad758c4",
+      "camera_bundle_sha256": "cc9de167a2b8ef7eb9534c31e6d81c317ee1b955ac12dec18d2dee8f49c3f9b0",
+      "files": {
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t0_CAM_F0.jpg": {
+          "sha256": "7b5b8fdf7160095437cd25a19d638aebd50a528a42e195b1182728c735e2fa3d",
+          "size_bytes": 173581
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t1_CAM_F0.jpg": {
+          "sha256": "f555cdcbed87c834a4807fa08f28d3b365f262c053b69ec89d8876b4ada1fbb4",
+          "size_bytes": 172345
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t2_CAM_F0.jpg": {
+          "sha256": "c6b37efdfd65b8e452254e0391cc7e50d0b65445688d556cda5febeb959381e1",
+          "size_bytes": 171732
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t3_CAM_F0.jpg": {
+          "sha256": "7d2c210af8283793212c03fb383ac1902d112f849a521deac21c5c98f89f0169",
+          "size_bytes": 171603
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t0_CAM_L0.jpg": {
+          "sha256": "a4b0363fc8778da062a599589881687f179df3456b9e8cd81fe858872d8c2ca8",
+          "size_bytes": 188230
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t1_CAM_L0.jpg": {
+          "sha256": "7e40152601dc137e2847d4fcc85776aa4f5d6e13e501922848517aa7c21a72fa",
+          "size_bytes": 187791
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t2_CAM_L0.jpg": {
+          "sha256": "ee9fb8744fff648ff513e585cf394865651b6b189a3acd1edec44ce2e2895331",
+          "size_bytes": 189035
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t3_CAM_L0.jpg": {
+          "sha256": "9af22e3f58cc3fe007614d85832582243589453535b7ca9cb10ab9b9462ebd45",
+          "size_bytes": 189085
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t0_CAM_R0.jpg": {
+          "sha256": "ba8db39222fd91f6881c9415801a90af4a5dd9e110bc851ef10b9a81a6a4b956",
+          "size_bytes": 178383
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t1_CAM_R0.jpg": {
+          "sha256": "0fc7c693fd43c3eafdca3269b64aa993d8a2719ad0d53a3b43966380f85fa7e7",
+          "size_bytes": 176662
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t2_CAM_R0.jpg": {
+          "sha256": "a3b7838f5a08310e5283e613f3205d55e6251e8bfab18e34a4b02e433a8458b2",
+          "size_bytes": 176791
+        },
+        "scenes/scene_04_fast_arterial_lead_vehicle/images/t3_CAM_R0.jpg": {
+          "sha256": "7b151381d44162d95ab6630228123aac90f24ede152b725e1cac958aad47188d",
+          "size_bytes": 179721
+        }
+      }
+    },
+    "scene_05_active_braking_deceleration": {
+      "frame_token": "b49c80be2d0d5bb9",
+      "camera_bundle_sha256": "9862713e90e94bf8dc4e8c00fc10f22bd9851d5b7438b004311f3575adaa5ccb",
+      "files": {
+        "scenes/scene_05_active_braking_deceleration/images/t0_CAM_F0.jpg": {
+          "sha256": "ff2e8755bbdd75211b8725982bbda96977c15092db3db25d278fc01e7a5ebdc4",
+          "size_bytes": 224089
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t1_CAM_F0.jpg": {
+          "sha256": "e84b8674b55afd6c6f950d62c1f1c3e0d362acb2e75401ec613b05451a1a81ec",
+          "size_bytes": 213451
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t2_CAM_F0.jpg": {
+          "sha256": "7c164234c5b29b3072c0213bdc01046d00ad4a9c1f1cf8784cc846adcd81b1c7",
+          "size_bytes": 207066
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t3_CAM_F0.jpg": {
+          "sha256": "867ef25e02fd43108ae3811942beb1e35038040448a2748e8dee6191123b12dd",
+          "size_bytes": 203509
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t0_CAM_L0.jpg": {
+          "sha256": "05e76dc5bcef780e722ecc2f412239c61d45355ce337176bf04f3f2f9d354b5a",
+          "size_bytes": 252536
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t1_CAM_L0.jpg": {
+          "sha256": "dabaae8168ec4787c17cfe5e63ea8869fd9927caa4a2b994601414f1e618a836",
+          "size_bytes": 250591
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t2_CAM_L0.jpg": {
+          "sha256": "a9a0a82297faaaa9af155adaab2887be7f76a97a07deea4bd62bd847d00530fc",
+          "size_bytes": 242823
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t3_CAM_L0.jpg": {
+          "sha256": "e628817b34646fd14e61fd8a37846c1ef5f534816c097d674914d49ef9582895",
+          "size_bytes": 231302
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t0_CAM_R0.jpg": {
+          "sha256": "d42d0e0a7c43b61b6fd688f064f990a16c4c86e50834ffb1629554fed81bbe5a",
+          "size_bytes": 228826
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t1_CAM_R0.jpg": {
+          "sha256": "d5bd223eb1b552f264653430a975a661b1917f92a59570fc74428b0e6d887536",
+          "size_bytes": 230599
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t2_CAM_R0.jpg": {
+          "sha256": "239c7a43fbe374acbf9c411032326671c8c4f3dfcb72c7e1e36615afed51618c",
+          "size_bytes": 231770
+        },
+        "scenes/scene_05_active_braking_deceleration/images/t3_CAM_R0.jpg": {
+          "sha256": "d7257674a885200b5a6a1319c7d1a912945fe5b787122ff9a5f0f1a6b220c58f",
+          "size_bytes": 227279
+        }
+      }
+    },
+    "scene_06_intersection_turn_maneuver": {
+      "frame_token": "c9d4d04945e85ef8",
+      "camera_bundle_sha256": "c98ee3ff90c71c8b1aba59cce36ac272cce96490bb830839a74d3e1279c4d9a8",
+      "files": {
+        "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_F0.jpg": {
+          "sha256": "19cbf99c3956abad506b98689d48fdcf1c5c93d86fdc76692f3c1b111e16d781",
+          "size_bytes": 256901
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_F0.jpg": {
+          "sha256": "6c9e036868c353c9196737d9f5a7dd8e74014f1e23972b8556f4ca8d1a5bdf9c",
+          "size_bytes": 254718
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_F0.jpg": {
+          "sha256": "1b396da2247e4c4f4a1b94ebe2962c53514720e1d80d3e6e47ea8f4727d1d652",
+          "size_bytes": 212988
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_F0.jpg": {
+          "sha256": "c97660297c5213930e8280d776b1e77e3d0e3ac8fd3b7c0d1dfc4fa5c6f47b01",
+          "size_bytes": 170271
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_L0.jpg": {
+          "sha256": "7946bce7ab8a022a16d72bc19bb89f2cf9703e5798a5a5758b7dd0657d20915d",
+          "size_bytes": 228145
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_L0.jpg": {
+          "sha256": "90d0c4c1ccb476d14ceb3e069ff760abf19bbc75b5543c9696f32239280a8356",
+          "size_bytes": 233160
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_L0.jpg": {
+          "sha256": "ba5344cfd001058ffc0e4343754ff46bd691e844429eaabedf19fd2fc58d58d0",
+          "size_bytes": 232070
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_L0.jpg": {
+          "sha256": "bccf1ada887227a284c663f164a8080ede943a6ecf7b58751c68b70d0d0ba75d",
+          "size_bytes": 237322
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t0_CAM_R0.jpg": {
+          "sha256": "24c59fd2cb926ab4148a7d21273d13d9e7b30043851231e410a993057cd0208a",
+          "size_bytes": 137993
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t1_CAM_R0.jpg": {
+          "sha256": "5bf3e6320e2de2c6e5377a0e8bc8b3e49ee4d7a2ac752c465d2fac930521afcd",
+          "size_bytes": 219113
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t2_CAM_R0.jpg": {
+          "sha256": "1fb446809e9caa6196ad569ab2dc1034807d7c931b28d9cc90143c36e02f07ee",
+          "size_bytes": 238764
+        },
+        "scenes/scene_06_intersection_turn_maneuver/images/t3_CAM_R0.jpg": {
+          "sha256": "676a11ef101e9485f403c0c2b267827664d077ff7b11464b329f45f71540ae7f",
+          "size_bytes": 247467
+        }
+      }
+    },
+    "scene_07_stationary_ego_baseline": {
+      "frame_token": "e9138a74627452c2",
+      "camera_bundle_sha256": "cbcf5f45ae946c5edaf827d431f123fba0947c278188b070916daf93e53227d6",
+      "files": {
+        "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_F0.jpg": {
+          "sha256": "9aceb18b2b713357c8f765762038bfbf78e1c45501c23aba508d842e2b2ea748",
+          "size_bytes": 206697
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_F0.jpg": {
+          "sha256": "9d34d66d9bf6d74299a173af1d2c808a5f3b25f223664d89706944b31d747313",
+          "size_bytes": 206589
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_F0.jpg": {
+          "sha256": "7d3e1787f6b070a327baba2c04edba693702bc8c96a35c42dbb728a2b479be2a",
+          "size_bytes": 206590
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_F0.jpg": {
+          "sha256": "fe39ec64a18ede27469361563bf37791c5fff490162786f50fe133981f8cee50",
+          "size_bytes": 206579
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_L0.jpg": {
+          "sha256": "b721f3922c578048087634b35a80bfe091e12e66ac460f0632a60b046dc8770a",
+          "size_bytes": 218551
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_L0.jpg": {
+          "sha256": "8667da820ec2d52d8f49cf8f6af0314b8711518747969e113a458fbf16951e8d",
+          "size_bytes": 218368
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_L0.jpg": {
+          "sha256": "456cf76fb881a49825d5a701697984755d81654c4d1d7c2a91ec481133fcb1a1",
+          "size_bytes": 218364
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_L0.jpg": {
+          "sha256": "f1567179627ec43799d83e20f06a9af7f71d3aa276eee20f8767eb76777c2805",
+          "size_bytes": 218628
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t0_CAM_R0.jpg": {
+          "sha256": "8af586f41ab1692dcd0d0da3d568ca511f203139a734402f9b312e6a55d5337b",
+          "size_bytes": 235713
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t1_CAM_R0.jpg": {
+          "sha256": "1878b41ac6d50b99b3a298545164f449aca5c87ef852275b24686b0674657395",
+          "size_bytes": 235515
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t2_CAM_R0.jpg": {
+          "sha256": "a1808f6716b0092d9de79f694c1f75ce635003dc650565c73102d3740961b35b",
+          "size_bytes": 235950
+        },
+        "scenes/scene_07_stationary_ego_baseline/images/t3_CAM_R0.jpg": {
+          "sha256": "8463282b6228eccbe66cfac9e78070a65804071d025cf02155e49d7f8c970af2",
+          "size_bytes": 235724
+        }
+      }
+    }
+  }
+}
