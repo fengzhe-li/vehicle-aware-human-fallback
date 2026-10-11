@@ -123,7 +123,36 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 
 ---
 
-## 5. Interactive English Dashboard, Screenshots & Landscape PDF Report
+## 5. RQ1 — Controlled Driving-Command Sensitivity (`EXT-VLA-C07`, [`command_sensitivity.py`](./command_sensitivity.py))
+
+To quantify how strongly AutoVLA depends on the supplied high-level driving command in the two scenes subject to the `EXT-VLA-C06` command-leakage boundary (`scene_02_stationary_lead_obstacle` and `scene_06_intersection_turn_maneuver`), [`command_sensitivity.py`](./command_sensitivity.py) executes a controlled single-variable prompt intervention replacing `"turn left"` with `"keep forward"` while holding all 12 camera frames, initial speed/acceleration, model weights, `agent_vocab.pkl`, and greedy decoding (`do_sample=False`) identical.
+
+- **Canonical Immutability:** All 7 canonical prediction files in [`artifacts/predictions/`](./artifacts/predictions) remain byte-for-byte unchanged (`verify_canonical_predictions_unchanged()`); the 2 intervention artifacts are saved separately in [`artifacts/command_sensitivity/scene_02_keep_forward.json`](./artifacts/command_sensitivity/scene_02_keep_forward.json) and [`artifacts/command_sensitivity/scene_06_keep_forward.json`](./artifacts/command_sensitivity/scene_06_keep_forward.json) alongside [`comparison.csv`](./artifacts/command_sensitivity/comparison.csv) and [`summary.json`](./artifacts/command_sensitivity/summary.json).
+- **Critical Interpretation Rule:** In both scenes, the logged human trajectory is a left-turn maneuver ($y_{\text{GT}}(5.0\text{ s}) = +16.6678\text{ m}$ in `scene_02`; $+8.3498\text{ m}$ in `scene_06`) and is **not** a valid ground-truth target for a deliberately different `"keep forward"` command. Open-loop ADE/FDE differences under `"keep forward"` quantify **command sensitivity relative to the recorded turning trajectory**, not policy quality or driving safety.
+
+| Scene ID (`frame_token`) | Command Condition | Action Tokens `<action_k>` (Steps 1–10) | Tokens Changed (First Step) | Final 5.0 s Pose $(x_{10}, y_{10}, \psi_{10})$ | $\Delta y(5\text{ s})$ / Mean–Max L2 Div. | ADE / FDE vs Logged Turn GT ($\text{m}$)\* | Nominal / Wet ($\mu=0.5$) Feasibility | 1D Corridor Exit / Admissible R3B Steps |
+| :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `scene_02` (`3cacb287d398542f`) | Control: `turn left` | `[418, 728, 418, 728, 1506, 724, 841, 722, 684, 1429]` | — | `(29.28 m, +19.82 m, +63.41°)` | — | `2.4187` / `3.4684` | `SATISFIED` / **`VIOLATED` (`C7`)** | Exits at `1.5 s` / **`3/7` (`0.0–1.0 s`)** |
+| `scene_02` (`3cacb287d398542f`) | Intervention: `keep forward` | `[1172, 42, 598, 1506, 1806, 1074, 1257, 522, 1475, 1814]` | **`10 / 10` (Step 1)** | `(32.11 m, +13.06 m, +55.33°)` | **`-6.75 m` (`-34.1%`)** / `3.77`–`7.32 m` | `1.5385` / `3.8597` | `SATISFIED` / **`VIOLATED` (`C7`)** | Exits at `3.0 s` / **`6/7` (`0.0–2.5 s`)** |
+| `scene_06` (`c9d4d04945e85ef8`) | Control: `turn left` | `[773, 1466, 1898, 115, 1898, 39, 115, 1108, 672, 646]` | — | `(43.53 m, +7.60 m, +12.18°)` | — | `0.6595` / `1.8800` | `SATISFIED` / `SATISFIED` | Exits at `2.0 s` / Obs `0/7`, CF `4/7` |
+| `scene_06` (`c9d4d04945e85ef8`) | Intervention: `keep forward` | `[1205, 1937, 1898, 13, 534, 39, 39, 1188, 120, 5]` | **`8 / 10` (Step 1)** | `(43.60 m, +5.04 m, +10.21°)` | **`-2.55 m` (`-33.6%`)** / `1.41`–`2.56 m` | `1.7793` / `3.6976` | `SATISFIED` / `SATISFIED` | Exits at `2.5 s` / Obs `0/7`, CF `5/7` |
+
+---
+
+## 6. RQ2 — Scene 05 `C10` Numerical Robustness Audit (`EXT-VLA-C08`, [`c10_robustness.py`](./c10_robustness.py))
+
+To test whether the `scene_05_active_braking_deceleration` `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` violation is an artifact of a single finite-difference formula, [`c10_robustness.py`](./c10_robustness.py) evaluates a 75-cell parameter grid (**5 discrete derivative estimators $\times$ 5 temporal windows $\times$ 3 illustrative diagnostic thresholds** $\in \{2.0, 2.5, 3.0\}\text{ m/s}^2$) on both the canonical unsigned rollout (`1.56 m/s^2`) and the saved OOD signed-acceleration rollout (`-1.55 m/s^2`), outputting [`artifacts/c10_robustness/c10_robustness_matrix.csv`](./artifacts/c10_robustness/c10_robustness_matrix.csv) and [`artifacts/c10_robustness/c10_robustness_summary.json`](./artifacts/c10_robustness/c10_robustness_summary.json).
+
+- **Overall Classification:** `SENSITIVE_TO_TEMPORAL_WINDOW_AND_SMOOTHED_THRESHOLD_ROBUST_FOR_WINDOWS_GE_1P5S_AT_LE_2P5MPS2`
+- **Multi-Step Post-Reversal Robustness (`30/30` cells violated):** Across all 5 estimators (`E1` chord-speed backward difference, `E2` pure ego-$x$ Taylor/central second difference, `E3` body-frame projected velocity difference, `E4` $1.0\text{ s}$ central velocity difference, and `E5` 3-step moving average) and all windows covering the braking-to-acceleration reversal (`W3: 0.0–1.5 s`, `W4: 0.0–2.0 s`, `W5: 0.0–5.0 s`), the C10 violation holds in **30 / 30 cells** at both the `2.0 m/s^2` and canonical `2.5 m/s^2` thresholds (`peak |a_lon - a_x(0)| = 3.0967 m/s^2` on `E1/E2/E3`, `2.8516 m/s^2` on `E4`, and `2.6825 m/s^2` on `E5`), driven by **9 consecutive positive-acceleration steps** ($t = 1.0..5.0\text{ s}$, accelerating the ego vehicle from $3.87\text{ m/s}$ to $7.05\text{ m/s}$).
+- **Where Binary C10 Classification Is Sensitive (`45/75` total cells violated):**
+  1. *Early temporal windows ($t \le 1.0\text{ s}$):* `W1 (0.0–0.5 s)` passes `15/15` cells (`0/15` violations) because Step 1 still decelerates (`-0.8841 m/s^2` on `E1`, `-1.7658 m/s^2` on `E2`). `W2 (0.0–1.0 s)` violates the `2.0 m/s^2` threshold (`2.3442 m/s^2` on `E1/E2/E3`, `2.7200 m/s^2` on `E4`) but passes `2.5` and `3.0 m/s^2` on unsmoothed `E1/E2/E3`.
+  2. *Smoothed estimators at the `3.0 m/s^2` threshold:* At `3.0 m/s^2`, unsmoothed estimators `E1/E2/E3` still violate (`3.0967 > 3.0 m/s^2`), whereas multi-step smoothing (`E4` central difference and `E5` 3-step moving average) damps the Step 3 peak to `2.8516` and `2.6825 m/s^2` (`< 3.0 m/s^2`).
+- **D4 Sanity Checks & D5 Signed-Rollout Comparison:** Heading remains within $\pm 0.085^\circ$ over $[0, 1.5]\text{ s}$, producing `< 0.01301 m/s^2` (`< 0.42%`) discrepancy between chord-speed (`E1`) and pure ego-$x$ (`E2`) across Steps 2–10 (`0.00000 m/s^2` at the Step 3 peak) and `< 0.00120 m/s^2` (`< 0.04%`) between `E1` and body-frame `E3`. In contrast, the saved signed-acceleration OOD rollout (`-1.55 m/s^2`) records **0 / 75 active-motion C10 violations** (`max jump <= 0.6684 m/s^2`). *(Disclaimer: Thresholds `{2.0, 2.5, 3.0} m/s^2` are illustrative diagnostic bounds for sensitivity analysis, not externally validated safety standards.)*
+
+---
+
+## 7. Interactive English Dashboard, Screenshots & Landscape PDF Report
 
 - **Interactive HTML Dashboard:** [`artifacts/report/index.html`](./artifacts/report/index.html)
 - **Landscape PDF Export:** [`artifacts/report/vla_handover_feasibility_report.pdf`](./artifacts/report/vla_handover_feasibility_report.pdf)
@@ -131,7 +160,7 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 ### Dashboard Screenshots
 
 ![Screenshot 01: Executive Findings, Methodological Leakage Disclosure, and Overview](./artifacts/report/screenshots/01_executive_findings_and_overview.png)
-*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C06`), driving-command leakage disclosure banner, interactive control bar, and Scene 01 overview.*
+*Screenshot 01: Executive Research Summary (`EXT-VLA-C01`–`EXT-VLA-C08`), driving-command leakage disclosure banner, interactive control bar, and Scene 01 overview.*
 
 ![Screenshot 02: Scene 05 Active-Braking Violation and Controlled Signed-Acceleration Ablation](./artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png)
 *Screenshot 02: Scene 05 `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` violation (`+1.5442 m/s^2` vs `-1.5525 m/s^2`) and single-variable signed-acceleration prompt ablation (`-1.55 m/s^2`) with OOD causal boundary notices.*
@@ -144,7 +173,7 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 
 ---
 
-## 6. Licensing, Data Redistribution Policy & Reproducible Commands
+## 8. Licensing, Data Redistribution Policy & Reproducible Commands
 
 ### Licensing & External Data Availability
 
@@ -156,7 +185,7 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 ### Reproducible CLI Workflow
 
 ```bash
-# 0. One-Command Offline Demo (recomputes evaluation, verifies provenance, and opens HTML dashboard):
+# 0. One-Command Offline Demo (recomputes evaluation, RQ1/RQ2 audits, verifies provenance, and opens HTML dashboard):
 .venv/bin/python -m extensions.vla_handover_feasibility.demo
 
 # 1. Offline Provenance & Consistency Audit (runs out-of-the-box without external raw JPEGs):
@@ -165,22 +194,26 @@ Holding all 12 camera images, $v_0 = 4.31\text{ m/s}$, driving command `'keep fo
 # 2. Offline Re-evaluation of Saved Genuine AutoVLA Predictions (~1 second):
 .venv/bin/python -m extensions.vla_handover_feasibility.experiment_runner --skip-inference
 
-# 3. Regenerate the Self-Contained Interactive English HTML Dashboard:
+# 3. Offline Re-evaluation of RQ1 Controlled Command Sensitivity & RQ2 Scene 05 C10 Robustness:
+.venv/bin/python -m extensions.vla_handover_feasibility.command_sensitivity --skip-inference
+.venv/bin/python -m extensions.vla_handover_feasibility.c10_robustness
+
+# 4. Regenerate the Self-Contained Interactive English HTML Dashboard:
 .venv/bin/python -m extensions.vla_handover_feasibility.report_generator
 
-# 4. Run the 17-Test Extension Verification Suite:
+# 5. Run the 19-Test Extension Verification Suite:
 .venv/bin/pytest extensions/vla_handover_feasibility/tests -v
 
-# 5. Optional: Stream & Verify the 84 Raw Camera JPEGs from OpenDriveLab/OpenScene for Live Inference:
+# 6. Optional: Stream & Verify the 84 Raw Camera JPEGs from OpenDriveLab/OpenScene for Live Inference:
 .venv/bin/python -m extensions.vla_handover_feasibility.extract_navsim_scenes
 
-# 6. Optional: Run Live Sequential (batch_size=1) AutoVLA Inference on Apple MPS / CUDA GPU:
+# 7. Optional: Run Live Sequential (batch_size=1) AutoVLA Inference on Apple MPS / CUDA GPU:
 .venv/bin/python -m extensions.vla_handover_feasibility.experiment_runner --scene-id scene_03_close_urban_lead_following
 ```
 
 ### Test & Baseline Regression Summary
 
-- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`17 passed`** (`test_vla_handover_extension.py`).
+- **Extension Test Suite ([`artifacts/extension_pytest_output.txt`](./artifacts/extension_pytest_output.txt)):** **`19 passed`** (`test_vla_handover_extension.py`).
 - **Original Repository Test Suite ([`artifacts/baseline_pytest_output.txt`](./artifacts/baseline_pytest_output.txt)):** **`430 passed, 1 skipped, 1 deselected, 4 failed`** when audited against squashed pre-release git history (`all 27 R3B tests in tests/test_r3b.py and tests/test_r6a_figures.py::test_scientific_results_unchanged passing`):
   1. `tests/test_r2a.py::test_r2a_provenance`, `tests/test_r2b.py::test_r2b_provenance`, and `tests/test_r2c_lite.py::test_r2c_provenance` failed with `git diff` exit code `128` (`fatal: bad object 9d1c41d01a5a141f07020610c58879b76b214d11`) prior to the `tests/provenance_dependencies.py` content-hash verifier on `main`.
   2. `tests/test_r6a_figures.py::test_deterministic_rendering` fails on `FA2_participant_exposure_slopes.pdf` byte-level SHA-256 comparison due to Matplotlib / Python `3.14` PDF font stream metadata differences against the frozen PDF generated during release.

@@ -20,13 +20,14 @@ This repository provides a two-part open-source safety-engineering and AI-verifi
 ### 3. Technologies Used
 - **AI & Multimodal Inference:** PyTorch, Hugging Face `transformers` (`Qwen2.5-VL`, `bfloat16` `safetensors` with exact `825/825` `strict=True` state-dict bijection), `qwen-vl-utils`, AutoVLA physical action codebook (`2,048` tokens).
 - **Scientific Computing & Verification:** Python 3.10+, NumPy, SciPy, Pandas, SymPy (symbolic monotonicity verification), Matplotlib.
-- **Quality Assurance & Reproducibility:** Pytest (`17` VLA extension tests + `424` public-clone baseline tests), SHA-256 artifact & sensor-manifest auditing, Headless Chromium visual QA, GitHub Actions CI.
+- **Quality Assurance & Reproducibility:** Pytest (`19` VLA extension tests + `424` public-clone baseline tests), SHA-256 artifact & sensor-manifest auditing, Headless Chromium visual QA, GitHub Actions CI.
 
 ### 4. What the System Demonstrates
 - **Genuine VLA Trajectory Decoding & Physical Auditing:** Sub-meter highway tracking (`scene_01`: `ADE = 0.36 m`, `FDE = 0.76 m`) alongside automatic detection of wet-pavement lateral acceleration violations (`scene_02`: $|a_{\text{lat}}| = 2.27\text{ m/s}^2 > 2.00\text{ m/s}^2$ at $\mu = 0.5$, triggering `C7_LATERAL_ACCELERATION_LIMIT`).
-- **Active-Braking Prompt Vulnerability (`scene_05`, `EXT-VLA-C02`):** In `scene_05_active_braking_deceleration`, the ego vehicle is actively braking ($a_{x,0} = -1.5525\text{ m/s}^2$, $v_0 = 4.3103\text{ m/s}$). Because AutoVLA's upstream prompt encodes acceleration as an unsigned scalar norm (`1.56 m/s^2`), the model reverses into strong positive acceleration (`+1.5442 m/s^2` at $t = 1.5\text{ s}$, `FDE = 12.90 m`), violating `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` (`3.10 m/s^2 > 2.50 m/s^2`) and eroding counterfactual R3B stopping margins as takeover is delayed.
-- **Controlled Single-Variable Signed-Acceleration Ablation (`scene_05`, `EXT-VLA-C05`):** Holding the checkpoint, 12 camera frames, velocity, command, and greedy decoding identical while replacing `"1.56 m/s^2"` with signed `"-1.55 m/s^2"` ([`ablation_scene_05_signed_accel.json`](extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json)) sustains deceleration and reduces `0.0–2.0 s` braking-phase ADE by **88.1%** (`1.2131 m` $\to$ `0.1448 m`; full `5.0 s` ADE `6.2543 m` $\to$ `2.4210 m`), while exposing single-scene out-of-distribution (OOD) token jitter at standstill ($t = 4.5\text{ s}$).
-- **Methodological Auditing of Driving-Command Leakage (`EXT-VLA-C06`):** Programmatically flags turning scenes (`scene_02` and `scene_06`, where `"turn left"` aligns with future ground-truth lateral displacement $y_{\text{GT}}(3.0\text{ s}) > 4.0\text{ m}$) so command-conditioned `ADE`/`FDE` metrics are never misreported as leakage-free blind predictions.
+- **Active-Braking Prompt Vulnerability (`scene_05`, `EXT-VLA-C03`):** In `scene_05_active_braking_deceleration`, the ego vehicle is actively braking ($a_{x,0} = -1.5525\text{ m/s}^2$, $v_0 = 4.3103\text{ m/s}$). Because AutoVLA's upstream prompt encodes acceleration as an unsigned scalar norm (`1.56 m/s^2`), the model reverses into strong positive acceleration (`+1.5442 m/s^2` at $t = 1.5\text{ s}$, `FDE = 12.90 m`), violating `C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY` (`3.10 m/s^2 > 2.50 m/s^2`) and eroding counterfactual R3B stopping margins as takeover is delayed.
+- **Controlled Single-Variable Signed-Acceleration Ablation (`scene_05`, `EXT-VLA-C03`):** Holding the checkpoint, 12 camera frames, velocity, command, and greedy decoding identical while replacing `"1.56 m/s^2"` with signed `"-1.55 m/s^2"` ([`ablation_scene_05_signed_accel.json`](extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json)) sustains deceleration and reduces `0.0–2.0 s` braking-phase ADE by **88.1%** (`1.2131 m` $\to$ `0.1448 m`; full `5.0 s` ADE `6.2543 m` $\to$ `2.4210 m`), while exposing single-scene out-of-distribution (OOD) token jitter at standstill ($t = 4.5\text{ s}$).
+- **Methodological Auditing of Driving-Command Leakage (`EXT-VLA-C06`) & Controlled Command Sensitivity (`EXT-VLA-C07`):** Programmatically flags turning scenes (`scene_02` and `scene_06`, where `"turn left"` aligns with future ground-truth lateral displacement $y_{\text{GT}}(3.0\text{ s}) > 4.0\text{ m}$) and executes a controlled single-variable command intervention (`"turn left"` $\to$ `"keep forward"`, [`artifacts/command_sensitivity/`](extensions/vla_handover_feasibility/artifacts/command_sensitivity/)) holding all 12 camera frames and initial kinematics fixed. Replacing `"turn left"` with `"keep forward"` changes `10/10` tokens in `scene_02` ($\Delta y(5\text{ s}) = -6.75\text{ m}$, $-34.1\%$, doubling admissible 1D R3B corridor steps from `3/7` to `6/7`) and `8/10` tokens in `scene_06` (reducing Step 1 $|a_{\text{lat}}|$ by **61.8%** and $\Delta y(5\text{ s})$ by $-2.55\text{ m}$, $-33.6\%$), while visual intersection geometry still pulls the trajectory left later in the horizon. *(Critical Interpretation Rule: the logged left-turn trajectory is not a valid ground-truth target for `"keep forward"`, so ADE/FDE shifts measure command sensitivity rather than policy quality.)*
+- **Scene 05 `C10` Numerical Robustness Audit (`EXT-VLA-C08`):** Audits the `scene_05` braking-to-acceleration reversal across **5 discrete derivative estimators** (`E1`–`E5`), **5 temporal windows** (`W1`–`W5`), and **3 illustrative diagnostic thresholds** (`2.0, 2.5, 3.0 m/s^2`, [`artifacts/c10_robustness/`](extensions/vla_handover_feasibility/artifacts/c10_robustness/)). The `C10` violation is **100% robust (`30/30` cells violated)** across all 5 estimators for windows $\ge 1.5\text{ s}$ at thresholds $\le 2.5\text{ m/s}^2$ (`peak |a_lon - a_x(0)| = 3.0967 m/s^2` on `E1/E2/E3`, `2.8516` on `E4`, `2.6825` on `E5`; 9 consecutive positive-acceleration steps $t = 1.0..5.0\text{ s}$), while sensitive to early windows ($t \le 1.0\text{ s}$) and to multi-step smoothing (`E4/E5`) at the `3.0 m/s^2` threshold (`45/75` total cells violated; `0/75` active-motion violations on the signed OOD ablation).
 
 ### 5. One-Command Offline Demo (`< 1 second` after install, no GPU or restricted data required)
 
@@ -185,12 +186,14 @@ To maintain strict scientific and assurance integrity, this project explicitly d
 ├── experiments/              # Legacy audit and analytical challenge documents (Phases A-H)
 ├── extensions/               # Research extensions preserving the frozen core baseline
 │   └── vla_handover_feasibility/   # Audited AutoVLA trajectory & R3B handover feasibility pipeline
-│       ├── artifacts/        # Evaluation summaries, claim register, ablation JSON, cached predictions, HTML/PDF report & PNG screenshots
+│       ├── artifacts/        # Evaluation summaries, claim register, command sensitivity, C10 robustness, HTML/PDF report & screenshots
 │       ├── data/             # Scene manifest, SHA-256 camera digest, AutoVLA action codebook (agent_vocab.pkl)
-│       ├── tests/            # 17 unit, synthetic-fixture, R3B-adapter, demo, and provenance tests
+│       ├── tests/            # 19 unit, synthetic-fixture, R3B-adapter, RQ1/RQ2 sensitivity, demo, and provenance tests
 │       ├── action_tokenizer.py     # Action token regex parser & SE(2) trajectory rollout decoder
 │       ├── browser_qa.py           # Headless Chromium visual QA & screenshot generator
+│       ├── c10_robustness.py       # RQ2 Scene 05 C10 numerical robustness audit (5 estimators x 5 windows x 3 thresholds)
 │       ├── cloud_gpu_runner.py     # Optional cloud GPU execution wrapper
+│       ├── command_sensitivity.py  # RQ1 controlled driving-command sensitivity runner & comparative evaluator
 │       ├── demo.py                 # One-command offline evaluation & interactive dashboard launcher
 │       ├── experiment_runner.py    # End-to-end evaluation & R3B counterfactual pipeline
 │       ├── extract_navsim_scenes.py # On-demand OpenScene camera frame extractor & SHA-256 verifier
@@ -267,18 +270,20 @@ The VLA extension is 100% reproducible offline from a fresh Git clone using only
 # Run the one-command offline evaluation, provenance audit, and dashboard generator
 python -m extensions.vla_handover_feasibility.demo --no-open
 
-# Run the 17 extension unit, synthetic-fixture, R3B-adapter, demo, and provenance tests
+# Run the 19 extension unit, synthetic-fixture, R3B-adapter, RQ1/RQ2, demo, and provenance tests
 pytest extensions/vla_handover_feasibility/tests -v
 
 # Or invoke the individual pipeline stages directly:
 python -m extensions.vla_handover_feasibility.experiment_runner --skip-inference
+python -m extensions.vla_handover_feasibility.command_sensitivity --skip-inference
+python -m extensions.vla_handover_feasibility.c10_robustness
 python -m extensions.vla_handover_feasibility.report_generator
 python -m extensions.vla_handover_feasibility.provenance_audit
 ```
 
 **Expected Extension Test Output:**
 ```text
-================= 17 passed in ~1.2s =================
+================= 19 passed in ~1.8s =================
 ```
 
 ### 2. Core Baseline Test Suite

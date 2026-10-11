@@ -740,6 +740,8 @@ def test_one_command_offline_demo_and_readme_assets() -> None:
     assert res["status"] == "PROVENANCE_AND_CONSISTENCY_VERIFIED"
     assert res["verified_scenes_count"] == 7
     assert res["total_csv_evaluation_rows"] == 1011
+    assert res["command_sensitivity_verified"] is True
+    assert res["c10_robustness_verified"] is True
     assert res["opened_browser"] is False
     assert Path(res["report_html_path"]).exists()
     assert Path(res["report_html_path"]).stat().st_size > 100_000
@@ -754,3 +756,163 @@ def test_one_command_offline_demo_and_readme_assets() -> None:
                 continue
             resolved = (readme_path.parent / target).resolve()
             assert resolved.exists(), f"Broken link or image {target!r} in {readme_path} -> {resolved}"
+
+
+# =============================================================================
+# 12. RQ1 Driving-Command Sensitivity & Isolation Tests
+# =============================================================================
+
+
+def test_rq1_command_only_intervention_isolation_and_canonical_immutability(tmp_path: Path) -> None:
+    from dataclasses import replace
+
+    from extensions.vla_handover_feasibility.command_sensitivity import (
+        CANONICAL_PREDICTION_SHA256,
+        DEFAULT_COMMAND_SENSITIVITY_DIR,
+        SUPPORTED_AUTOVLA_COMMANDS,
+        evaluate_command_sensitivity,
+        verify_canonical_predictions_unchanged,
+        verify_command_intervention_provenance,
+    )
+    from extensions.vla_handover_feasibility.provenance_audit import ProvenanceMismatchError
+
+    # 1. Verify all 7 canonical prediction JSON files are byte-for-byte unchanged
+    sha_map = verify_canonical_predictions_unchanged(DEFAULT_PREDICTIONS_DIR)
+    assert len(sha_map) == 7
+    assert sha_map == CANONICAL_PREDICTION_SHA256
+    assert SUPPORTED_AUTOVLA_COMMANDS == ("turn left", "keep forward", "turn right")
+
+    manifest = json.loads((DEFAULT_DATA_DIR / "scenes_manifest.json").read_text(encoding="utf-8"))
+    scene_by_id = {s["scene_id"]: s for s in manifest["scenes"]}
+    tok = AutoVLAActionTokenizer(DEFAULT_CODEBOOK_PATH)
+
+    s2_meta = scene_by_id["scene_02_stationary_lead_obstacle"]
+    s2_ctrl = load_prediction_artifact(DEFAULT_PREDICTIONS_DIR / "scene_02_stationary_lead_obstacle_fast.json")
+    s2_intv = load_prediction_artifact(DEFAULT_COMMAND_SENSITIVITY_DIR / "scene_02_keep_forward.json")
+
+    prov = verify_command_intervention_provenance(
+        scene_meta=s2_meta,
+        control_artifact=s2_ctrl,
+        intervention_artifact=s2_intv,
+        expected_intervention_command="keep forward",
+        action_tokenizer=tok,
+    )
+    assert prov["prompt_isolation_verified"] is True
+    assert prov["control_command"] == "turn left"
+    assert prov["intervention_command"] == "keep forward"
+
+    # Reject unsupported AutoVLA command strings (e.g. "unknown")
+    with pytest.raises(ProvenanceMismatchError, match="Unsupported AutoVLA command"):
+        verify_command_intervention_provenance(
+            scene_meta=s2_meta,
+            control_artifact=s2_ctrl,
+            intervention_artifact=s2_intv,
+            expected_intervention_command="unknown",
+            action_tokenizer=tok,
+        )
+
+    # Reject any non-command kinematic modification in the intervention artifact
+    bad_speed_intv = replace(s2_intv, ego_initial_speed_mps=s2_intv.ego_initial_speed_mps + 0.1)
+    with pytest.raises(ProvenanceMismatchError, match="Ego kinematic field ego_initial_speed_mps changed"):
+        verify_command_intervention_provenance(
+            scene_meta=s2_meta,
+            control_artifact=s2_ctrl,
+            intervention_artifact=bad_speed_intv,
+            expected_intervention_command="keep forward",
+            action_tokenizer=tok,
+        )
+
+    # Reject prompt text that changes anything other than the driving command substring
+    bad_prompt_intv = replace(s2_intv, prompt_text=s2_intv.prompt_text + " extra text")
+    with pytest.raises(ProvenanceMismatchError, match="Prompt isolation violated"):
+        verify_command_intervention_provenance(
+            scene_meta=s2_meta,
+            control_artifact=s2_ctrl,
+            intervention_artifact=bad_prompt_intv,
+            expected_intervention_command="keep forward",
+            action_tokenizer=tok,
+        )
+
+    # Verify full RQ1 comparative evaluation metrics and R3B corridor non-applicability
+    cmd_summary = evaluate_command_sensitivity(
+        output_dir=tmp_path / "cmd_sens",
+        force_recompute_inference=False,
+    )
+    assert cmd_summary["canonical_predictions_verified_unchanged"] is True
+    assert "not a valid ground-truth target" in cmd_summary["critical_interpretation_rule"]
+
+    s2_res = cmd_summary["scenes"]["scene_02_stationary_lead_obstacle"]
+    assert s2_res["control_turn_left"]["action_codebook_indices"] == [418, 728, 418, 728, 1506, 724, 841, 722, 684, 1429]
+    assert s2_res["intervention_keep_forward"]["action_codebook_indices"] == [1172, 42, 598, 1506, 1806, 1074, 1257, 522, 1475, 1814]
+    assert s2_res["comparative_metrics"]["tokens_changed_count"] == 10
+    assert s2_res["comparative_metrics"]["first_divergent_step"] == 1
+    assert math.isclose(s2_res["comparative_metrics"]["delta_final_y_m_intv_minus_ctrl"], -6.7527, abs_tol=1e-3)
+    assert s2_res["r3b_impact"]["observed_schedule_control_turn_left"]["admissible_count"] == 3
+    assert s2_res["r3b_impact"]["observed_schedule_intervention_keep_forward"]["admissible_count"] == 6
+    assert (
+        s2_res["r3b_impact"]["observed_schedule_intervention_keep_forward"]["p1_dry_mu1.0_by_tau"]["3.0s"]["status"]
+        == "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE"
+    )
+
+    s6_res = cmd_summary["scenes"]["scene_06_intersection_turn_maneuver"]
+    assert s6_res["control_turn_left"]["action_codebook_indices"] == [773, 1466, 1898, 115, 1898, 39, 115, 1108, 672, 646]
+    assert s6_res["intervention_keep_forward"]["action_codebook_indices"] == [1205, 1937, 1898, 13, 534, 39, 39, 1188, 120, 5]
+    assert s6_res["comparative_metrics"]["tokens_changed_count"] == 8
+    assert s6_res["comparative_metrics"]["first_divergent_step"] == 1
+    assert math.isclose(s6_res["comparative_metrics"]["delta_final_y_m_intv_minus_ctrl"], -2.5546, abs_tol=1e-3)
+    assert s6_res["r3b_impact"]["observed_schedule_control_turn_left"]["admissible_count"] == 0
+    assert s6_res["r3b_impact"]["observed_schedule_intervention_keep_forward"]["admissible_count"] == 0
+    assert s6_res["r3b_impact"]["counterfactual_schedule_control_turn_left"]["admissible_count"] == 4
+    assert s6_res["r3b_impact"]["counterfactual_schedule_intervention_keep_forward"]["admissible_count"] == 5
+
+
+# =============================================================================
+# 13. RQ2 Scene 05 C10 Numerical Robustness Audit Tests
+# =============================================================================
+
+
+def test_rq2_scene_05_c10_numerical_robustness_audit(tmp_path: Path) -> None:
+    from extensions.vla_handover_feasibility.c10_robustness import (
+        DIAGNOSTIC_THRESHOLDS_MPS2,
+        TEMPORAL_WINDOWS,
+        compute_all_derivative_estimators,
+        run_c10_robustness_audit,
+    )
+
+    assert DIAGNOSTIC_THRESHOLDS_MPS2 == (2.0, 2.5, 3.0)
+    assert len(TEMPORAL_WINDOWS) == 5
+
+    s5_art = load_prediction_artifact(DEFAULT_PREDICTIONS_DIR / "scene_05_active_braking_deceleration_fast.json")
+    series = compute_all_derivative_estimators(
+        waypoints=s5_art.predicted_waypoints,
+        initial_speed_mps=s5_art.ego_initial_speed_mps,
+        initial_vx_mps=s5_art.ego_vx_mps,
+    )
+    assert set(series.keys()) == {
+        "E1_chord_backward_diff",
+        "E2_ego_x_taylor_second_diff",
+        "E3_body_frame_vx_backward_diff",
+        "E4_central_velocity_diff",
+        "E5_three_step_moving_average",
+    }
+
+    c10_summary = run_c10_robustness_audit(output_dir=tmp_path / "c10_rob")
+    assert (
+        c10_summary["overall_classification"]
+        == "SENSITIVE_TO_TEMPORAL_WINDOW_AND_SMOOTHED_THRESHOLD_ROBUST_FOR_WINDOWS_GE_1P5S_AT_LE_2P5MPS2"
+    )
+    counts = c10_summary["grid_violation_counts"]
+    assert counts["canonical_unsigned_total_cells"] == 75
+    assert counts["canonical_unsigned_violated_cells"] == 45
+    assert counts["canonical_windows_ge_1.5s_thresholds_le_2.5_cells"] == 30
+    assert counts["canonical_windows_ge_1.5s_thresholds_le_2.5_violated"] == 30
+    assert counts["signed_ablation_active_motion_total_cells"] == 75
+    assert counts["signed_ablation_active_motion_violated_cells"] == 0
+
+    sanity = c10_summary["sanity_checks_d4"]
+    assert sanity["heading_distortion_check"]["distorts_longitudinal_accel"] is False
+    assert sanity["heading_distortion_check"]["max_diff_e1_chord_vs_e2_pure_x_steps_2_to_10_mps2"] < 0.015
+    assert sanity["heading_distortion_check"]["max_diff_e1_chord_vs_e3_body_vx_all_steps_mps2"] < 0.002
+    assert sanity["quantization_vs_persistent_reversal_check"]["positive_accel_step_count"] == 9
+    assert sanity["quantization_vs_persistent_reversal_check"]["is_single_step_quantization_artifact"] is False
+

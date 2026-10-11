@@ -59,6 +59,8 @@ def verify_scene_and_prediction_provenance(
     artifact_path: str | Path | None = None,
     manifest_sha256: str | None = None,
     require_raw_images: bool = False,
+    expected_driving_command: str | None = None,
+    expected_filename: str | None = None,
 ) -> dict[str, Any]:
     """Verify all provenance and mathematical alignment invariants between `scene_meta` and `artifact`.
 
@@ -83,7 +85,7 @@ def verify_scene_and_prediction_provenance(
     artifact_sha: str | None = None
     if artifact_path is not None:
         ap = Path(artifact_path)
-        expected_name = f"{artifact.scene_id}_{artifact.inference_mode}.json"
+        expected_name = expected_filename or f"{artifact.scene_id}_{artifact.inference_mode}.json"
         if ap.name != expected_name:
             raise ProvenanceMismatchError(
                 f"[{sid}] Prediction artifact filename {ap.name!r} does not match expected {expected_name!r}"
@@ -175,14 +177,15 @@ def verify_scene_and_prediction_provenance(
         raise ProvenanceMismatchError(
             f"[{sid}] Ego state vector (vx, vy, ay) mismatch between manifest and prediction artifact"
         )
-    if str(ego["effective_driving_command"]) != artifact.driving_command:
+    target_cmd = expected_driving_command if expected_driving_command is not None else str(ego["effective_driving_command"])
+    if target_cmd != artifact.driving_command:
         raise ProvenanceMismatchError(
-            f"[{sid}] Driving command mismatch: manifest={ego['effective_driving_command']!r} vs artifact={artifact.driving_command!r}"
+            f"[{sid}] Driving command mismatch: expected={target_cmd!r} vs artifact={artifact.driving_command!r}"
         )
 
     expected_v_prompt = f"velocity is {float(ego['speed_mps']):.2f} m/s"
     expected_a_prompt = f"acceleration is {float(ego['accel_norm_mps2']):.2f} m/s^2"
-    expected_cmd_prompt = f"driving command is {ego['effective_driving_command']}."
+    expected_cmd_prompt = f"driving command is {target_cmd}."
     for substr in (expected_v_prompt, expected_a_prompt, expected_cmd_prompt):
         if substr not in artifact.prompt_text:
             raise ProvenanceMismatchError(
@@ -380,7 +383,9 @@ def run_provenance_audit(
     ext_root: str | Path | None = None,
     require_raw_images: bool = False,
 ) -> dict[str, Any]:
-    """Run the 11-point provenance and consistency audit across all 7 scenes.
+    """Run the 11-point provenance and consistency audit across all 7 scenes,
+    plus the controlled command-sensitivity interventions (RQ1) and Scene 05 C10
+    numerical robustness audit (RQ2).
 
     Explicitly distinguishes checks verified offline from publicly redistributable
     repository artifacts versus checks that depend on externally obtained raw camera
@@ -399,12 +404,19 @@ def run_provenance_audit(
     cam_manifest_sha = sha256_file(cam_sha_path) if cam_sha_path.exists() else None
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    scene_by_id = {s["scene_id"]: s for s in manifest.get("scenes", [])}
     tok = AutoVLAActionTokenizer(DEFAULT_CODEBOOK_PATH)
 
+    from extensions.vla_handover_feasibility.command_sensitivity import (
+        COMMAND_SENSITIVITY_SPECS,
+        verify_canonical_predictions_unchanged,
+    )
     from extensions.vla_handover_feasibility.vla_inference import (
         DEFAULT_AUTOVLA_MODEL_DIR,
         load_prediction_artifact,
     )
+
+    canonical_sha_map = verify_canonical_predictions_unchanged(pred_dir)
 
     scene_reports = []
     total_live_jpegs = 0
@@ -426,6 +438,49 @@ def run_provenance_audit(
         total_live_jpegs += int(rep["camera_live_jpegs_present"])
         scene_reports.append(rep)
 
+    # Audit controlled command-sensitivity interventions (RQ1)
+    cmd_sens_dir = root_dir / "artifacts" / "command_sensitivity"
+    cmd_sens_reports: dict[str, Any] = {}
+    for spec in COMMAND_SENSITIVITY_SPECS:
+        sid = spec["scene_id"]
+        out_fn = spec["intervention_filename"]
+        int_path = cmd_sens_dir / out_fn
+        if not int_path.exists():
+            raise ProvenanceMismatchError(f"Missing controlled command-sensitivity artifact: {int_path}")
+        int_art = load_prediction_artifact(int_path)
+        int_rep = verify_scene_and_prediction_provenance(
+            scene_meta=scene_by_id[sid],
+            artifact=int_art,
+            data_root=data_root,
+            action_tokenizer=tok,
+            artifact_path=int_path,
+            manifest_sha256=manifest_sha,
+            require_raw_images=require_raw_images,
+            expected_driving_command=spec["intervention_command"],
+            expected_filename=out_fn,
+        )
+        cmd_sens_reports[out_fn] = {
+            "scene_id": sid,
+            "artifact_category": "CONTROLLED_COMMAND_SENSITIVITY_INTERVENTION",
+            "control_command": spec["control_command"],
+            "intervention_command": spec["intervention_command"],
+            "sha256": int_rep["prediction_artifact_sha256"],
+            "action_codebook_indices": int_rep["action_codebook_indices"],
+            "verified": True,
+        }
+
+    cmd_sens_summary_path = cmd_sens_dir / "summary.json"
+    cmd_sens_csv_path = cmd_sens_dir / "comparison.csv"
+    if not cmd_sens_summary_path.exists() or not cmd_sens_csv_path.exists():
+        raise ProvenanceMismatchError("Missing command-sensitivity summary.json or comparison.csv")
+
+    # Audit Scene 05 C10 numerical robustness matrix (RQ2)
+    c10_dir = root_dir / "artifacts" / "c10_robustness"
+    c10_summary_path = c10_dir / "c10_robustness_summary.json"
+    c10_csv_path = c10_dir / "c10_robustness_matrix.csv"
+    if not c10_summary_path.exists() or not c10_csv_path.exists():
+        raise ProvenanceMismatchError("Missing C10 robustness summary.json or c10_robustness_matrix.csv")
+
     consistency = verify_evaluation_and_dashboard_consistency(
         manifest_path=manifest_path,
         summary_path=summary_path,
@@ -446,9 +501,21 @@ def run_provenance_audit(
         "codebook_sha256": codebook_sha,
         "camera_sha256_manifest_digest": cam_manifest_sha,
         "verified_scenes_count": len(scene_reports),
+        "canonical_predictions_sha256": canonical_sha_map,
         "future_displacement_command_leakage_flagged_scenes": leakage_flagged_scenes,
+        "controlled_command_sensitivity_interventions": {
+            "artifacts": cmd_sens_reports,
+            "summary_sha256": sha256_file(cmd_sens_summary_path),
+            "comparison_csv_sha256": sha256_file(cmd_sens_csv_path),
+        },
+        "scene_05_c10_robustness_audit": {
+            "summary_sha256": sha256_file(c10_summary_path),
+            "matrix_csv_sha256": sha256_file(c10_csv_path),
+        },
         "offline_reproducible_from_public_artifacts": {
             "all_7_genuine_predictions_present_and_sha256_verified": True,
+            "controlled_command_sensitivity_interventions_verified": len(cmd_sens_reports) == 2,
+            "scene_05_c10_robustness_matrix_verified": True,
             "action_token_regex_and_se2_codebook_decoding_exact": True,
             "ade_fde_ground_truth_alignment_exact": True,
             "c1_to_c10_physical_feasibility_and_r3b_margins_recomputable": True,
@@ -469,7 +536,8 @@ def run_provenance_audit(
             ).exists(),
             "autovla_checkpoint_note": (
                 "Live neural-network forward generation requires Zewei-Zhou/AutoVLA (AutoVLA_PDMS_89.ckpt, 8.14 GB bfloat16). "
-                "Offline evaluation uses the 7 committed genuine prediction artifacts in artifacts/predictions/."
+                "Offline evaluation uses the 7 committed genuine prediction artifacts in artifacts/predictions/ "
+                "plus the 2 controlled command-intervention artifacts in artifacts/command_sensitivity/."
             ),
         },
         "consistency": consistency,

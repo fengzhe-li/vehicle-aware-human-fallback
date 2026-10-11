@@ -483,6 +483,28 @@ def evaluate_all_predictions_and_counterfactuals(
             ],
         }
 
+    # Evaluate RQ1 Controlled Driving-Command Sensitivity (Scene 02 & Scene 06: turn left -> keep forward)
+    from extensions.vla_handover_feasibility.command_sensitivity import (
+        evaluate_command_sensitivity,
+    )
+    from extensions.vla_handover_feasibility.c10_robustness import (
+        run_c10_robustness_audit,
+    )
+
+    command_sensitivity_summary = evaluate_command_sensitivity(
+        manifest_path=manifest_file,
+        predictions_dir=pred_dir,
+        output_dir=out_dir / "command_sensitivity",
+        force_recompute_inference=False,
+    )
+
+    # Evaluate RQ2 Scene 05 C10 Numerical Robustness Audit (D1-D5)
+    c10_robustness_summary = run_c10_robustness_audit(
+        predictions_dir=pred_dir,
+        ablation_path=ablation_s05_path,
+        output_dir=out_dir / "c10_robustness",
+    )
+
     # Save tabular CSV
     csv_path = out_dir / "counterfactual_comparison.csv"
     if csv_rows:
@@ -507,7 +529,7 @@ def evaluate_all_predictions_and_counterfactuals(
 
     summary_payload = {
         "extension_name": "VLA-Informed Handover Feasibility Analysis",
-        "extension_version": "0.2.0",
+        "extension_version": "0.3.0",
         "manifest_sha256": manifest_sha,
         "codebook_sha256": codebook_sha,
         "central_research_question": (
@@ -539,6 +561,8 @@ def evaluate_all_predictions_and_counterfactuals(
             "Obstacle distance and TTC are never inferred from camera images alone; scenes without observed 3D in-lane obstacle annotations require explicit counterfactual obstacle assumptions or return INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE.",
             "No complete scenario state is labelled as purely observed if it incorporates a counterfactual environmental obstacle distance or a static projection of a moving lead vehicle.",
             "Driving-command future-information leakage limitation: in scene_02_stationary_lead_obstacle (and scene_06_intersection_turn_maneuver), the effective 'turn left' command corresponds to future ground-truth lateral displacement (y_GT(3.0 s) = +4.5128 m in scene_02; +4.0889 m in scene_06). Resolving an unknown raw command from future ground-truth displacement—or conditioning on NAVSIM/OpenScene future-route-derived commands generally—constitutes potential future-information leakage for trajectory-prediction evaluation; affected results are therefore not presented as strictly leakage-free blind predictions.",
+            "Controlled command-sensitivity interpretation rule (RQ1 / EXT-VLA-C07): in scene_02 and scene_06, the logged human trajectory is a left-turn maneuver and is NOT a valid ground-truth target for a deliberately different 'keep forward' intervention command; ADE/FDE differences under 'keep forward' quantify command sensitivity relative to the recorded turning trajectory, NOT policy quality or driving safety.",
+            "Scene 05 C10 numerical robustness boundary (RQ2 / EXT-VLA-C08): the braking-to-acceleration reversal violation is 100% robust across all 5 discrete derivative estimators (E1-E5) for windows >= 1.5 s at thresholds <= 2.5 m/s^2 (30/30 cells violated), but sensitive to early windows (0.0-0.5 s passes 0/15; 0.0-1.0 s violates only at 2.0 m/s^2) and to multi-step smoothing at the 3.0 m/s^2 threshold.",
             "The 1,011 rows in counterfactual_comparison.csv represent parameter-sweep evaluations across 7 real scenes, 7 takeover request times, 3 policy branches (P0, P1, P2), and 2 friction levels (mu in {1.0, 0.5}), NOT 1,011 independent driving observations.",
             "The original 42-claim ledger (research/R5A_CLAIM_LEDGER.csv), frozen results, thesis figures, and counterfactual policy definitions remain completely unmodified.",
         ],
@@ -552,6 +576,8 @@ def evaluate_all_predictions_and_counterfactuals(
             "total_csv_evaluation_rows": len(csv_rows),
         },
         "scene_05_signed_accel_ablation": scene_05_ablation_summary,
+        "command_sensitivity": command_sensitivity_summary,
+        "scene_05_c10_robustness": c10_robustness_summary,
         "records": evaluated_records,
     }
 
@@ -674,6 +700,45 @@ def write_extension_claim_register(summary_payload: dict[str, Any], out_csv_path
             "scope_and_limitations": (
                 "Recorded inference inputs are preserved unmodified for provenance integrity, but ADE/FDE metrics on command-conditioned scenes "
                 "(especially scene_02 and scene_06) must not be interpreted as strictly leakage-free blind trajectory predictions."
+            ),
+        },
+        {
+            "extension_claim_id": "EXT-VLA-C07",
+            "phase": "RQ1 (Phase B/C)",
+            "category": "DRIVING_COMMAND_SENSITIVITY",
+            "claim_statement": (
+                "Replacing the high-level driving command from 'turn left' to 'keep forward' while holding all 12 camera frames, initial kinematics, "
+                "and greedy decoding fixed alters 10/10 action tokens in scene_02 (reducing 5.0 s lateral displacement by -6.75 m [-34.1%], "
+                "19.82 m -> 13.06 m, and extending 1D R3B corridor admissibility from tau_req <= 1.0 s [3/7] to tau_req <= 2.5 s [6/7]) and "
+                "8/10 action tokens in scene_06 (reducing Step 1 lateral acceleration by 61.8% [1.3711 -> 0.5232 m/s^2] and 5.0 s lateral displacement "
+                "by -2.55 m [-33.6%], 7.60 m -> 5.04 m), while visual intersection geometry still induces a delayed leftward curve later in the horizon."
+            ),
+            "evidence_artifact": "extensions/vla_handover_feasibility/artifacts/command_sensitivity/summary.json",
+            "verification_status": "VERIFIED",
+            "scope_and_limitations": (
+                "Critical Interpretation Rule: the logged human trajectory in scene_02 and scene_06 is a left-turn maneuver and is NOT a valid "
+                "ground-truth target for a 'keep forward' command; ADE/FDE shifts under 'keep forward' (scene_02: 2.42 -> 1.54 m ADE, 3.47 -> 3.86 m FDE; "
+                "scene_06: 0.66 -> 1.78 m ADE, 1.88 -> 3.70 m FDE) measure command sensitivity relative to the recorded turn, not policy quality or safety."
+            ),
+        },
+        {
+            "extension_claim_id": "EXT-VLA-C08",
+            "phase": "RQ2 (Phase D)",
+            "category": "C10_NUMERICAL_ROBUSTNESS_AUDIT",
+            "claim_statement": (
+                "Across 5 discrete derivative estimators on the native 0.5 s grid (E1 chord-speed backward difference, E2 pure ego-x Taylor/central second difference, "
+                "E3 body-frame projected velocity difference, E4 1.0 s central velocity difference, E5 3-step moving average), 5 temporal windows, and "
+                "3 illustrative thresholds (2.0, 2.5, 3.0 m/s^2), the scene_05 C10 braking-to-acceleration reversal is 100% robust (30/30 cells violated) "
+                "for all windows >= 1.5 s at thresholds <= 2.5 m/s^2 (peak |a_lon - a_x(0)| = 3.0967 m/s^2 on E1/E2/E3, 2.8516 m/s^2 on E4, "
+                "2.6825 m/s^2 on E5, with 9 consecutive positive-acceleration steps t = 1.0..5.0 s), while remaining sensitive to early windows "
+                "(0.0-0.5 s has 0/15 violations; 0.0-1.0 s violates only at 2.0 m/s^2) and to multi-step smoothing at the 3.0 m/s^2 threshold (45/75 total cells violated)."
+            ),
+            "evidence_artifact": "extensions/vla_handover_feasibility/artifacts/c10_robustness/c10_robustness_summary.json",
+            "verification_status": "VERIFIED",
+            "scope_and_limitations": (
+                "Thresholds 2.0, 2.5, and 3.0 m/s^2 are illustrative numerical-sensitivity bounds on the 0.5 s waypoint grid, not universal biomechanics "
+                "or ISO safety standards. Heading distortion on Steps 2-10 is <= 0.01301 m/s^2 (E1 vs E2, < 0.42%) and <= 0.00120 m/s^2 (E1 vs E3, < 0.04%); "
+                "the saved OOD signed-acceleration rollout ('-1.55 m/s^2') has 0/75 active-motion violations."
             ),
         },
     ]

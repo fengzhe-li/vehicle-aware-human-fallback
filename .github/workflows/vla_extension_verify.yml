@@ -39,13 +39,19 @@ jobs:
         run: |
           python -m extensions.vla_handover_feasibility.demo --no-open
 
-      - name: Verify dashboard, evaluation artifacts, and README screenshot links
+      - name: Verify dashboard, evaluation artifacts, RQ1/RQ2 outputs, and README screenshot links
         run: |
           test -s extensions/vla_handover_feasibility/artifacts/report/index.html
           test -s extensions/vla_handover_feasibility/artifacts/evaluation_summary.json
           test -s extensions/vla_handover_feasibility/artifacts/counterfactual_comparison.csv
           test -s extensions/vla_handover_feasibility/artifacts/extension_claim_register.csv
           test -s extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json
+          test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/scene_02_keep_forward.json
+          test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/scene_06_keep_forward.json
+          test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/comparison.csv
+          test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/summary.json
+          test -s extensions/vla_handover_feasibility/artifacts/c10_robustness/c10_robustness_matrix.csv
+          test -s extensions/vla_handover_feasibility/artifacts/c10_robustness/c10_robustness_summary.json
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/01_executive_findings_and_overview.png
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/03_scene_03_urban_lead_r3b_handover.png

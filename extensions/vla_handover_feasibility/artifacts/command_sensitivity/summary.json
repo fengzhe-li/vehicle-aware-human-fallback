@@ -1,0 +1,2517 @@
+{
+  "experiment_id": "AUTOVLA_COMMAND_SENSITIVITY_RQ1",
+  "baseline_commit": "7225af0e72a415a6a73d3d86acaf2bdc8f0c7c8a",
+  "supported_autovla_commands": [
+    "turn left",
+    "keep forward",
+    "turn right"
+  ],
+  "canonical_predictions_verified_unchanged": true,
+  "canonical_prediction_sha256": {
+    "scene_01_high_speed_open_road_fast.json": "776a1f5121dd21d1cd2949f2e756a3c2efa6b6171bbec561718051bf663423ca",
+    "scene_02_stationary_lead_obstacle_fast.json": "0d257927c044da1f59149ced11ae9d5fc0cf937af0a89fd99115f84fe7d182d4",
+    "scene_03_close_urban_lead_following_fast.json": "5a516928de7a3c6c2732c0b4ede31d5e486919315a34fbe22ab2ce291b777aa2",
+    "scene_04_fast_arterial_lead_vehicle_fast.json": "de61ef1c170292347f054f63af790c2ae2adc78c3c17d9900f7bd1ffed0bd746",
+    "scene_05_active_braking_deceleration_fast.json": "b54884da70ccccfe516202595a44124c596af016b2d93d480dc81fedd2e81fe3",
+    "scene_06_intersection_turn_maneuver_fast.json": "a53c5470a8902ecdfda828d65c70ae9a86ceaf620501ad03895302eabc918fd5",
+    "scene_07_stationary_ego_baseline_fast.json": "88f5f4edd77fc6139d1eed8b0f4a408fca7764b32d45f15d8dc6862ed780e5a8"
+  },
+  "critical_interpretation_rule": "The logged human trajectory is associated with the actual left-turn maneuver in Scene 02 and Scene 06. It is not a valid ground-truth target for a deliberately different `keep forward` command. Changes in ADE/FDE under `keep forward` measure command sensitivity relative to the recorded trajectory, not direct evidence that the intervention produced a better or worse driving policy.",
+  "scenes": {
+    "scene_02_stationary_lead_obstacle": {
+      "scene_id": "scene_02_stationary_lead_obstacle",
+      "frame_token": "3cacb287d398542f",
+      "scene_name": "log-0019-scene-0013",
+      "map_location": "us-nv-las-vegas-strip",
+      "ego_initial_speed_mps": 6.947,
+      "ego_initial_accel_mps2": 1.3035,
+      "provenance": {
+        "scene_id": "scene_02_stationary_lead_obstacle",
+        "frame_token": "3cacb287d398542f",
+        "artifact_role": "CONTROLLED_COMMAND_INTERVENTION",
+        "control_command": "turn left",
+        "intervention_command": "keep forward",
+        "prompt_isolation_verified": true,
+        "control_artifact_sha256": "0d257927c044da1f59149ced11ae9d5fc0cf937af0a89fd99115f84fe7d182d4",
+        "intervention_artifact_sha256": "0aa56f4d354737b67f4297f6b0039a44aa42bb2eebbd498fae3908b75da571d1",
+        "control_ade_vs_logged_gt_m": 2.4187,
+        "control_fde_vs_logged_gt_m": 3.4684,
+        "intervention_ade_vs_logged_gt_m": 1.5385,
+        "intervention_fde_vs_logged_gt_m": 3.8597
+      },
+      "critical_interpretation_notice": "The logged human trajectory reflects the actual human left-turn maneuver. It is NOT a valid ground-truth target for a deliberately different `keep forward` command. ADE/FDE changes under `keep forward` measure command sensitivity relative to the recorded turning reference, not driving policy superiority or safety.",
+      "control_turn_left": {
+        "artifact_path": "artifacts/predictions/scene_02_stationary_lead_obstacle_fast.json",
+        "artifact_sha256": "0d257927c044da1f59149ced11ae9d5fc0cf937af0a89fd99115f84fe7d182d4",
+        "driving_command": "turn left",
+        "prompt_text": "Suppose you are driving, and I'm providing you with the image captured by the car's <FRONT VIEW>, <FRONT LEFT VIEW>, <FRONT RIGHT VIEW>, theego velocity is 6.95 m/s, the ego acceleration is 1.35 m/s^2, and the driving command is turn left. Generate the planned trajectory for the next 5 seconds.",
+        "action_codebook_indices": [
+          418,
+          728,
+          418,
+          728,
+          1506,
+          724,
+          841,
+          722,
+          684,
+          1429
+        ],
+        "inference_latency_ms": 355750.0,
+        "device": "cpu",
+        "ade_vs_logged_left_turn_gt_m": 2.4187,
+        "fde_vs_logged_left_turn_gt_m": 3.4684,
+        "final_displacement_x_m": 29.2772,
+        "final_displacement_y_m": 19.816,
+        "final_heading_rad": 1.1067,
+        "final_heading_deg": 63.41,
+        "kinematics_summary": {
+          "min_speed_mps": 6.7443,
+          "max_speed_mps": 8.6721,
+          "min_lon_accel_mps2": -0.4053,
+          "max_lon_accel_mps2": 0.8955,
+          "peak_abs_lon_accel_mps2": 0.8955,
+          "max_braking_demand_mps2": 0.4053,
+          "max_abs_lat_accel_mps2": 2.2721,
+          "max_total_accel_mps2": 2.3664,
+          "max_abs_yaw_rate_radps": 0.2823,
+          "total_path_length_m": 37.2438
+        },
+        "feasibility_dry_mu1.0": "CONSTRAINTS_SATISFIED",
+        "feasibility_wet_mu0.5": "CONSTRAINTS_VIOLATED",
+        "failed_checks_dry": [],
+        "failed_checks_wet": [
+          "C7_LATERAL_ACCELERATION_LIMIT"
+        ],
+        "maneuver": {
+          "maneuver_label": "LEFT_TURN_OR_LEFT_LANE_DEPARTURE",
+          "final_x_m": 29.2772,
+          "final_y_m": 19.816,
+          "final_heading_rad": 1.1067,
+          "final_heading_deg": 63.41,
+          "max_abs_y_m": 19.816,
+          "max_abs_heading_rad": 1.1067,
+          "max_abs_heading_deg": 63.41,
+          "remains_in_r3b_longitudinal_corridor_all_5s": false,
+          "first_corridor_exit_step": 3,
+          "first_corridor_exit_tau_s": 1.5
+        },
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 3.36392,
+            "y_m": 0.23565,
+            "heading_rad": 0.08713
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 6.72802,
+            "y_m": 0.8119,
+            "heading_rad": 0.21846
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 9.96091,
+            "y_m": 1.77102,
+            "heading_rad": 0.3056
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 13.12015,
+            "y_m": 3.06267,
+            "heading_rad": 0.43693
+          },
+          {
+            "step": 5,
+            "t_s": 2.5,
+            "x_m": 16.2712,
+            "y_m": 4.87879,
+            "heading_rad": 0.53788
+          },
+          {
+            "step": 6,
+            "t_s": 3.0,
+            "x_m": 19.21672,
+            "y_m": 7.04969,
+            "heading_rad": 0.65963
+          },
+          {
+            "step": 7,
+            "t_s": 3.5,
+            "x_m": 22.09544,
+            "y_m": 9.59708,
+            "heading_rad": 0.74706
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 24.73678,
+            "y_m": 12.61956,
+            "heading_rad": 0.88823
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 27.14261,
+            "y_m": 16.04178,
+            "heading_rad": 0.97571
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 29.27719,
+            "y_m": 19.816,
+            "heading_rad": 1.10671
+          }
+        ]
+      },
+      "intervention_keep_forward": {
+        "artifact_path": "artifacts/command_sensitivity/scene_02_keep_forward.json",
+        "artifact_sha256": "0aa56f4d354737b67f4297f6b0039a44aa42bb2eebbd498fae3908b75da571d1",
+        "driving_command": "keep forward",
+        "prompt_text": "Suppose you are driving, and I'm providing you with the image captured by the car's <FRONT VIEW>, <FRONT LEFT VIEW>, <FRONT RIGHT VIEW>, theego velocity is 6.95 m/s, the ego acceleration is 1.35 m/s^2, and the driving command is keep forward. Generate the planned trajectory for the next 5 seconds.",
+        "action_codebook_indices": [
+          1172,
+          42,
+          598,
+          1506,
+          1806,
+          1074,
+          1257,
+          522,
+          1475,
+          1814
+        ],
+        "inference_latency_ms": 49734.65,
+        "device": "mps",
+        "peak_rss_mb": 1013.67,
+        "swap_used_mb": 23209.88,
+        "ade_vs_logged_left_turn_gt_m": 1.5385,
+        "fde_vs_logged_left_turn_gt_m": 3.8597,
+        "final_displacement_x_m": 32.1131,
+        "final_displacement_y_m": 13.0633,
+        "final_heading_rad": 0.9657,
+        "final_heading_deg": 55.33,
+        "kinematics_summary": {
+          "min_speed_mps": 6.8257,
+          "max_speed_mps": 7.7416,
+          "min_lon_accel_mps2": -0.2927,
+          "max_lon_accel_mps2": 0.7352,
+          "peak_abs_lon_accel_mps2": 0.7352,
+          "max_braking_demand_mps2": 0.2927,
+          "max_abs_lat_accel_mps2": 2.3952,
+          "max_total_accel_mps2": 2.3964,
+          "max_abs_yaw_rate_radps": 0.3127,
+          "total_path_length_m": 36.5303
+        },
+        "feasibility_dry_mu1.0": "CONSTRAINTS_SATISFIED",
+        "feasibility_wet_mu0.5": "CONSTRAINTS_VIOLATED",
+        "failed_checks_dry": [],
+        "failed_checks_wet": [
+          "C7_LATERAL_ACCELERATION_LIMIT"
+        ],
+        "maneuver": {
+          "maneuver_label": "LEFT_TURN_OR_LEFT_LANE_DEPARTURE",
+          "final_x_m": 32.1131,
+          "final_y_m": 13.0633,
+          "final_heading_rad": 0.9657,
+          "final_heading_deg": 55.33,
+          "max_abs_y_m": 13.0633,
+          "max_abs_heading_rad": 0.9657,
+          "max_abs_heading_deg": 55.33,
+          "remains_in_r3b_longitudinal_corridor_all_5s": false,
+          "first_corridor_exit_step": 6,
+          "first_corridor_exit_tau_s": 3.0
+        },
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 3.41263,
+            "y_m": 0.03985,
+            "heading_rad": 0.01628
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 6.93735,
+            "y_m": 0.09627,
+            "heading_rad": 0.01603
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 10.43896,
+            "y_m": 0.3037,
+            "heading_rad": 0.07404
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 14.02948,
+            "y_m": 0.883,
+            "heading_rad": 0.17498
+          },
+          {
+            "step": 5,
+            "t_s": 2.5,
+            "x_m": 17.55096,
+            "y_m": 1.74885,
+            "heading_rad": 0.26613
+          },
+          {
+            "step": 6,
+            "t_s": 3.0,
+            "x_m": 20.8852,
+            "y_m": 2.97685,
+            "heading_rad": 0.4225
+          },
+          {
+            "step": 7,
+            "t_s": 3.5,
+            "x_m": 24.11271,
+            "y_m": 4.86051,
+            "heading_rad": 0.56191
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 27.13529,
+            "y_m": 7.19742,
+            "heading_rad": 0.68495
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 29.81016,
+            "y_m": 9.95207,
+            "heading_rad": 0.8409
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 32.11306,
+            "y_m": 13.06329,
+            "heading_rad": 0.96566
+          }
+        ]
+      },
+      "ground_truth_logged_maneuver": {
+        "final_x_m": 30.7328,
+        "final_y_m": 16.6678,
+        "final_heading_rad": 1.261,
+        "final_heading_deg": 72.25,
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 3.5195,
+            "y_m": 0.0498,
+            "heading_rad": 0.0308
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 7.1471,
+            "y_m": 0.2441,
+            "heading_rad": 0.0855
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 10.7851,
+            "y_m": 0.6782,
+            "heading_rad": 0.1621
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 14.3173,
+            "y_m": 1.4813,
+            "heading_rad": 0.285
+          },
+          {
+            "step": 5,
+            "t_s": 2.5,
+            "x_m": 17.7338,
+            "y_m": 2.7378,
+            "heading_rad": 0.4226
+          },
+          {
+            "step": 6,
+            "t_s": 3.0,
+            "x_m": 21.0011,
+            "y_m": 4.5128,
+            "heading_rad": 0.5702
+          },
+          {
+            "step": 7,
+            "t_s": 3.501,
+            "x_m": 24.0511,
+            "y_m": 6.819,
+            "heading_rad": 0.7226
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 26.792,
+            "y_m": 9.6084,
+            "heading_rad": 0.8871
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 29.074,
+            "y_m": 12.9082,
+            "heading_rad": 1.0689
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 30.7328,
+            "y_m": 16.6678,
+            "heading_rad": 1.261
+          }
+        ]
+      },
+      "comparative_metrics": {
+        "tokens_changed_count": 10,
+        "first_divergent_step": 1,
+        "mean_l2_trajectory_divergence_m": 3.7685,
+        "final_step_l2_divergence_m": 7.324,
+        "delta_final_x_m_intv_minus_ctrl": 2.8359,
+        "delta_final_y_m_intv_minus_ctrl": -6.7527,
+        "delta_y_3s_m_intv_minus_ctrl": -4.0728,
+        "max_abs_lateral_diff_m": 6.7527,
+        "delta_final_heading_rad_intv_minus_ctrl": -0.141,
+        "delta_final_heading_deg_intv_minus_ctrl": -8.08,
+        "max_abs_heading_diff_deg": 15.57,
+        "ade_vs_logged_gt_delta_m": -0.8802,
+        "fde_vs_logged_gt_delta_m": 0.3913,
+        "qualitative_maneuver_changed": false,
+        "new_constraint_violations_dry": [],
+        "new_constraint_violations_wet": [],
+        "resolved_constraint_violations_dry": [],
+        "resolved_constraint_violations_wet": [],
+        "step_by_step_deltas": [
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 1,
+            "t_s": 0.5,
+            "gt_x_m": 3.5195,
+            "gt_y_m": 0.0498,
+            "gt_heading_rad": 0.0308,
+            "control_cmd": "turn left",
+            "control_token": 418,
+            "control_x_m": 3.3639,
+            "control_y_m": 0.2356,
+            "control_heading_rad": 0.0871,
+            "control_heading_deg": 4.99,
+            "control_speed_mps": 6.7443,
+            "control_a_lon_mps2": -0.4053,
+            "control_a_lat_mps2": 1.1753,
+            "control_yaw_rate_radps": 0.1743,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1172,
+            "intervention_x_m": 3.4126,
+            "intervention_y_m": 0.0398,
+            "intervention_heading_rad": 0.0163,
+            "intervention_heading_deg": 0.93,
+            "intervention_speed_mps": 6.8257,
+            "intervention_a_lon_mps2": -0.2425,
+            "intervention_a_lat_mps2": 0.2223,
+            "intervention_yaw_rate_radps": 0.0326,
+            "delta_x_m_intv_minus_ctrl": 0.0487,
+            "delta_y_m_intv_minus_ctrl": -0.1958,
+            "l2_divergence_m": 0.2018,
+            "delta_heading_rad_intv_minus_ctrl": -0.0709,
+            "delta_heading_deg_intv_minus_ctrl": -4.06
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 2,
+            "t_s": 1.0,
+            "gt_x_m": 7.1471,
+            "gt_y_m": 0.2441,
+            "gt_heading_rad": 0.0855,
+            "control_cmd": "turn left",
+            "control_token": 728,
+            "control_x_m": 6.728,
+            "control_y_m": 0.8119,
+            "control_heading_rad": 0.2185,
+            "control_heading_deg": 12.52,
+            "control_speed_mps": 6.8262,
+            "control_a_lon_mps2": 0.1637,
+            "control_a_lat_mps2": 1.793,
+            "control_yaw_rate_radps": 0.2627,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 42,
+            "intervention_x_m": 6.9374,
+            "intervention_y_m": 0.0963,
+            "intervention_heading_rad": 0.016,
+            "intervention_heading_deg": 0.92,
+            "intervention_speed_mps": 7.0503,
+            "intervention_a_lon_mps2": 0.4492,
+            "intervention_a_lat_mps2": -0.0035,
+            "intervention_yaw_rate_radps": -0.0005,
+            "delta_x_m_intv_minus_ctrl": 0.2093,
+            "delta_y_m_intv_minus_ctrl": -0.7156,
+            "l2_divergence_m": 0.7456,
+            "delta_heading_rad_intv_minus_ctrl": -0.2024,
+            "delta_heading_deg_intv_minus_ctrl": -11.6
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 3,
+            "t_s": 1.5,
+            "gt_x_m": 10.7851,
+            "gt_y_m": 0.6782,
+            "gt_heading_rad": 0.1621,
+            "control_cmd": "turn left",
+            "control_token": 418,
+            "control_x_m": 9.9609,
+            "control_y_m": 1.771,
+            "control_heading_rad": 0.3056,
+            "control_heading_deg": 17.51,
+            "control_speed_mps": 6.7443,
+            "control_a_lon_mps2": -0.1637,
+            "control_a_lat_mps2": 1.1754,
+            "control_yaw_rate_radps": 0.1743,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 598,
+            "intervention_x_m": 10.439,
+            "intervention_y_m": 0.3037,
+            "intervention_heading_rad": 0.074,
+            "intervention_heading_deg": 4.24,
+            "intervention_speed_mps": 7.0155,
+            "intervention_a_lon_mps2": -0.0697,
+            "intervention_a_lat_mps2": 0.8139,
+            "intervention_yaw_rate_radps": 0.116,
+            "delta_x_m_intv_minus_ctrl": 0.478,
+            "delta_y_m_intv_minus_ctrl": -1.4673,
+            "l2_divergence_m": 1.5432,
+            "delta_heading_rad_intv_minus_ctrl": -0.2316,
+            "delta_heading_deg_intv_minus_ctrl": -13.27
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 4,
+            "t_s": 2.0,
+            "gt_x_m": 14.3173,
+            "gt_y_m": 1.4813,
+            "gt_heading_rad": 0.285,
+            "control_cmd": "turn left",
+            "control_token": 728,
+            "control_x_m": 13.1202,
+            "control_y_m": 3.0627,
+            "control_heading_rad": 0.4369,
+            "control_heading_deg": 25.03,
+            "control_speed_mps": 6.8262,
+            "control_a_lon_mps2": 0.1637,
+            "control_a_lat_mps2": 1.793,
+            "control_yaw_rate_radps": 0.2627,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1506,
+            "intervention_x_m": 14.0295,
+            "intervention_y_m": 0.883,
+            "intervention_heading_rad": 0.175,
+            "intervention_heading_deg": 10.03,
+            "intervention_speed_mps": 7.2739,
+            "intervention_a_lon_mps2": 0.5168,
+            "intervention_a_lat_mps2": 1.4685,
+            "intervention_yaw_rate_radps": 0.2019,
+            "delta_x_m_intv_minus_ctrl": 0.9093,
+            "delta_y_m_intv_minus_ctrl": -2.1797,
+            "l2_divergence_m": 2.3617,
+            "delta_heading_rad_intv_minus_ctrl": -0.262,
+            "delta_heading_deg_intv_minus_ctrl": -15.01
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 5,
+            "t_s": 2.5,
+            "gt_x_m": 17.7338,
+            "gt_y_m": 2.7378,
+            "gt_heading_rad": 0.4226,
+            "control_cmd": "turn left",
+            "control_token": 1506,
+            "control_x_m": 16.2712,
+            "control_y_m": 4.8788,
+            "control_heading_rad": 0.5379,
+            "control_heading_deg": 30.82,
+            "control_speed_mps": 7.2739,
+            "control_a_lon_mps2": 0.8955,
+            "control_a_lat_mps2": 1.4686,
+            "control_yaw_rate_radps": 0.2019,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1806,
+            "intervention_x_m": 17.551,
+            "intervention_y_m": 1.7489,
+            "intervention_heading_rad": 0.2661,
+            "intervention_heading_deg": 15.25,
+            "intervention_speed_mps": 7.2527,
+            "intervention_a_lon_mps2": -0.0423,
+            "intervention_a_lat_mps2": 1.3222,
+            "intervention_yaw_rate_radps": 0.1823,
+            "delta_x_m_intv_minus_ctrl": 1.2798,
+            "delta_y_m_intv_minus_ctrl": -3.1299,
+            "l2_divergence_m": 3.3815,
+            "delta_heading_rad_intv_minus_ctrl": -0.2717,
+            "delta_heading_deg_intv_minus_ctrl": -15.57
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 6,
+            "t_s": 3.0,
+            "gt_x_m": 21.0011,
+            "gt_y_m": 4.5128,
+            "gt_heading_rad": 0.5702,
+            "control_cmd": "turn left",
+            "control_token": 724,
+            "control_x_m": 19.2167,
+            "control_y_m": 7.0497,
+            "control_heading_rad": 0.6596,
+            "control_heading_deg": 37.79,
+            "control_speed_mps": 7.3182,
+            "control_a_lon_mps2": 0.0885,
+            "control_a_lat_mps2": 1.782,
+            "control_yaw_rate_radps": 0.2435,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1074,
+            "intervention_x_m": 20.8852,
+            "intervention_y_m": 2.9769,
+            "intervention_heading_rad": 0.4225,
+            "intervention_heading_deg": 24.21,
+            "intervention_speed_mps": 7.1064,
+            "intervention_a_lon_mps2": -0.2927,
+            "intervention_a_lat_mps2": 2.2224,
+            "intervention_yaw_rate_radps": 0.3127,
+            "delta_x_m_intv_minus_ctrl": 1.6685,
+            "delta_y_m_intv_minus_ctrl": -4.0728,
+            "l2_divergence_m": 4.4013,
+            "delta_heading_rad_intv_minus_ctrl": -0.2371,
+            "delta_heading_deg_intv_minus_ctrl": -13.59
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 7,
+            "t_s": 3.5,
+            "gt_x_m": 24.0511,
+            "gt_y_m": 6.819,
+            "gt_heading_rad": 0.7226,
+            "control_cmd": "turn left",
+            "control_token": 841,
+            "control_x_m": 22.0954,
+            "control_y_m": 9.5971,
+            "control_heading_rad": 0.7471,
+            "control_heading_deg": 42.8,
+            "control_speed_mps": 7.688,
+            "control_a_lon_mps2": 0.7396,
+            "control_a_lat_mps2": 1.3443,
+            "control_yaw_rate_radps": 0.1749,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1257,
+            "intervention_x_m": 24.1127,
+            "intervention_y_m": 4.8605,
+            "intervention_heading_rad": 0.5619,
+            "intervention_heading_deg": 32.2,
+            "intervention_speed_mps": 7.474,
+            "intervention_a_lon_mps2": 0.7352,
+            "intervention_a_lat_mps2": 2.0839,
+            "intervention_yaw_rate_radps": 0.2788,
+            "delta_x_m_intv_minus_ctrl": 2.0173,
+            "delta_y_m_intv_minus_ctrl": -4.7366,
+            "l2_divergence_m": 5.1482,
+            "delta_heading_rad_intv_minus_ctrl": -0.1852,
+            "delta_heading_deg_intv_minus_ctrl": -10.61
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 8,
+            "t_s": 4.0,
+            "gt_x_m": 26.792,
+            "gt_y_m": 9.6084,
+            "gt_heading_rad": 0.8871,
+            "control_cmd": "turn left",
+            "control_token": 722,
+            "control_x_m": 24.7368,
+            "control_y_m": 12.6196,
+            "control_heading_rad": 0.8882,
+            "control_heading_deg": 50.89,
+            "control_speed_mps": 8.028,
+            "control_a_lon_mps2": 0.68,
+            "control_a_lat_mps2": 2.2666,
+            "control_yaw_rate_radps": 0.2823,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 522,
+            "intervention_x_m": 27.1353,
+            "intervention_y_m": 7.1974,
+            "intervention_heading_rad": 0.6849,
+            "intervention_heading_deg": 39.24,
+            "intervention_speed_mps": 7.6412,
+            "intervention_a_lon_mps2": 0.3346,
+            "intervention_a_lat_mps2": 1.8804,
+            "intervention_yaw_rate_radps": 0.2461,
+            "delta_x_m_intv_minus_ctrl": 2.3985,
+            "delta_y_m_intv_minus_ctrl": -5.4221,
+            "l2_divergence_m": 5.929,
+            "delta_heading_rad_intv_minus_ctrl": -0.2033,
+            "delta_heading_deg_intv_minus_ctrl": -11.65
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 9,
+            "t_s": 4.5,
+            "gt_x_m": 29.074,
+            "gt_y_m": 12.9082,
+            "gt_heading_rad": 1.0689,
+            "control_cmd": "turn left",
+            "control_token": 684,
+            "control_x_m": 27.1426,
+            "control_y_m": 16.0418,
+            "control_heading_rad": 0.9757,
+            "control_heading_deg": 55.9,
+            "control_speed_mps": 8.3665,
+            "control_a_lon_mps2": 0.6771,
+            "control_a_lat_mps2": 1.4638,
+            "control_yaw_rate_radps": 0.175,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1475,
+            "intervention_x_m": 29.8102,
+            "intervention_y_m": 9.9521,
+            "intervention_heading_rad": 0.8409,
+            "intervention_heading_deg": 48.18,
+            "intervention_speed_mps": 7.6793,
+            "intervention_a_lon_mps2": 0.0762,
+            "intervention_a_lat_mps2": 2.3952,
+            "intervention_yaw_rate_radps": 0.3119,
+            "delta_x_m_intv_minus_ctrl": 2.6675,
+            "delta_y_m_intv_minus_ctrl": -6.0897,
+            "l2_divergence_m": 6.6483,
+            "delta_heading_rad_intv_minus_ctrl": -0.1348,
+            "delta_heading_deg_intv_minus_ctrl": -7.72
+          },
+          {
+            "scene_id": "scene_02_stationary_lead_obstacle",
+            "step": 10,
+            "t_s": 5.0,
+            "gt_x_m": 30.7328,
+            "gt_y_m": 16.6678,
+            "gt_heading_rad": 1.261,
+            "control_cmd": "turn left",
+            "control_token": 1429,
+            "control_x_m": 29.2772,
+            "control_y_m": 19.816,
+            "control_heading_rad": 1.1067,
+            "control_heading_deg": 63.41,
+            "control_speed_mps": 8.6721,
+            "control_a_lon_mps2": 0.6111,
+            "control_a_lat_mps2": 2.2721,
+            "control_yaw_rate_radps": 0.262,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1814,
+            "intervention_x_m": 32.1131,
+            "intervention_y_m": 13.0633,
+            "intervention_heading_rad": 0.9657,
+            "intervention_heading_deg": 55.33,
+            "intervention_speed_mps": 7.7416,
+            "intervention_a_lon_mps2": 0.1245,
+            "intervention_a_lat_mps2": 1.9317,
+            "intervention_yaw_rate_radps": 0.2495,
+            "delta_x_m_intv_minus_ctrl": 2.8359,
+            "delta_y_m_intv_minus_ctrl": -6.7527,
+            "l2_divergence_m": 7.324,
+            "delta_heading_rad_intv_minus_ctrl": -0.141,
+            "delta_heading_deg_intv_minus_ctrl": -8.08
+          }
+        ]
+      },
+      "r3b_impact": {
+        "observed_obstacle_present": true,
+        "observed_obstacle_d0_m": 55.486,
+        "observed_schedule_control_turn_left": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0
+          ],
+          "admissible_count": 3,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 1.5,
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.0,
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.5,
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 55.486,
+              "margin_min_m": 25.1881,
+              "margin_max_m": 41.8873,
+              "margin_min_s": 3.6258,
+              "margin_max_s": 6.0296,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.7443,
+              "d_rem_m": 52.1221,
+              "margin_min_m": 22.7921,
+              "margin_max_m": 38.9437,
+              "margin_min_s": 3.3794,
+              "margin_max_s": 5.7743,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8262,
+              "d_rem_m": 48.758,
+              "margin_min_m": 19.0378,
+              "margin_max_m": 35.4104,
+              "margin_min_s": 2.7889,
+              "margin_max_s": 5.1874,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 55.486,
+              "margin_min_m": 24.0537,
+              "margin_max_m": 39.7707,
+              "margin_min_s": 3.4625,
+              "margin_max_s": 5.7249,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.7443,
+              "d_rem_m": 52.1221,
+              "margin_min_m": 21.7211,
+              "margin_max_m": 36.9525,
+              "margin_min_s": 3.2206,
+              "margin_max_s": 5.479,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8262,
+              "d_rem_m": 48.758,
+              "margin_min_m": 17.9415,
+              "margin_max_m": 33.369,
+              "margin_min_s": 2.6283,
+              "margin_max_s": 4.8884,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          }
+        },
+        "observed_schedule_intervention_keep_forward": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0,
+            1.5,
+            2.0,
+            2.5
+          ],
+          "admissible_count": 6,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 55.486,
+              "margin_min_m": 25.1881,
+              "margin_max_m": 41.8873,
+              "margin_min_s": 3.6258,
+              "margin_max_s": 6.0296,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8257,
+              "d_rem_m": 52.0734,
+              "margin_min_m": 22.3554,
+              "margin_max_m": 38.7267,
+              "margin_min_s": 3.2752,
+              "margin_max_s": 5.6736,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0503,
+              "d_rem_m": 48.5486,
+              "margin_min_m": 17.7548,
+              "margin_max_m": 34.7339,
+              "margin_min_s": 2.5183,
+              "margin_max_s": 4.9266,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0155,
+              "d_rem_m": 45.047,
+              "margin_min_m": 14.4206,
+              "margin_max_m": 31.3053,
+              "margin_min_s": 2.0555,
+              "margin_max_s": 4.4623,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2739,
+              "d_rem_m": 41.4565,
+              "margin_min_m": 9.584,
+              "margin_max_m": 27.1705,
+              "margin_min_s": 1.3176,
+              "margin_max_s": 3.7353,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "2.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2527,
+              "d_rem_m": 37.935,
+              "margin_min_m": 6.165,
+              "margin_max_m": 23.6938,
+              "margin_min_s": 0.85,
+              "margin_max_s": 3.2669,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 55.486,
+              "margin_min_m": 24.0537,
+              "margin_max_m": 39.7707,
+              "margin_min_s": 3.4625,
+              "margin_max_s": 5.7249,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8257,
+              "d_rem_m": 52.0734,
+              "margin_min_m": 21.2592,
+              "margin_max_m": 36.6856,
+              "margin_min_s": 3.1146,
+              "margin_max_s": 5.3746,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0503,
+              "d_rem_m": 48.5486,
+              "margin_min_m": 16.5873,
+              "margin_max_m": 32.5519,
+              "margin_min_s": 2.3527,
+              "margin_max_s": 4.6171,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0155,
+              "d_rem_m": 45.047,
+              "margin_min_m": 13.2643,
+              "margin_max_m": 29.1455,
+              "margin_min_s": 1.8907,
+              "margin_max_s": 4.1544,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2739,
+              "d_rem_m": 41.4565,
+              "margin_min_m": 8.3432,
+              "margin_max_m": 24.8434,
+              "margin_min_s": 1.147,
+              "margin_max_s": 3.4154,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "2.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2527,
+              "d_rem_m": 37.935,
+              "margin_min_m": 4.9313,
+              "margin_max_m": 21.3808,
+              "margin_min_s": 0.6799,
+              "margin_max_s": 2.948,
+              "interval_classification": "UNIFORMLY_POSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE"
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          }
+        },
+        "counterfactual_reference_d0_m": 18.0,
+        "counterfactual_schedule_control_turn_left": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0
+          ],
+          "admissible_count": 3,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 1.5,
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.0,
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.5,
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.22 m <= 0 m at tau_req=3.00s (ego advanced x=19.22 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 18.0,
+              "margin_min_m": -12.2979,
+              "margin_max_m": 4.4013,
+              "margin_min_s": -1.7702,
+              "margin_max_s": 0.6336,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.7443,
+              "d_rem_m": 14.6361,
+              "margin_min_m": -14.6939,
+              "margin_max_m": 1.4577,
+              "margin_min_s": -2.1787,
+              "margin_max_s": 0.2161,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8262,
+              "d_rem_m": 11.272,
+              "margin_min_m": -18.4482,
+              "margin_max_m": -2.0756,
+              "margin_min_s": -2.7026,
+              "margin_max_s": -0.3041,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.22 m <= 0 m at tau_req=3.00s (ego advanced x=19.22 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 18.0,
+              "margin_min_m": -13.4323,
+              "margin_max_m": 2.2847,
+              "margin_min_s": -1.9335,
+              "margin_max_s": 0.3289,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.7443,
+              "d_rem_m": 14.6361,
+              "margin_min_m": -15.7649,
+              "margin_max_m": -0.5335,
+              "margin_min_s": -2.3375,
+              "margin_max_s": -0.0791,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8262,
+              "d_rem_m": 11.272,
+              "margin_min_m": -19.5445,
+              "margin_max_m": -4.117,
+              "margin_min_s": -2.8632,
+              "margin_max_s": -0.6031,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=1.50s departs straight-line longitudinal corridor (|y|=1.77 m > 1.75 m or |heading|=0.31 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=3.06 m > 1.75 m or |heading|=0.44 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=4.88 m > 1.75 m or |heading|=0.54 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=7.05 m > 1.75 m or |heading|=0.66 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.22 m <= 0 m at tau_req=3.00s (ego advanced x=19.22 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          }
+        },
+        "counterfactual_schedule_intervention_keep_forward": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0,
+            1.5,
+            2.0,
+            2.5
+          ],
+          "admissible_count": 6,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -2.89 m <= 0 m at tau_req=3.00s (ego advanced x=20.89 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 18.0,
+              "margin_min_m": -12.2979,
+              "margin_max_m": 4.4013,
+              "margin_min_s": -1.7702,
+              "margin_max_s": 0.6336,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8257,
+              "d_rem_m": 14.5874,
+              "margin_min_m": -15.1306,
+              "margin_max_m": 1.2407,
+              "margin_min_s": -2.2167,
+              "margin_max_s": 0.1818,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0503,
+              "d_rem_m": 11.0626,
+              "margin_min_m": -19.7312,
+              "margin_max_m": -2.7521,
+              "margin_min_s": -2.7986,
+              "margin_max_s": -0.3903,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0155,
+              "d_rem_m": 7.561,
+              "margin_min_m": -23.0654,
+              "margin_max_m": -6.1807,
+              "margin_min_s": -3.2878,
+              "margin_max_s": -0.881,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2739,
+              "d_rem_m": 3.9705,
+              "margin_min_m": -27.902,
+              "margin_max_m": -10.3155,
+              "margin_min_s": -3.8359,
+              "margin_max_s": -1.4182,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2527,
+              "d_rem_m": 0.449,
+              "margin_min_m": -31.321,
+              "margin_max_m": -13.7922,
+              "margin_min_s": -4.3185,
+              "margin_max_s": -1.9016,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -2.89 m <= 0 m at tau_req=3.00s (ego advanced x=20.89 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.947,
+              "d_rem_m": 18.0,
+              "margin_min_m": -13.4323,
+              "margin_max_m": 2.2847,
+              "margin_min_s": -1.9335,
+              "margin_max_s": 0.3289,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 6.8257,
+              "d_rem_m": 14.5874,
+              "margin_min_m": -16.2268,
+              "margin_max_m": -0.8004,
+              "margin_min_s": -2.3773,
+              "margin_max_s": -0.1173,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0503,
+              "d_rem_m": 11.0626,
+              "margin_min_m": -20.8987,
+              "margin_max_m": -4.9341,
+              "margin_min_s": -2.9642,
+              "margin_max_s": -0.6998,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.0155,
+              "d_rem_m": 7.561,
+              "margin_min_m": -24.2217,
+              "margin_max_m": -8.3405,
+              "margin_min_s": -3.4526,
+              "margin_max_s": -1.1889,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2739,
+              "d_rem_m": 3.9705,
+              "margin_min_m": -29.1428,
+              "margin_max_m": -12.6426,
+              "margin_min_s": -4.0065,
+              "margin_max_s": -1.7381,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 7.2527,
+              "d_rem_m": 0.449,
+              "margin_min_m": -32.5547,
+              "margin_max_m": -16.1052,
+              "margin_min_s": -4.4886,
+              "margin_max_s": -2.2206,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.98 m > 1.75 m or |heading|=0.42 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -2.89 m <= 0 m at tau_req=3.00s (ego advanced x=20.89 m past initial obstacle coordinate d0=18.00 m prior to takeover request)."
+            }
+          }
+        }
+      }
+    },
+    "scene_06_intersection_turn_maneuver": {
+      "scene_id": "scene_06_intersection_turn_maneuver",
+      "frame_token": "c9d4d04945e85ef8",
+      "scene_name": "log-0063-scene-0005",
+      "map_location": "sg-one-north",
+      "ego_initial_speed_mps": 8.7828,
+      "ego_initial_accel_mps2": -0.4007,
+      "provenance": {
+        "scene_id": "scene_06_intersection_turn_maneuver",
+        "frame_token": "c9d4d04945e85ef8",
+        "artifact_role": "CONTROLLED_COMMAND_INTERVENTION",
+        "control_command": "turn left",
+        "intervention_command": "keep forward",
+        "prompt_isolation_verified": true,
+        "control_artifact_sha256": "a53c5470a8902ecdfda828d65c70ae9a86ceaf620501ad03895302eabc918fd5",
+        "intervention_artifact_sha256": "3a3f0f9f80054d5cadc78f65175283b6211ae29c574b56a0936c19c1fed69790",
+        "control_ade_vs_logged_gt_m": 0.6595,
+        "control_fde_vs_logged_gt_m": 1.88,
+        "intervention_ade_vs_logged_gt_m": 1.7793,
+        "intervention_fde_vs_logged_gt_m": 3.6976
+      },
+      "critical_interpretation_notice": "The logged human trajectory reflects the actual human left-turn maneuver. It is NOT a valid ground-truth target for a deliberately different `keep forward` command. ADE/FDE changes under `keep forward` measure command sensitivity relative to the recorded turning reference, not driving policy superiority or safety.",
+      "control_turn_left": {
+        "artifact_path": "artifacts/predictions/scene_06_intersection_turn_maneuver_fast.json",
+        "artifact_sha256": "a53c5470a8902ecdfda828d65c70ae9a86ceaf620501ad03895302eabc918fd5",
+        "driving_command": "turn left",
+        "prompt_text": "Suppose you are driving, and I'm providing you with the image captured by the car's <FRONT VIEW>, <FRONT LEFT VIEW>, <FRONT RIGHT VIEW>, theego velocity is 8.78 m/s, the ego acceleration is 1.41 m/s^2, and the driving command is turn left. Generate the planned trajectory for the next 5 seconds.",
+        "action_codebook_indices": [
+          773,
+          1466,
+          1898,
+          115,
+          1898,
+          39,
+          115,
+          1108,
+          672,
+          646
+        ],
+        "inference_latency_ms": 69041.17,
+        "device": "mps",
+        "ade_vs_logged_left_turn_gt_m": 0.6595,
+        "fde_vs_logged_left_turn_gt_m": 1.88,
+        "final_displacement_x_m": 43.5253,
+        "final_displacement_y_m": 7.5953,
+        "final_heading_rad": 0.2127,
+        "final_heading_deg": 12.18,
+        "kinematics_summary": {
+          "min_speed_mps": 8.593,
+          "max_speed_mps": 8.9772,
+          "min_lon_accel_mps2": -0.3797,
+          "max_lon_accel_mps2": 0.3885,
+          "peak_abs_lon_accel_mps2": 0.3885,
+          "max_braking_demand_mps2": 0.3797,
+          "max_abs_lat_accel_mps2": 1.3711,
+          "max_total_accel_mps2": 1.4227,
+          "max_abs_yaw_rate_radps": 0.1596,
+          "total_path_length_m": 44.2378
+        },
+        "feasibility_dry_mu1.0": "CONSTRAINTS_SATISFIED",
+        "feasibility_wet_mu0.5": "CONSTRAINTS_SATISFIED",
+        "failed_checks_dry": [],
+        "failed_checks_wet": [],
+        "maneuver": {
+          "maneuver_label": "LEFT_TURN_OR_LEFT_LANE_DEPARTURE",
+          "final_x_m": 43.5253,
+          "final_y_m": 7.5953,
+          "final_heading_rad": 0.2127,
+          "final_heading_deg": 12.18,
+          "max_abs_y_m": 7.5953,
+          "max_abs_heading_rad": 0.2324,
+          "max_abs_heading_deg": 13.32,
+          "remains_in_r3b_longitudinal_corridor_all_5s": false,
+          "first_corridor_exit_step": 4,
+          "first_corridor_exit_tau_s": 2.0
+        },
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 4.28865,
+            "y_m": 0.25929,
+            "heading_rad": 0.07978
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 8.65502,
+            "y_m": 0.74774,
+            "heading_rad": 0.12
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 13.07835,
+            "y_m": 1.40919,
+            "heading_rad": 0.15955
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 17.51007,
+            "y_m": 2.12137,
+            "heading_rad": 0.16031
+          },
+          {
+            "step": 5,
+            "t_s": 2.5,
+            "x_m": 21.90314,
+            "y_m": 2.96055,
+            "heading_rad": 0.19986
+          },
+          {
+            "step": 6,
+            "t_s": 3.0,
+            "x_m": 26.25171,
+            "y_m": 3.85729,
+            "heading_rad": 0.20331
+          },
+          {
+            "step": 7,
+            "t_s": 3.5,
+            "x_m": 30.64804,
+            "y_m": 4.76266,
+            "heading_rad": 0.20407
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 34.95398,
+            "y_m": 5.75438,
+            "heading_rad": 0.23244
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 39.24716,
+            "y_m": 6.66659,
+            "heading_rad": 0.20003
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 43.52529,
+            "y_m": 7.59531,
+            "heading_rad": 0.21265
+          }
+        ]
+      },
+      "intervention_keep_forward": {
+        "artifact_path": "artifacts/command_sensitivity/scene_06_keep_forward.json",
+        "artifact_sha256": "3a3f0f9f80054d5cadc78f65175283b6211ae29c574b56a0936c19c1fed69790",
+        "driving_command": "keep forward",
+        "prompt_text": "Suppose you are driving, and I'm providing you with the image captured by the car's <FRONT VIEW>, <FRONT LEFT VIEW>, <FRONT RIGHT VIEW>, theego velocity is 8.78 m/s, the ego acceleration is 1.41 m/s^2, and the driving command is keep forward. Generate the planned trajectory for the next 5 seconds.",
+        "action_codebook_indices": [
+          1205,
+          1937,
+          1898,
+          13,
+          534,
+          39,
+          39,
+          1188,
+          120,
+          5
+        ],
+        "inference_latency_ms": 85426.04,
+        "device": "mps",
+        "peak_rss_mb": 1013.67,
+        "swap_used_mb": 23387.31,
+        "ade_vs_logged_left_turn_gt_m": 1.7793,
+        "fde_vs_logged_left_turn_gt_m": 3.6976,
+        "final_displacement_x_m": 43.5974,
+        "final_displacement_y_m": 5.0407,
+        "final_heading_rad": 0.1782,
+        "final_heading_deg": 10.21,
+        "kinematics_summary": {
+          "min_speed_mps": 8.4203,
+          "max_speed_mps": 9.0991,
+          "min_lon_accel_mps2": -0.6233,
+          "max_lon_accel_mps2": 0.4907,
+          "peak_abs_lon_accel_mps2": 0.6233,
+          "max_braking_demand_mps2": 0.6233,
+          "max_abs_lat_accel_mps2": 0.8394,
+          "max_total_accel_mps2": 0.9406,
+          "max_abs_yaw_rate_radps": 0.0968,
+          "total_path_length_m": 43.9364
+        },
+        "feasibility_dry_mu1.0": "CONSTRAINTS_SATISFIED",
+        "feasibility_wet_mu0.5": "CONSTRAINTS_SATISFIED",
+        "failed_checks_dry": [],
+        "failed_checks_wet": [],
+        "maneuver": {
+          "maneuver_label": "LEFT_TURN_OR_LEFT_LANE_DEPARTURE",
+          "final_x_m": 43.5974,
+          "final_y_m": 5.0407,
+          "final_heading_rad": 0.1782,
+          "final_heading_deg": 10.21,
+          "max_abs_y_m": 5.0407,
+          "max_abs_heading_rad": 0.1782,
+          "max_abs_heading_deg": 10.21,
+          "remains_in_r3b_longitudinal_corridor_all_5s": false,
+          "first_corridor_exit_step": 6,
+          "first_corridor_exit_tau_s": 3.0
+        },
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 4.3029,
+            "y_m": 0.09298,
+            "heading_rad": 0.03039
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 8.64288,
+            "y_m": 0.3855,
+            "heading_rad": 0.05571
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 13.09955,
+            "y_m": 0.76143,
+            "heading_rad": 0.09527
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 17.62774,
+            "y_m": 1.20188,
+            "heading_rad": 0.09652
+          },
+          {
+            "step": 5,
+            "t_s": 2.5,
+            "x_m": 22.0692,
+            "y_m": 1.7092,
+            "heading_rad": 0.12117
+          },
+          {
+            "step": 6,
+            "t_s": 3.0,
+            "x_m": 26.47481,
+            "y_m": 2.26131,
+            "heading_rad": 0.12462
+          },
+          {
+            "step": 7,
+            "t_s": 3.5,
+            "x_m": 30.87849,
+            "y_m": 2.8286,
+            "heading_rad": 0.12806
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 35.1553,
+            "y_m": 3.53017,
+            "heading_rad": 0.17648
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 39.45374,
+            "y_m": 4.29522,
+            "heading_rad": 0.17651
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 43.59739,
+            "y_m": 5.04069,
+            "heading_rad": 0.17817
+          }
+        ]
+      },
+      "ground_truth_logged_maneuver": {
+        "final_x_m": 45.2473,
+        "final_y_m": 8.3498,
+        "final_heading_rad": 0.228,
+        "final_heading_deg": 13.06,
+        "waypoints": [
+          {
+            "step": 1,
+            "t_s": 0.5,
+            "x_m": 4.294,
+            "y_m": 0.2352,
+            "heading_rad": 0.0777
+          },
+          {
+            "step": 2,
+            "t_s": 1.0,
+            "x_m": 8.5673,
+            "y_m": 0.7376,
+            "heading_rad": 0.1354
+          },
+          {
+            "step": 3,
+            "t_s": 1.5,
+            "x_m": 12.8486,
+            "y_m": 1.444,
+            "heading_rad": 0.1687
+          },
+          {
+            "step": 4,
+            "t_s": 2.0,
+            "x_m": 17.2112,
+            "y_m": 2.2304,
+            "heading_rad": 0.1825
+          },
+          {
+            "step": 5,
+            "t_s": 2.501,
+            "x_m": 21.7738,
+            "y_m": 3.1038,
+            "heading_rad": 0.1922
+          },
+          {
+            "step": 6,
+            "t_s": 3.001,
+            "x_m": 26.479,
+            "y_m": 4.0889,
+            "heading_rad": 0.201
+          },
+          {
+            "step": 7,
+            "t_s": 3.5,
+            "x_m": 31.2712,
+            "y_m": 5.1664,
+            "heading_rad": 0.2096
+          },
+          {
+            "step": 8,
+            "t_s": 4.0,
+            "x_m": 36.0304,
+            "y_m": 6.2572,
+            "heading_rad": 0.2156
+          },
+          {
+            "step": 9,
+            "t_s": 4.5,
+            "x_m": 40.7155,
+            "y_m": 7.3098,
+            "heading_rad": 0.2236
+          },
+          {
+            "step": 10,
+            "t_s": 5.0,
+            "x_m": 45.2473,
+            "y_m": 8.3498,
+            "heading_rad": 0.228
+          }
+        ]
+      },
+      "comparative_metrics": {
+        "tokens_changed_count": 8,
+        "first_divergent_step": 1,
+        "mean_l2_trajectory_divergence_m": 1.4095,
+        "final_step_l2_divergence_m": 2.5556,
+        "delta_final_x_m_intv_minus_ctrl": 0.0721,
+        "delta_final_y_m_intv_minus_ctrl": -2.5546,
+        "delta_y_3s_m_intv_minus_ctrl": -1.596,
+        "max_abs_lateral_diff_m": 2.5546,
+        "delta_final_heading_rad_intv_minus_ctrl": -0.0345,
+        "delta_final_heading_deg_intv_minus_ctrl": -1.98,
+        "max_abs_heading_diff_deg": 4.51,
+        "ade_vs_logged_gt_delta_m": 1.1198,
+        "fde_vs_logged_gt_delta_m": 1.8176,
+        "qualitative_maneuver_changed": false,
+        "new_constraint_violations_dry": [],
+        "new_constraint_violations_wet": [],
+        "resolved_constraint_violations_dry": [],
+        "resolved_constraint_violations_wet": [],
+        "step_by_step_deltas": [
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 1,
+            "t_s": 0.5,
+            "gt_x_m": 4.294,
+            "gt_y_m": 0.2352,
+            "gt_heading_rad": 0.0777,
+            "control_cmd": "turn left",
+            "control_token": 773,
+            "control_x_m": 4.2886,
+            "control_y_m": 0.2593,
+            "control_heading_rad": 0.0798,
+            "control_heading_deg": 4.57,
+            "control_speed_mps": 8.593,
+            "control_a_lon_mps2": -0.3797,
+            "control_a_lat_mps2": 1.3711,
+            "control_yaw_rate_radps": 0.1596,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1205,
+            "intervention_x_m": 4.3029,
+            "intervention_y_m": 0.093,
+            "intervention_heading_rad": 0.0304,
+            "intervention_heading_deg": 1.74,
+            "intervention_speed_mps": 8.6078,
+            "intervention_a_lon_mps2": -0.35,
+            "intervention_a_lat_mps2": 0.5232,
+            "intervention_yaw_rate_radps": 0.0608,
+            "delta_x_m_intv_minus_ctrl": 0.0143,
+            "delta_y_m_intv_minus_ctrl": -0.1663,
+            "l2_divergence_m": 0.1669,
+            "delta_heading_rad_intv_minus_ctrl": -0.0494,
+            "delta_heading_deg_intv_minus_ctrl": -2.83
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 2,
+            "t_s": 1.0,
+            "gt_x_m": 8.5673,
+            "gt_y_m": 0.7376,
+            "gt_heading_rad": 0.1354,
+            "control_cmd": "turn left",
+            "control_token": 1466,
+            "control_x_m": 8.655,
+            "control_y_m": 0.7477,
+            "control_heading_rad": 0.12,
+            "control_heading_deg": 6.88,
+            "control_speed_mps": 8.7872,
+            "control_a_lon_mps2": 0.3885,
+            "control_a_lat_mps2": 0.7068,
+            "control_yaw_rate_radps": 0.0804,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1937,
+            "intervention_x_m": 8.6429,
+            "intervention_y_m": 0.3855,
+            "intervention_heading_rad": 0.0557,
+            "intervention_heading_deg": 3.19,
+            "intervention_speed_mps": 8.6997,
+            "intervention_a_lon_mps2": 0.1837,
+            "intervention_a_lat_mps2": 0.4405,
+            "intervention_yaw_rate_radps": 0.0506,
+            "delta_x_m_intv_minus_ctrl": -0.0121,
+            "delta_y_m_intv_minus_ctrl": -0.3622,
+            "l2_divergence_m": 0.3624,
+            "delta_heading_rad_intv_minus_ctrl": -0.0643,
+            "delta_heading_deg_intv_minus_ctrl": -3.68
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 3,
+            "t_s": 1.5,
+            "gt_x_m": 12.8486,
+            "gt_y_m": 1.444,
+            "gt_heading_rad": 0.1687,
+            "control_cmd": "turn left",
+            "control_token": 1898,
+            "control_x_m": 13.0784,
+            "control_y_m": 1.4092,
+            "control_heading_rad": 0.1595,
+            "control_heading_deg": 9.14,
+            "control_speed_mps": 8.945,
+            "control_a_lon_mps2": 0.3156,
+            "control_a_lat_mps2": 0.7076,
+            "control_yaw_rate_radps": 0.0791,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1898,
+            "intervention_x_m": 13.0996,
+            "intervention_y_m": 0.7614,
+            "intervention_heading_rad": 0.0953,
+            "intervention_heading_deg": 5.46,
+            "intervention_speed_mps": 8.945,
+            "intervention_a_lon_mps2": 0.4907,
+            "intervention_a_lat_mps2": 0.7077,
+            "intervention_yaw_rate_radps": 0.0791,
+            "delta_x_m_intv_minus_ctrl": 0.0212,
+            "delta_y_m_intv_minus_ctrl": -0.6478,
+            "l2_divergence_m": 0.6481,
+            "delta_heading_rad_intv_minus_ctrl": -0.0643,
+            "delta_heading_deg_intv_minus_ctrl": -3.68
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 4,
+            "t_s": 2.0,
+            "gt_x_m": 17.2112,
+            "gt_y_m": 2.2304,
+            "gt_heading_rad": 0.1825,
+            "control_cmd": "turn left",
+            "control_token": 115,
+            "control_x_m": 17.5101,
+            "control_y_m": 2.1214,
+            "control_heading_rad": 0.1603,
+            "control_heading_deg": 9.19,
+            "control_speed_mps": 8.9772,
+            "control_a_lon_mps2": 0.0643,
+            "control_a_lat_mps2": 0.0137,
+            "control_yaw_rate_radps": 0.0015,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 13,
+            "intervention_x_m": 17.6277,
+            "intervention_y_m": 1.2019,
+            "intervention_heading_rad": 0.0965,
+            "intervention_heading_deg": 5.53,
+            "intervention_speed_mps": 9.0991,
+            "intervention_a_lon_mps2": 0.3083,
+            "intervention_a_lat_mps2": 0.0227,
+            "intervention_yaw_rate_radps": 0.0025,
+            "delta_x_m_intv_minus_ctrl": 0.1177,
+            "delta_y_m_intv_minus_ctrl": -0.9195,
+            "l2_divergence_m": 0.927,
+            "delta_heading_rad_intv_minus_ctrl": -0.0638,
+            "delta_heading_deg_intv_minus_ctrl": -3.65
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 5,
+            "t_s": 2.5,
+            "gt_x_m": 21.7738,
+            "gt_y_m": 3.1038,
+            "gt_heading_rad": 0.1922,
+            "control_cmd": "turn left",
+            "control_token": 1898,
+            "control_x_m": 21.9031,
+            "control_y_m": 2.9606,
+            "control_heading_rad": 0.1999,
+            "control_heading_deg": 11.45,
+            "control_speed_mps": 8.945,
+            "control_a_lon_mps2": -0.0643,
+            "control_a_lat_mps2": 0.7076,
+            "control_yaw_rate_radps": 0.0791,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 534,
+            "intervention_x_m": 22.0692,
+            "intervention_y_m": 1.7092,
+            "intervention_heading_rad": 0.1212,
+            "intervention_heading_deg": 6.94,
+            "intervention_speed_mps": 8.9407,
+            "intervention_a_lon_mps2": -0.3169,
+            "intervention_a_lat_mps2": 0.4408,
+            "intervention_yaw_rate_radps": 0.0493,
+            "delta_x_m_intv_minus_ctrl": 0.1661,
+            "delta_y_m_intv_minus_ctrl": -1.2513,
+            "l2_divergence_m": 1.2623,
+            "delta_heading_rad_intv_minus_ctrl": -0.0787,
+            "delta_heading_deg_intv_minus_ctrl": -4.51
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 6,
+            "t_s": 3.0,
+            "gt_x_m": 26.479,
+            "gt_y_m": 4.0889,
+            "gt_heading_rad": 0.201,
+            "control_cmd": "turn left",
+            "control_token": 39,
+            "control_x_m": 26.2517,
+            "control_y_m": 3.8573,
+            "control_heading_rad": 0.2033,
+            "control_heading_deg": 11.65,
+            "control_speed_mps": 8.8801,
+            "control_a_lon_mps2": -0.1297,
+            "control_a_lat_mps2": 0.0613,
+            "control_yaw_rate_radps": 0.0069,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 39,
+            "intervention_x_m": 26.4748,
+            "intervention_y_m": 2.2613,
+            "intervention_heading_rad": 0.1246,
+            "intervention_heading_deg": 7.14,
+            "intervention_speed_mps": 8.8801,
+            "intervention_a_lon_mps2": -0.1211,
+            "intervention_a_lat_mps2": 0.0613,
+            "intervention_yaw_rate_radps": 0.0069,
+            "delta_x_m_intv_minus_ctrl": 0.2231,
+            "delta_y_m_intv_minus_ctrl": -1.596,
+            "l2_divergence_m": 1.6115,
+            "delta_heading_rad_intv_minus_ctrl": -0.0787,
+            "delta_heading_deg_intv_minus_ctrl": -4.51
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 7,
+            "t_s": 3.5,
+            "gt_x_m": 31.2712,
+            "gt_y_m": 5.1664,
+            "gt_heading_rad": 0.2096,
+            "control_cmd": "turn left",
+            "control_token": 115,
+            "control_x_m": 30.648,
+            "control_y_m": 4.7627,
+            "control_heading_rad": 0.2041,
+            "control_heading_deg": 11.69,
+            "control_speed_mps": 8.9772,
+            "control_a_lon_mps2": 0.1941,
+            "control_a_lat_mps2": 0.0137,
+            "control_yaw_rate_radps": 0.0015,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 39,
+            "intervention_x_m": 30.8785,
+            "intervention_y_m": 2.8286,
+            "intervention_heading_rad": 0.1281,
+            "intervention_heading_deg": 7.34,
+            "intervention_speed_mps": 8.8801,
+            "intervention_a_lon_mps2": -0.0,
+            "intervention_a_lat_mps2": 0.0611,
+            "intervention_yaw_rate_radps": 0.0069,
+            "delta_x_m_intv_minus_ctrl": 0.2304,
+            "delta_y_m_intv_minus_ctrl": -1.9341,
+            "l2_divergence_m": 1.9477,
+            "delta_heading_rad_intv_minus_ctrl": -0.076,
+            "delta_heading_deg_intv_minus_ctrl": -4.36
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 8,
+            "t_s": 4.0,
+            "gt_x_m": 36.0304,
+            "gt_y_m": 6.2572,
+            "gt_heading_rad": 0.2156,
+            "control_cmd": "turn left",
+            "control_token": 1108,
+            "control_x_m": 34.954,
+            "control_y_m": 5.7544,
+            "control_heading_rad": 0.2324,
+            "control_heading_deg": 13.32,
+            "control_speed_mps": 8.8373,
+            "control_a_lon_mps2": -0.2797,
+            "control_a_lat_mps2": 0.5014,
+            "control_yaw_rate_radps": 0.0567,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 1188,
+            "intervention_x_m": 35.1553,
+            "intervention_y_m": 3.5302,
+            "intervention_heading_rad": 0.1765,
+            "intervention_heading_deg": 10.11,
+            "intervention_speed_mps": 8.6679,
+            "intervention_a_lon_mps2": -0.4244,
+            "intervention_a_lat_mps2": 0.8394,
+            "intervention_yaw_rate_radps": 0.0968,
+            "delta_x_m_intv_minus_ctrl": 0.2013,
+            "delta_y_m_intv_minus_ctrl": -2.2242,
+            "l2_divergence_m": 2.2333,
+            "delta_heading_rad_intv_minus_ctrl": -0.056,
+            "delta_heading_deg_intv_minus_ctrl": -3.21
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 9,
+            "t_s": 4.5,
+            "gt_x_m": 40.7155,
+            "gt_y_m": 7.3098,
+            "gt_heading_rad": 0.2236,
+            "control_cmd": "turn left",
+            "control_token": 672,
+            "control_x_m": 39.2472,
+            "control_y_m": 6.6666,
+            "control_heading_rad": 0.2,
+            "control_heading_deg": 11.46,
+            "control_speed_mps": 8.7781,
+            "control_a_lon_mps2": -0.1186,
+            "control_a_lat_mps2": -0.569,
+            "control_yaw_rate_radps": -0.0648,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 120,
+            "intervention_x_m": 39.4537,
+            "intervention_y_m": 4.2952,
+            "intervention_heading_rad": 0.1765,
+            "intervention_heading_deg": 10.11,
+            "intervention_speed_mps": 8.732,
+            "intervention_a_lon_mps2": 0.1281,
+            "intervention_a_lat_mps2": 0.0005,
+            "intervention_yaw_rate_radps": 0.0001,
+            "delta_x_m_intv_minus_ctrl": 0.2066,
+            "delta_y_m_intv_minus_ctrl": -2.3714,
+            "l2_divergence_m": 2.3804,
+            "delta_heading_rad_intv_minus_ctrl": -0.0235,
+            "delta_heading_deg_intv_minus_ctrl": -1.35
+          },
+          {
+            "scene_id": "scene_06_intersection_turn_maneuver",
+            "step": 10,
+            "t_s": 5.0,
+            "gt_x_m": 45.2473,
+            "gt_y_m": 8.3498,
+            "gt_heading_rad": 0.228,
+            "control_cmd": "turn left",
+            "control_token": 646,
+            "control_x_m": 43.5253,
+            "control_y_m": 7.5953,
+            "control_heading_rad": 0.2127,
+            "control_heading_deg": 12.18,
+            "control_speed_mps": 8.7555,
+            "control_a_lon_mps2": -0.045,
+            "control_a_lat_mps2": 0.221,
+            "control_yaw_rate_radps": 0.0252,
+            "intervention_cmd": "keep forward",
+            "intervention_token": 5,
+            "intervention_x_m": 43.5974,
+            "intervention_y_m": 5.0407,
+            "intervention_heading_rad": 0.1782,
+            "intervention_heading_deg": 10.21,
+            "intervention_speed_mps": 8.4203,
+            "intervention_a_lon_mps2": -0.6233,
+            "intervention_a_lat_mps2": 0.028,
+            "intervention_yaw_rate_radps": 0.0033,
+            "delta_x_m_intv_minus_ctrl": 0.0721,
+            "delta_y_m_intv_minus_ctrl": -2.5546,
+            "l2_divergence_m": 2.5556,
+            "delta_heading_rad_intv_minus_ctrl": -0.0345,
+            "delta_heading_deg_intv_minus_ctrl": -1.98
+          }
+        ]
+      },
+      "r3b_impact": {
+        "observed_obstacle_present": false,
+        "observed_obstacle_d0_m": null,
+        "observed_schedule_control_turn_left": {
+          "admissible_tau_req_s": [],
+          "admissible_count": 0,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 0.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 0.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 1.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 1.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 2.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "0.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "0.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          }
+        },
+        "observed_schedule_intervention_keep_forward": {
+          "admissible_tau_req_s": [],
+          "admissible_count": 0,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 0.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 0.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 1.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 1.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 2.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 2.5,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "0.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "0.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "1.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "No observed in-lane lead obstacle in dataset 3D annotations within +-1.75 m corridor, and no counterfactual obstacle distance was assumed; TTC cannot be inferred from camera images alone.; Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            }
+          }
+        },
+        "counterfactual_reference_d0_m": 20.0,
+        "counterfactual_schedule_control_turn_left": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0,
+            1.5
+          ],
+          "admissible_count": 4,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 2.0,
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            {
+              "tau_req_s": 2.5,
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.90 m <= 0 m at tau_req=2.50s (ego advanced x=21.90 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.25 m <= 0 m at tau_req=3.00s (ego advanced x=26.25 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7828,
+              "d_rem_m": 20.0,
+              "margin_min_m": -19.3561,
+              "margin_max_m": 2.3889,
+              "margin_min_s": -2.2039,
+              "margin_max_s": 0.272,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.593,
+              "d_rem_m": 15.7113,
+              "margin_min_m": -22.6837,
+              "margin_max_m": -1.4676,
+              "margin_min_s": -2.6398,
+              "margin_max_s": -0.1708,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7872,
+              "d_rem_m": 11.345,
+              "margin_min_m": -28.0335,
+              "margin_max_m": -6.2762,
+              "margin_min_s": -3.1903,
+              "margin_max_s": -0.7142,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.945,
+              "d_rem_m": 6.9216,
+              "margin_min_m": -33.26,
+              "margin_max_m": -11.0618,
+              "margin_min_s": -3.7183,
+              "margin_max_s": -1.2366,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.90 m <= 0 m at tau_req=2.50s (ego advanced x=21.90 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.25 m <= 0 m at tau_req=3.00s (ego advanced x=26.25 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7828,
+              "d_rem_m": 20.0,
+              "margin_min_m": -21.1549,
+              "margin_max_m": -1.0396,
+              "margin_min_s": -2.4087,
+              "margin_max_s": -0.1184,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.593,
+              "d_rem_m": 15.7113,
+              "margin_min_m": -24.4063,
+              "margin_max_m": -4.7458,
+              "margin_min_s": -2.8403,
+              "margin_max_s": -0.5523,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7872,
+              "d_rem_m": 11.345,
+              "margin_min_m": -29.8341,
+              "margin_max_m": -9.7082,
+              "margin_min_s": -3.3952,
+              "margin_max_s": -1.1048,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.945,
+              "d_rem_m": 6.9216,
+              "margin_min_m": -35.1254,
+              "margin_max_m": -14.6215,
+              "margin_min_s": -3.9268,
+              "margin_max_s": -1.6346,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.00s departs straight-line longitudinal corridor (|y|=2.12 m > 1.75 m or |heading|=0.16 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions."
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=2.50s departs straight-line longitudinal corridor (|y|=2.96 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -1.90 m <= 0 m at tau_req=2.50s (ego advanced x=21.90 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=3.86 m > 1.75 m or |heading|=0.20 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.25 m <= 0 m at tau_req=3.00s (ego advanced x=26.25 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          }
+        },
+        "counterfactual_schedule_intervention_keep_forward": {
+          "admissible_tau_req_s": [
+            0.0,
+            0.5,
+            1.0,
+            1.5,
+            2.0
+          ],
+          "admissible_count": 5,
+          "total_tau_count": 7,
+          "non_applicable_taus": [
+            {
+              "tau_req_s": 2.5,
+              "reason": "Remaining obstacle distance d(tau_req) = -2.07 m <= 0 m at tau_req=2.50s (ego advanced x=22.07 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            {
+              "tau_req_s": 3.0,
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.47 m <= 0 m at tau_req=3.00s (ego advanced x=26.47 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          ],
+          "p1_dry_mu1.0_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7828,
+              "d_rem_m": 20.0,
+              "margin_min_m": -19.3561,
+              "margin_max_m": 2.3889,
+              "margin_min_s": -2.2039,
+              "margin_max_s": 0.272,
+              "interval_classification": "PARAMETER_SENSITIVE",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.6078,
+              "d_rem_m": 15.6971,
+              "margin_min_m": -22.7729,
+              "margin_max_m": -1.5155,
+              "margin_min_s": -2.6456,
+              "margin_max_s": -0.1761,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.6997,
+              "d_rem_m": 11.3571,
+              "margin_min_m": -27.5773,
+              "margin_max_m": -6.0642,
+              "margin_min_s": -3.1699,
+              "margin_max_s": -0.6971,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.945,
+              "d_rem_m": 6.9004,
+              "margin_min_m": -33.2811,
+              "margin_max_m": -11.0829,
+              "margin_min_s": -3.7206,
+              "margin_max_s": -1.239,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 9.0991,
+              "d_rem_m": 2.3723,
+              "margin_min_m": -38.5975,
+              "margin_max_m": -15.9676,
+              "margin_min_s": -4.2419,
+              "margin_max_s": -1.7548,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Remaining obstacle distance d(tau_req) = -2.07 m <= 0 m at tau_req=2.50s (ego advanced x=22.07 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.47 m <= 0 m at tau_req=3.00s (ego advanced x=26.47 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          },
+          "p1_wet_mu0.5_by_tau": {
+            "0.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.7828,
+              "d_rem_m": 20.0,
+              "margin_min_m": -21.1549,
+              "margin_max_m": -1.0396,
+              "margin_min_s": -2.4087,
+              "margin_max_s": -0.1184,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "0.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.6078,
+              "d_rem_m": 15.6971,
+              "margin_min_m": -24.5014,
+              "margin_max_m": -4.8054,
+              "margin_min_s": -2.8464,
+              "margin_max_s": -0.5583,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.6997,
+              "d_rem_m": 11.3571,
+              "margin_min_m": -29.3425,
+              "margin_max_m": -9.4265,
+              "margin_min_s": -3.3728,
+              "margin_max_s": -1.0835,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "1.5s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 8.945,
+              "d_rem_m": 6.9004,
+              "margin_min_m": -35.1465,
+              "margin_max_m": -14.6426,
+              "margin_min_s": -3.9292,
+              "margin_max_s": -1.637,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.0s": {
+              "status": "APPLICABLE",
+              "v_at_req_mps": 9.0991,
+              "d_rem_m": 2.3723,
+              "margin_min_m": -40.5273,
+              "margin_max_m": -19.6542,
+              "margin_min_s": -4.454,
+              "margin_max_s": -2.16,
+              "interval_classification": "UNIFORMLY_VIOLATED",
+              "state_source": "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0"
+            },
+            "2.5s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Remaining obstacle distance d(tau_req) = -2.07 m <= 0 m at tau_req=2.50s (ego advanced x=22.07 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            },
+            "3.0s": {
+              "status": "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              "reason": "Hypothetical VLA state at tau_req=3.00s departs straight-line longitudinal corridor (|y|=2.26 m > 1.75 m or |heading|=0.12 rad > 0.35 rad); 1D longitudinal R3B braking-only model is not applicable without combined lateral-longitudinal assumptions.; Remaining obstacle distance d(tau_req) = -6.47 m <= 0 m at tau_req=3.00s (ego advanced x=26.47 m past initial obstacle coordinate d0=20.00 m prior to takeover request)."
+            }
+          }
+        }
+      }
+    }
+  }
+}

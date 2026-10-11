@@ -241,7 +241,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="space-y-1.5 max-w-4xl">
           <div class="flex flex-wrap items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-700 border border-blue-500/30">
-              Extension: extensions/vla_handover_feasibility (v0.2.0)
+              Extension: extensions/vla_handover_feasibility (v0.3.0)
             </span>
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">
               Genuine AutoVLA Inference (Qwen2.5-VL-3B + 2048 Physical Action Tokens)
@@ -675,6 +675,108 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
     </section>
 
+    <!-- RQ1 Controlled Command-Sensitivity Comparison (Scene 02 & Scene 06) & RQ2 Scene 05 C10 Robustness Matrix -->
+    <section id="rq1-command-sensitivity-section" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-4 print-avoid-break">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-indigo-500/15 text-indigo-800 border border-indigo-500/30">
+              RQ1 — Controlled Driving-Command Sensitivity Experiment (EXT-VLA-C07)
+            </span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">
+              7 Canonical Predictions Frozen &amp; Unchanged
+            </span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-500/15 text-purple-800 border border-purple-500/30">
+              2 Controlled Single-Variable Interventions ("turn left" &rarr; "keep forward")
+            </span>
+          </div>
+          <h2 class="text-sm font-bold text-[var(--foreground)] mt-1">
+            Scene 02 &amp; Scene 06 Trajectory, Kinematic &amp; R3B Corridor Sensitivity Under Controlled Driving-Command Intervention
+          </h2>
+        </div>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">
+          Supported Upstream AutoVLA Commands: "turn left" | "keep forward" | "turn right"
+        </span>
+      </div>
+
+      <!-- Critical Interpretation Rule Alert -->
+      <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-xs text-amber-950 leading-relaxed">
+        <strong>Critical Interpretation Rule (Command-Conditioned ADE/FDE vs. Logged Human Turn):</strong>
+        In <strong>Scene 02</strong> (y<sub>GT</sub>(5.0 s) = +16.67 m) and <strong>Scene 06</strong> (y<sub>GT</sub>(5.0 s) = +8.35 m), the logged human ground-truth trajectory executes a <strong>left-turn maneuver</strong>. It is <em>not</em> a valid ground-truth reference target for a deliberately different <code>"keep forward"</code> intervention command. Reported ADE/FDE differences under <code>"keep forward"</code> quantify <strong>command sensitivity relative to the recorded turning trajectory</strong>, not policy quality, driving safety, or superiority/inferiority of either trajectory. Outside the &pm;1.75 m / &pm;0.35 rad longitudinal corridor (or without an observed 3D in-lane obstacle), R3B braking-only recoverability explicitly returns <code>INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE</code>.
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Scene 02 Command Sensitivity Card -->
+        <div class="rounded-lg border border-[var(--border)] bg-[var(--background)] p-3 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <div>
+              <span class="text-xs font-bold text-[var(--foreground)]">Scene 02 — Stationary Lead Obstacle Approach (<code>3cacb287d398542f</code>)</span>
+              <div class="text-[11px] text-[var(--muted-foreground)]">v<sub>0</sub> = 6.95 m/s, a<sub>x,0</sub> = +0.58 m/s&sup2;, Observed Stationary 3D Lead d<sub>0</sub> = 55.49 m</div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-indigo-500/15 text-indigo-800 border border-indigo-500/30">10/10 Tokens Changed (Step 1)</span>
+          </div>
+          <div id="svg-cmd-sens-scene02" class="w-full rounded bg-[var(--card)] border border-[var(--border)] p-1.5"></div>
+          <div id="table-cmd-sens-scene02" class="table-wrapper rounded border border-[var(--border)] bg-[var(--card)]"></div>
+        </div>
+
+        <!-- Scene 06 Command Sensitivity Card -->
+        <div class="rounded-lg border border-[var(--border)] bg-[var(--background)] p-3 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <div>
+              <span class="text-xs font-bold text-[var(--foreground)]">Scene 06 — Multi-Vehicle Intersection Turn (<code>c9d4d04945e85ef8</code>)</span>
+              <div class="text-[11px] text-[var(--muted-foreground)]">v<sub>0</sub> = 8.78 m/s, a<sub>x,0</sub> = +0.41 m/s&sup2;, No Observed In-Corridor Lead (CF d<sub>0</sub> = 20.0 m)</div>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-indigo-500/15 text-indigo-800 border border-indigo-500/30">8/10 Tokens Changed (Step 1)</span>
+          </div>
+          <div id="svg-cmd-sens-scene06" class="w-full rounded bg-[var(--card)] border border-[var(--border)] p-1.5"></div>
+          <div id="table-cmd-sens-scene06" class="table-wrapper rounded border border-[var(--border)] bg-[var(--card)]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RQ2 Scene 05 C10 Numerical Robustness Audit Section -->
+    <section id="rq2-c10-robustness-section" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-4 print-avoid-break">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-xs font-bold bg-rose-500/15 text-rose-800 border border-rose-500/30">
+              RQ2 — Scene 05 C10 Numerical Robustness Audit (EXT-VLA-C08)
+            </span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 border border-emerald-500/30">
+              Native 0.5 s Grid Only (No Synthetic Resampling)
+            </span>
+            <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/15 text-amber-900 border border-amber-500/30">
+              30/30 Violated for Windows &ge; 1.5 s at &le; 2.5 m/s&sup2; (45/75 Overall Grid)
+            </span>
+          </div>
+          <h2 class="text-sm font-bold text-[var(--foreground)] mt-1">
+            Sensitivity of <code>C10_LONGITUDINAL_ACCEL_STATE_CONSISTENCY</code> Across 5 Discrete Derivative Estimators, 5 Temporal Windows &amp; 3 Illustrative Thresholds
+          </h2>
+        </div>
+        <span id="c10-overall-badge" class="text-xs font-mono px-2.5 py-1 rounded bg-amber-500/15 text-amber-900 border border-amber-500/30"></span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start text-xs">
+        <div class="lg:col-span-5 space-y-2.5">
+          <div class="font-semibold">Scene 05 Implied Longitudinal Acceleration a<sub>lon</sub>(t) [m/s&sup2;] Across Estimators E1&ndash;E5 vs. Signed OOD Rollout</div>
+          <div id="svg-c10-estimators" class="w-full rounded-lg bg-[var(--background)] border border-[var(--border)] p-2"></div>
+          <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1 text-[11px] leading-relaxed">
+            <div><strong>D4 Physical &amp; Numerical Sanity Checks:</strong> Observed a<sub>x</sub>(0) = &minus;1.5525 m/s&sup2; (v<sub>0</sub> = 4.3103 m/s). Under canonical unsigned prompt (<code>1.56 m/s^2</code>), Step 1 decelerates (&minus;0.8841 m/s&sup2; on E1/E3; &minus;1.7658 m/s&sup2; on E2), then <strong>9 consecutive steps (t = 1.0..5.0 s) exhibit positive acceleration</strong>, reaching x(5.0 s) = 28.534 m vs. logged GT 15.648 m (+12.89 m overshoot). Heading distortion on Steps 2&ndash;10 is &lt; 0.0019 m/s&sup2; (&lt; 0.07%).</div>
+            <div><strong>D5 Signed-Acceleration OOD Comparison (<code>-1.55 m/s^2</code>):</strong> Sustains negative acceleration across all active-motion steps (t = 0.5..3.5 s, max |a<sub>lon</sub> &minus; a<sub>x</sub>(0)| &le; 0.6684 m/s&sup2;, <strong>0/75 active-motion C10 violations</strong>; single-scene OOD diagnostic).</div>
+            <div class="text-amber-900"><strong>Threshold Boundary Note:</strong> Thresholds 2.0, 2.5 (canonical), and 3.0 m/s&sup2; are illustrative numerical-sensitivity bounds on the 0.5 s waypoint grid, not universal biomechanics or ISO safety standards.</div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-1.5">
+          <div class="flex flex-wrap items-center justify-between gap-1 text-xs">
+            <span class="font-semibold">5 Estimators (E1&ndash;E5) &times; 5 Temporal Windows (W1&ndash;W5) &times; 3 Thresholds (2.0 / 2.5 / 3.0 m/s&sup2;)</span>
+            <span class="text-[11px] text-[var(--muted-foreground)]">Cells show Peak |a<sub>lon</sub> &minus; a<sub>x</sub>(0)| [m/s&sup2;], Peak a<sub>lon</sub>, and Pass/Violated @ [2.0 / 2.5 / 3.0]</span>
+          </div>
+          <div id="table-c10-matrix" class="table-wrapper rounded-lg border border-[var(--border)]"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- Cross-Scenario Summary & Extension Claim Register -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 print-avoid-break">
       <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
@@ -703,7 +805,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
       <div class="lg:col-span-6 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-3">
         <h2 class="text-sm font-bold text-[var(--foreground)]">
-          Independent Extension Evidence Register (EXT-VLA-C01 &ndash; EXT-VLA-C05)
+          Independent Extension Evidence Register (EXT-VLA-C01 &ndash; EXT-VLA-C08)
         </h2>
         <div class="table-wrapper rounded-lg border border-[var(--border)]">
           <table class="text-xs">
@@ -730,6 +832,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       const records = summary.records;
       const claims = bundle.extension_claims || [];
       const s05Ablation = summary.scene_05_signed_accel_ablation || null;
+      const cmdSens = summary.command_sensitivity || null;
+      const c10Rob = summary.scene_05_c10_robustness || null;
 
       document.getElementById("rq-text").textContent = summary.central_research_question;
       document.getElementById("prov-model").textContent = summary.model_provenance.selected_model;
@@ -1419,7 +1523,204 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       selectMu.addEventListener("change", renderActiveView);
       sliderTau.addEventListener("input", renderActiveView);
 
+      function renderCommandSensitivityCard(sceneId, svgContainerId, tableContainerId) {
+        if (!cmdSens || !cmdSens.scenes || !cmdSens.scenes[sceneId]) return;
+        const sc = cmdSens.scenes[sceneId];
+        const ctrl = sc.control_turn_left;
+        const intv = sc.intervention_keep_forward;
+        const cmp = sc.comparative_metrics;
+        const r3b = sc.r3b_impact;
+        const steps = cmp.step_by_step_deltas || [];
+        const svgEl = document.getElementById(svgContainerId);
+        const tblEl = document.getElementById(tableContainerId);
+        if (!svgEl || !tblEl || steps.length === 0) return;
+
+        const w = 480, h = 165, padL = 38, padR = 16, padT = 18, padB = 26;
+        let maxX = 46.0;
+        let maxAbsY = 12.0;
+        steps.forEach((s) => {
+          maxX = Math.max(maxX, s.control_x_m + 4, s.intervention_x_m + 4, s.gt_x_m + 4);
+          maxAbsY = Math.max(maxAbsY, Math.abs(s.control_y_m) + 2, Math.abs(s.intervention_y_m) + 2, Math.abs(s.gt_y_m) + 2);
+        });
+        const xToPx = (x) => padL + (Math.max(0, x) / maxX) * (w - padL - padR);
+        const yToPx = (y) => padT + ((maxAbsY - y) / (2 * maxAbsY)) * (h - padT - padB);
+
+        const corrTop = yToPx(1.75), corrBot = yToPx(-1.75), y0 = yToPx(0), x0 = xToPx(0);
+        let svg = `<svg viewBox="0 0 ${w} ${h}" class="w-full h-auto">`;
+        svg += `<rect x="${x0}" y="${corrTop}" width="${xToPx(maxX) - x0}" height="${Math.max(4, corrBot - corrTop)}" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.3)" stroke-dasharray="3 2" />`;
+        svg += `<line x1="${padL}" y1="${y0}" x2="${w - padR}" y2="${y0}" stroke="currentColor" stroke-opacity="0.2" />`;
+        for (let xm = 0; xm <= maxX; xm += 10) {
+          const px = xToPx(xm);
+          svg += `<line x1="${px}" y1="${padT}" x2="${px}" y2="${h - padB}" stroke="currentColor" stroke-opacity="0.1" />`;
+          svg += `<text x="${px}" y="${h - 7}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.7">${xm}m</text>`;
+        }
+        [-Math.round(maxAbsY * 0.75), 0, Math.round(maxAbsY * 0.75)].forEach((yv) => {
+          const py = yToPx(yv);
+          svg += `<text x="${padL - 4}" y="${py + 3}" text-anchor="end" font-size="8.5" fill="currentColor" fill-opacity="0.7">${yv >= 0 ? "+" : ""}${yv}m</text>`;
+        });
+
+        const gtPts = [`${x0},${y0}`].concat(steps.map((s) => `${xToPx(s.gt_x_m)},${yToPx(s.gt_y_m)}`)).join(" ");
+        const ctrlPts = [`${x0},${y0}`].concat(steps.map((s) => `${xToPx(s.control_x_m)},${yToPx(s.control_y_m)}`)).join(" ");
+        const intvPts = [`${x0},${y0}`].concat(steps.map((s) => `${xToPx(s.intervention_x_m)},${yToPx(s.intervention_y_m)}`)).join(" ");
+
+        svg += `<polyline fill="none" stroke="#10b981" stroke-width="1.8" stroke-dasharray="4 3" points="${gtPts}" />`;
+        svg += `<polyline fill="none" stroke="#ef4444" stroke-width="2.1" points="${ctrlPts}" />`;
+        svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.2" points="${intvPts}" />`;
+        steps.forEach((s) => {
+          svg += `<circle cx="${xToPx(s.control_x_m)}" cy="${yToPx(s.control_y_m)}" r="2.3" fill="#ef4444" />`;
+          svg += `<circle cx="${xToPx(s.intervention_x_m)}" cy="${yToPx(s.intervention_y_m)}" r="2.5" fill="#2563eb" />`;
+        });
+        svg += `<g transform="translate(${padL + 6}, ${padT + 10})" font-size="9" fill="currentColor">`;
+        svg += `<line x1="0" y1="-3" x2="12" y2="-3" stroke="#ef4444" stroke-width="2.1" /><text x="16" y="0">Control: "turn left" (y_5s=${ctrl.final_displacement_y_m.toFixed(2)}m)</text>`;
+        svg += `<line x1="0" y1="10" x2="12" y2="10" stroke="#2563eb" stroke-width="2.2" /><text x="16" y="13">Intervention: "keep forward" (y_5s=${intv.final_displacement_y_m.toFixed(2)}m)</text>`;
+        svg += `<line x1="0" y1="23" x2="12" y2="23" stroke="#10b981" stroke-width="1.8" stroke-dasharray="4 3" /><text x="16" y="26">Logged Human GT [Turn Left] (y_5s=${sc.logged_human_gt_5s_y_m.toFixed(2)}m)</text>`;
+        svg += `</g></svg>`;
+        svgEl.innerHTML = svg;
+
+        const obsCtrl = r3b.observed_schedule_control_turn_left;
+        const obsIntv = r3b.observed_schedule_intervention_keep_forward;
+        const cfCtrl = r3b.counterfactual_schedule_control_turn_left;
+        const cfIntv = r3b.counterfactual_schedule_intervention_keep_forward;
+
+        const r3bLabel = r3b.observed_obstacle_present
+          ? `Observed d0=${r3b.observed_obstacle_d0_m.toFixed(2)}m Corridor Steps`
+          : `Observed / CF (d0=${r3b.counterfactual_reference_d0_m.toFixed(1)}m) Corridor Steps`;
+        const r3bCtrlStr = r3b.observed_obstacle_present
+          ? `${obsCtrl.admissible_count}/7 (${obsCtrl.admissible_tau_req_s.map((t) => t.toFixed(1) + "s").join(",")})`
+          : `Obs 0/7 | CF ${cfCtrl.admissible_count}/7`;
+        const r3bIntvStr = r3b.observed_obstacle_present
+          ? `${obsIntv.admissible_count}/7 (${obsIntv.admissible_tau_req_s.map((t) => t.toFixed(1) + "s").join(",")})`
+          : `Obs 0/7 | CF ${cfIntv.admissible_count}/7`;
+
+        tblEl.innerHTML = `<table class="text-[11px] w-full">` +
+          `<thead class="bg-[var(--background)] text-[var(--muted-foreground)]">` +
+          `<tr><th class="text-left p-1.5 border-b border-[var(--border)]">Metric</th>` +
+          `<th class="text-right p-1.5 border-b border-[var(--border)]">Control ("turn left")</th>` +
+          `<th class="text-right p-1.5 border-b border-[var(--border)]">Intervention ("keep forward")</th>` +
+          `<th class="text-right p-1.5 border-b border-[var(--border)]">&Delta; (Intv &minus; Ctrl)</th></tr></thead>` +
+          `<tbody>` +
+          `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 font-medium">Action Tokens</th><td class="text-right p-1.5 font-mono">[${ctrl.action_codebook_indices.slice(0, 4).join(",")}...]</td><td class="text-right p-1.5 font-mono">[${intv.action_codebook_indices.slice(0, 4).join(",")}...]</td><td class="text-right p-1.5 font-mono font-bold text-indigo-700">${cmp.tokens_changed_count}/10 (step ${cmp.first_divergent_step})</td></tr>` +
+          `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 font-medium">Final Pose (x, y, &psi; @ 5.0s)</th><td class="text-right p-1.5 font-mono">(${ctrl.final_displacement_x_m.toFixed(2)}m, +${ctrl.final_displacement_y_m.toFixed(2)}m, +${ctrl.final_heading_deg.toFixed(1)}&deg;)</td><td class="text-right p-1.5 font-mono">(${intv.final_displacement_x_m.toFixed(2)}m, +${intv.final_displacement_y_m.toFixed(2)}m, +${intv.final_heading_deg.toFixed(1)}&deg;)</td><td class="text-right p-1.5 font-mono font-bold">&Delta;y=${cmp.delta_final_y_m_intv_minus_ctrl.toFixed(2)}m, &Delta;&psi;=${cmp.delta_final_heading_deg_intv_minus_ctrl.toFixed(1)}&deg;</td></tr>` +
+          `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 font-medium">Lateral y(3.0s) &amp; Mean/Max L2 Div</th><td class="text-right p-1.5 font-mono">y(3s)=+${steps[5].control_y_m.toFixed(2)}m</td><td class="text-right p-1.5 font-mono">y(3s)=+${steps[5].intervention_y_m.toFixed(2)}m</td><td class="text-right p-1.5 font-mono">&Delta;y(3s)=${cmp.delta_y_3s_m_intv_minus_ctrl.toFixed(2)}m | L2=${cmp.mean_l2_trajectory_divergence_m.toFixed(2)}/${cmp.final_l2_trajectory_divergence_m.toFixed(2)}m</td></tr>` +
+          `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 font-medium">ADE / FDE vs. Logged Turn GT*</th><td class="text-right p-1.5 font-mono">${ctrl.ade_vs_logged_left_turn_gt_m.toFixed(2)}m / ${ctrl.fde_vs_logged_left_turn_gt_m.toFixed(2)}m</td><td class="text-right p-1.5 font-mono">${intv.ade_vs_logged_left_turn_gt_m.toFixed(2)}m / ${intv.fde_vs_logged_left_turn_gt_m.toFixed(2)}m</td><td class="text-right p-1.5 font-mono">${cmp.ade_vs_logged_gt_delta_m >= 0 ? "+" : ""}${cmp.ade_vs_logged_gt_delta_m.toFixed(2)}m / ${cmp.fde_vs_logged_gt_delta_m >= 0 ? "+" : ""}${cmp.fde_vs_logged_gt_delta_m.toFixed(2)}m</td></tr>` +
+          `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 font-medium">C1&ndash;C10 Dry (&mu;=1.0) / Wet (&mu;=0.5)</th><td class="text-right p-1.5 font-mono">${ctrl["feasibility_dry_mu1.0"] === "CONSTRAINTS_SATISFIED" ? "PASS" : "VIOL"} / ${ctrl["feasibility_wet_mu0.5"] === "CONSTRAINTS_SATISFIED" ? "PASS" : "VIOL(C7)"}</td><td class="text-right p-1.5 font-mono">${intv["feasibility_dry_mu1.0"] === "CONSTRAINTS_SATISFIED" ? "PASS" : "VIOL"} / ${intv["feasibility_wet_mu0.5"] === "CONSTRAINTS_SATISFIED" ? "PASS" : "VIOL(C7)"}</td><td class="text-right p-1.5 font-mono">Step1 |a_lat|: ${steps[0].control_a_lat_mps2.toFixed(2)}&rarr;${steps[0].intervention_a_lat_mps2.toFixed(2)}</td></tr>` +
+          `<tr><th class="text-left p-1.5 font-medium">${r3bLabel}</th><td class="text-right p-1.5 font-mono">${r3bCtrlStr}</td><td class="text-right p-1.5 font-mono">${r3bIntvStr}</td><td class="text-right p-1.5 font-mono font-bold text-emerald-700">Corridor Exit: ${ctrl.maneuver.first_corridor_exit_tau_s}s &rarr; ${intv.maneuver.first_corridor_exit_tau_s}s</td></tr>` +
+          `</tbody></table>`;
+      }
+
+      function renderCommandSensitivitySection() {
+        renderCommandSensitivityCard("scene_02_stationary_lead_obstacle", "svg-cmd-sens-scene02", "table-cmd-sens-scene02");
+        renderCommandSensitivityCard("scene_06_intersection_turn_maneuver", "svg-cmd-sens-scene06", "table-cmd-sens-scene06");
+      }
+
+      function renderC10RobustnessSection() {
+        if (!c10Rob) return;
+        const badgeEl = document.getElementById("c10-overall-badge");
+        if (badgeEl) {
+          badgeEl.textContent = c10Rob.overall_classification || "";
+        }
+        const svgEl = document.getElementById("svg-c10-estimators");
+        const tblEl = document.getElementById("table-c10-matrix");
+        const ests = c10Rob.canonical_unsigned_rollout || {};
+        const sigEsts = (c10Rob.signed_input_diagnostic_rollout_ood && c10Rob.signed_input_diagnostic_rollout_ood.estimators) || {};
+        const ax0 = (c10Rob.sanity_checks_d4 && c10Rob.sanity_checks_d4.initial_ego_state_consistency)
+          ? c10Rob.sanity_checks_d4.initial_ego_state_consistency.ax0_mps2
+          : -1.5525;
+
+        if (svgEl && ests.E1_chord_backward_diff) {
+          const w = 460, h = 175, padL = 38, padR = 16, padT = 18, padB = 26;
+          const minA = -2.2, maxA = 2.0;
+          const tToPx = (t) => padL + (t / 5.0) * (w - padL - padR);
+          const aToPx = (a) => padT + ((maxA - a) / (maxA - minA)) * (h - padT - padB);
+
+          let svg = `<svg viewBox="0 0 ${w} ${h}" class="w-full h-auto">`;
+          const yZero = aToPx(0), yAx0 = aToPx(ax0), yThresh25 = aToPx(ax0 + 2.5);
+          svg += `<line x1="${padL}" y1="${yZero}" x2="${w - padR}" y2="${yZero}" stroke="currentColor" stroke-opacity="0.25" />`;
+          svg += `<line x1="${padL}" y1="${yAx0}" x2="${w - padR}" y2="${yAx0}" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2" />`;
+          svg += `<line x1="${padL}" y1="${yThresh25}" x2="${w - padR}" y2="${yThresh25}" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="4 2" />`;
+          svg += `<text x="${w - padR - 4}" y="${yThresh25 - 3}" text-anchor="end" font-size="8.5" font-weight="bold" fill="#ef4444">C10 Threshold (+2.5 m/s² above a_x(0) = +0.95 m/s²)</text>`;
+
+          [-2, -1, 0, 1, 2].forEach((av) => {
+            const py = aToPx(av);
+            svg += `<text x="${padL - 4}" y="${py + 3}" text-anchor="end" font-size="8.5" fill="currentColor" fill-opacity="0.7">${av >= 0 ? "+" : ""}${av}</text>`;
+          });
+          for (let tv = 0; tv <= 5; tv += 1) {
+            const px = tToPx(tv);
+            svg += `<line x1="${px}" y1="${padT}" x2="${px}" y2="${h - padB}" stroke="currentColor" stroke-opacity="0.08" />`;
+            svg += `<text x="${px}" y="${h - 7}" text-anchor="middle" font-size="9" fill="currentColor" fill-opacity="0.7">${tv}.0s</text>`;
+          }
+
+          const drawEst = (key, color, dash, width) => {
+            const arr = (ests[key] && ests[key].step_series) || [];
+            if (!arr.length) return;
+            const pts = [`${tToPx(0)},${yAx0}`].concat(arr.map((s) => `${tToPx(s.t_s)},${aToPx(s.a_lon_mps2)}`)).join(" ");
+            svg += `<polyline fill="none" stroke="${color}" stroke-width="${width}" ${dash ? `stroke-dasharray="${dash}"` : ""} points="${pts}" />`;
+          };
+          drawEst("E2_ego_x_taylor_second_diff", "#9333ea", "2 2", 1.6);
+          drawEst("E4_central_velocity_diff", "#d97706", "4 2", 1.9);
+          drawEst("E5_three_step_moving_average", "#059669", "3 2", 1.9);
+          drawEst("E1_chord_backward_diff", "#ef4444", "", 2.3);
+
+          const sigSteps = (sigEsts.E1_chord_backward_diff && sigEsts.E1_chord_backward_diff.step_series) || [];
+          if (sigSteps.length) {
+            const sPts = [`${tToPx(0)},${yAx0}`].concat(sigSteps.slice(0, 7).map((s) => `${tToPx(s.t_s)},${aToPx(s.a_lon_mps2)}`)).join(" ");
+            svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2" points="${sPts}" />`;
+          }
+
+          svg += `<g transform="translate(${padL + 6}, ${h - padB - 38})" font-size="8.5" fill="currentColor">`;
+          svg += `<line x1="0" y1="-3" x2="11" y2="-3" stroke="#ef4444" stroke-width="2.3" /><text x="14" y="0">E1/E3 Unsmoothed (peak +1.54 m/s², |&Delta;|=3.10)</text>`;
+          svg += `<line x1="0" y1="9" x2="11" y2="9" stroke="#d97706" stroke-width="1.9" stroke-dasharray="4 2" /><text x="14" y="12">E4 Central Diff 1s (peak +1.30 m/s², |&Delta;|=2.85)</text>`;
+          svg += `<line x1="0" y1="21" x2="11" y2="21" stroke="#059669" stroke-width="1.9" stroke-dasharray="3 2" /><text x="14" y="24">E5 3-Step Moving Avg (peak +1.13 m/s², |&Delta;|=2.68)</text>`;
+          svg += `<line x1="220" y1="-3" x2="231" y2="-3" stroke="#2563eb" stroke-width="2" /><text x="234" y="0">D5 Signed OOD "-1.55" (0/75 active viol.)</text>`;
+          svg += `</g></svg>`;
+          svgEl.innerHTML = svg;
+        }
+
+        const estKeys = Object.keys(ests);
+        if (tblEl && estKeys.length > 0) {
+          const firstWins = ests[estKeys[0]].windows || {};
+          const winKeys = Object.keys(firstWins);
+          let html = `<table class="text-[11px] w-full"><thead class="bg-[var(--background)] text-[var(--muted-foreground)]"><tr>` +
+            `<th class="text-left p-1.5 border-b border-[var(--border)]">Estimator (D1)</th>` +
+            winKeys.map((wk) => {
+              const wObj = firstWins[wk];
+              return `<th class="text-center p-1.5 border-b border-[var(--border)]">${wk.split("_")[0]}<div class="font-mono text-[10px]">0&ndash;${wObj.horizon_s.toFixed(1)}s</div></th>`;
+            }).join("") +
+            `</tr></thead><tbody>`;
+
+          estKeys.forEach((ek) => {
+            const eObj = ests[ek];
+            const shortName = ek.replace(/_/g, " ").slice(0, 26);
+            html += `<tr class="border-b border-[var(--border)]"><th class="text-left p-1.5 bg-[var(--card)] font-mono text-[10px]">${shortName}</th>`;
+            winKeys.forEach((wk) => {
+              const wCell = eObj.windows[wk];
+              if (!wCell) {
+                html += `<td class="p-1.5 text-center">N/A</td>`;
+                return;
+              }
+              const ths = wCell.thresholds || {};
+              const flags = ["2.0_mps2", "2.5_mps2", "3.0_mps2"].map((tk) => {
+                const m = ths[tk];
+                return m && m.c10_violated
+                  ? `<span class="px-1 rounded bg-rose-500/15 text-rose-800 font-bold">V</span>`
+                  : `<span class="px-1 rounded bg-emerald-500/15 text-emerald-800">P</span>`;
+              }).join("/");
+              html += `<td class="p-1.5 text-center font-mono">` +
+                `<div class="font-semibold">|&Delta;|=${wCell.window_max_jump_mps2.toFixed(2)}</div>` +
+                `<div class="text-[10px] text-[var(--muted-foreground)]">a_max=${wCell.window_peak_a_lon_mps2 >= 0 ? "+" : ""}${wCell.window_peak_a_lon_mps2.toFixed(2)}</div>` +
+                `<div class="mt-0.5 text-[10px]">${flags}</div>` +
+                `</td>`;
+            });
+            html += `</tr>`;
+          });
+          html += `</tbody></table>`;
+          tblEl.innerHTML = html;
+        }
+      }
+
       renderScene05AblationChart();
+      renderCommandSensitivitySection();
+      renderC10RobustnessSection();
       populateObstacleOptions(records[0]);
       renderActiveView();
     })();

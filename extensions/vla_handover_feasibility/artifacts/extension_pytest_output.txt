@@ -1,27 +1,29 @@
 ============================= test session starts ==============================
-platform darwin -- Python 3.14.5, pytest-9.1.1, pluggy-1.6.0 -- <repo_root>/.venv/bin/python3.14
+platform darwin -- Python 3.14.5, pytest-9.1.1, pluggy-1.6.0 -- /Users/fengzhecharlieli/Documents/vehicle-aware-human-fallback/.venv/bin/python3.14
 cachedir: .pytest_cache
-rootdir: <repo_root>
+rootdir: /Users/fengzhecharlieli/Documents/vehicle-aware-human-fallback
 configfile: pytest.ini
 plugins: anyio-4.15.1
-collecting ... collected 17 items
+collecting ... collected 19 items
 
 extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_model_output_parsing_fast_and_cot PASSED [  5%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_model_output_parsing_incomplete_and_out_of_range PASSED [ 11%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_build_autovla_user_message_structure PASSED [ 17%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_unit_and_coordinate_conversion_and_rollout PASSED [ 23%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_physical_constraint_calculations_satisfied_and_violated PASSED [ 29%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_missing_or_invalid_predictions_handling PASSED [ 35%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_synthetic_verifier_fixtures_c2_through_c10 PASSED [ 41%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_takeover_timing_assumptions_and_state_provenance PASSED [ 47%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_r3b_adapter_exact_mathematical_compatibility PASSED [ 52%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_boundary_and_interval_classifications PASSED [ 58%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_insufficient_evidence_classifications_in_r3b_adapter PASSED [ 64%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_saved_vla_prediction_artifacts_provenance PASSED [ 70%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_strict_provenance_audit_and_mismatch_detection PASSED [ 76%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_scene_05_active_braking_and_signed_accel_ablation_provenance PASSED [ 82%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_deterministic_evaluation_and_report_generation PASSED [ 88%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_original_research_code_and_42_claim_ledger_preserved PASSED [ 94%]
-extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_one_command_offline_demo_and_readme_assets PASSED [100%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_model_output_parsing_incomplete_and_out_of_range PASSED [ 10%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_build_autovla_user_message_structure PASSED [ 15%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_unit_and_coordinate_conversion_and_rollout PASSED [ 21%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_physical_constraint_calculations_satisfied_and_violated PASSED [ 26%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_missing_or_invalid_predictions_handling PASSED [ 31%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_synthetic_verifier_fixtures_c2_through_c10 PASSED [ 36%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_takeover_timing_assumptions_and_state_provenance PASSED [ 42%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_r3b_adapter_exact_mathematical_compatibility PASSED [ 47%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_boundary_and_interval_classifications PASSED [ 52%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_insufficient_evidence_classifications_in_r3b_adapter PASSED [ 57%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_saved_vla_prediction_artifacts_provenance PASSED [ 63%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_strict_provenance_audit_and_mismatch_detection PASSED [ 68%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_scene_05_active_braking_and_signed_accel_ablation_provenance PASSED [ 73%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_deterministic_evaluation_and_report_generation PASSED [ 78%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_original_research_code_and_42_claim_ledger_preserved PASSED [ 84%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_one_command_offline_demo_and_readme_assets PASSED [ 89%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_rq1_command_only_intervention_isolation_and_canonical_immutability PASSED [ 94%]
+extensions/vla_handover_feasibility/tests/test_vla_handover_extension.py::test_rq2_scene_05_c10_numerical_robustness_audit PASSED [100%]
 
-============================== 17 passed in 1.76s ==============================
+============================== 19 passed in 1.46s ==============================
