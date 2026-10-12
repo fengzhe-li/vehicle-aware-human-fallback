@@ -7,6 +7,17 @@
 
 ---
 
+## Project at a Glance
+
+In Level 3 automated driving, the vehicle drives within defined operating conditions but can ask a human to take over. This project investigates whether enough time and distance remain for braking after that request, and whether AI-generated driving trajectories respect physical constraints.
+
+It combines vehicle dynamics, road-friction limits and brake actuation delays with explicitly assumed human braking-delay ranges. Simulator driver-response evidence is audited separately: recorded control activity cannot establish independent human braking onset. Vision-Language-Action (VLA) model trajectories are decoded and checked for motion continuity, acceleration and friction constraints, with compatible states assessed using the braking-only model.
+
+- **Software engineering:** Python scientific pipelines, automated tests, GitHub Actions CI, reproducible offline evaluation, SHA-256 provenance audits and an interactive HTML demonstrator.
+- **AI verification:** Trajectory constraint checks, controlled prompt interventions and numerical sensitivity analysis.
+
+Uncertainty and evidence boundaries determine which conclusions are justified. Passing these checks establishes only the stated model conditions; it does not prove real-world driving safety, successful human takeover or VLA deployment readiness.
+
 ## Executive Overview
 
 ### 1. The Engineering Problem
