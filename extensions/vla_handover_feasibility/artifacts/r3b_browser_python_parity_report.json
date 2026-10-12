@@ -1,0 +1,429 @@
+{
+  "total_cases": 42,
+  "passed_count": 42,
+  "failed_count": 0,
+  "max_abs_float_diff": 0.0001,
+  "all_passed": true,
+  "results": [
+    {
+      "case_id": "RC01_scene01_high_speed_p1_dry",
+      "description": "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P1 dry mu=1.0",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 4.5917,
+      "py_margin_m": 4.5917
+    },
+    {
+      "case_id": "RC02_scene01_high_speed_p0_dry",
+      "description": "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P0 dry mu=1.0",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 3.7456,
+      "py_margin_m": 3.7456
+    },
+    {
+      "case_id": "RC03_scene01_high_speed_p2_dry",
+      "description": "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P2 dry mu=1.0",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 12.7103,
+      "py_margin_m": 12.7103
+    },
+    {
+      "case_id": "RC04_scene02_observed_static_lead_t0",
+      "description": "Scene 02 t0 v0=6.95 m/s, observed stationary obstacle d0=55.49m",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 36.9498,
+      "py_margin_m": 36.9498
+    },
+    {
+      "case_id": "RC05_scene02_keep_forward_tau1p5s",
+      "description": "Scene 02 keep_forward intervention at tau_req=1.5s inside 1D corridor",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 24.4029,
+      "py_margin_m": 24.4029
+    },
+    {
+      "case_id": "RC06_scene03_urban_moving_lead_wet",
+      "description": "Scene 03 t0 v0=13.05 m/s, moving lead d0=37.34m on wet road mu=0.5",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -7.5611,
+      "py_margin_m": -7.5611
+    },
+    {
+      "case_id": "RC07_scene04_arterial_lead_tau2s",
+      "description": "Scene 04 at tau_req=2.0s with moving lead d0=68.04m",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 43.8663,
+      "py_margin_m": 43.8663
+    },
+    {
+      "case_id": "RC08_scene05_active_braking_cf20m",
+      "description": "Scene 05 t0 v0=4.31 m/s, counterfactual d0=20m",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 8.6312,
+      "py_margin_m": 8.6312
+    },
+    {
+      "case_id": "RC09_kmh_60_alks_limit",
+      "description": "UN R157 60 km/h speed input with d0=50m, mu=1.0",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -2.4493,
+      "py_margin_m": -2.4493
+    },
+    {
+      "case_id": "RC10_kmh_100_motorway",
+      "description": "D003 100 km/h speed input with d0=95m, mu=0.7",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -3.4251,
+      "py_margin_m": -3.4251
+    },
+    {
+      "case_id": "RC11_kmh_130_alks_rev1",
+      "description": "UN R157 Rev.1 130 km/h speed input with d0=140m, mu=1.0",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -17.4085,
+      "py_margin_m": -17.4085
+    },
+    {
+      "case_id": "RC12_friction_damp_0p85",
+      "description": "Damp road mu=0.85 where mu*g=8.3385 > a_max=8.00 (chassis limited)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 4.2052,
+      "py_margin_m": 4.2052
+    },
+    {
+      "case_id": "RC13_friction_wet_0p70",
+      "description": "Wet road mu=0.70 where mu*g=6.867 < a_max=8.00 (friction capped)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 1.9573,
+      "py_margin_m": 1.9573
+    },
+    {
+      "case_id": "RC14_friction_snow_0p35",
+      "description": "Snow surface mu=0.35 where mu*g=3.4335 caps braking strongly",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -13.8468,
+      "py_margin_m": -13.8468
+    },
+    {
+      "case_id": "RC15_friction_ice_0p20",
+      "description": "Ice surface mu=0.20 where mu*g=1.962 m/s^2",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 3.1829,
+      "py_margin_m": 3.1829
+    },
+    {
+      "case_id": "RC16_short_reaction_attentive_1p15s",
+      "description": "Lower R3B corner t1=1.15s, t2=0.05s, t3=0.30s, a_max=9.10 m/s^2",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 9.7769,
+      "py_margin_m": 9.7769
+    },
+    {
+      "case_id": "RC17_long_reaction_conservative_3p00s",
+      "description": "Upper R3B corner t1=3.00s, t2=0.17s, t3=1.20s, a_max=6.43 m/s^2",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -48.1184,
+      "py_margin_m": -48.1184
+    },
+    {
+      "case_id": "RC18_standstill_inside_pre_control_phase",
+      "description": "Vehicle reaches standstill inside pre-control t1 under P2 (v0=3.5 m/s, a_sup=2.5 m/s^2, t1=2.0s)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 10.55,
+      "py_margin_m": 10.55
+    },
+    {
+      "case_id": "RC19_standstill_inside_linear_brake_ramp",
+      "description": "Vehicle reaches standstill inside linear brake ramp t3 (v_after_t1 <= 0.5 * a_eff * t3)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 7.6409,
+      "py_margin_m": 7.6409
+    },
+    {
+      "case_id": "RC20_zero_delay_zero_ramp_step_braking",
+      "description": "Instantaneous brake buildup t2=0.0s, t3=0.0s (R0 reference profile)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 5.75,
+      "py_margin_m": 5.75
+    },
+    {
+      "case_id": "RC21_aero_drag_epa_p05",
+      "description": "EPA 5th percentile low aerodynamic/rolling drag mode at 25 m/s (90 km/h)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -5.8118,
+      "py_margin_m": -5.8118
+    },
+    {
+      "case_id": "RC22_aero_drag_epa_median",
+      "description": "EPA 50th percentile median drag mode at 25 m/s (90 km/h)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -5.2273,
+      "py_margin_m": -5.2273
+    },
+    {
+      "case_id": "RC23_aero_drag_epa_p95",
+      "description": "EPA 95th percentile high aerodynamic/rolling drag mode at 25 m/s (90 km/h)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -4.6931,
+      "py_margin_m": -4.6931
+    },
+    {
+      "case_id": "RC24_aero_drag_epa_bev_median",
+      "description": "EPA Battery Electric median coastdown drag mode (road-load only, no regen)",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -5.7343,
+      "py_margin_m": -5.7343
+    },
+    {
+      "case_id": "RC25_aero_drag_custom_0p32",
+      "description": "Custom coastdown drag a_drag=0.32 m/s^2 at 22 m/s",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_VIOLATED",
+      "py_status": "NECESSARY_CONDITION_VIOLATED",
+      "js_margin_m": -3.1486,
+      "py_margin_m": -3.1486
+    },
+    {
+      "case_id": "RC26_boundary_proximity_epsilon_band",
+      "description": "Obstacle distance tuned so conservative time margin lies inside +-0.01s boundary band",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NECESSARY_CONDITION_SATISFIED",
+      "py_status": "NECESSARY_CONDITION_SATISFIED",
+      "js_margin_m": 17.52,
+      "py_margin_m": 17.52
+    },
+    {
+      "case_id": "RC27_road_grade_downhill_minus3pct_not_applicable",
+      "description": "Downhill grade -3.0% is outside level-road R3A/R3B analytical slice -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC28_road_grade_uphill_plus4pct_not_applicable",
+      "description": "Uphill grade +4.0% is outside level-road R3A/R3B analytical slice -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC29_corridor_lateral_exit_scene02_turn_left",
+      "description": "Scene 02 canonical turn-left at tau_req=1.5s exits +-1.75m lateral corridor -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC30_corridor_heading_exit_only",
+      "description": "Heading |psi|=0.39 rad > 0.35 rad even with |y|=1.10 m <= 1.75 m -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC31_stationary_ego_scene07",
+      "description": "Scene 07 stationary ego v0=0.0019 m/s <= 0.05 m/s -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC32_obstacle_already_passed_d_rem_nonpositive",
+      "description": "Ego x=32.0m >= d0=30.0m (d_rem = -2.0m <= 0) -> NOT_APPLICABLE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC33_missing_obstacle_insufficient_evidence",
+      "description": "Open-road scene with no observed 3D obstacle and no assumed d0 -> INSUFFICIENT_EVIDENCE",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "INSUFFICIENT_EVIDENCE",
+      "py_status": "INSUFFICIENT_EVIDENCE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC34_invalid_negative_speed",
+      "description": "Negative speed v0=-5.0 m/s rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC35_invalid_excessive_speed",
+      "description": "Excessive speed v0=72.0 m/s (> 60 m/s) rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC36_invalid_zero_obstacle_distance",
+      "description": "Zero obstacle distance d0=0.0 m rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC37_invalid_friction_zero",
+      "description": "Zero friction mu=0.0 rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC38_invalid_friction_above_1p2",
+      "description": "Excessive friction mu=1.35 (> 1.2) rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC39_invalid_negative_reaction_t1",
+      "description": "Negative reaction delay t1=-0.4 s rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC40_invalid_tau_req_above_3s",
+      "description": "Takeover request timing tau_req=3.5 s (> 3.0 s) rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC41_invalid_custom_drag_negative",
+      "description": "Negative custom aerodynamic drag a_drag=-0.15 m/s^2 rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    },
+    {
+      "case_id": "RC42_invalid_extreme_road_grade",
+      "description": "Extreme road gradient +35.0% (> 25.0%) rejected",
+      "passed": true,
+      "mismatches": [],
+      "js_status": "NOT_APPLICABLE",
+      "py_status": "NOT_APPLICABLE",
+      "js_margin_m": null,
+      "py_margin_m": null
+    }
+  ]
+}

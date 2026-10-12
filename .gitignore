@@ -58,4 +58,5 @@ extensions/vla_handover_feasibility/**/.chrome_qa_profile/
 *.safetensors
 *.pt
 *.pth
+_site/
 

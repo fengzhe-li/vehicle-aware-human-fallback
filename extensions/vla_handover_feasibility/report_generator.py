@@ -155,7 +155,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VLA-Informed Handover Feasibility Analysis — Research Evaluation Dashboard</title>
+  <title>Vehicle-Aware Human Fallback &amp; AutoVLA Trajectory Explorer — Interactive Demonstrator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
@@ -165,8 +165,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       --border: #e2e8f0;
       --muted-foreground: #475569;
     }
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
     .dashboard-title {
-      font-size: clamp(1.25rem, 1rem + 1.15vw, 1.8rem);
+      font-size: clamp(1.2rem, 0.95rem + 1.1vw, 1.75rem);
       line-height: 1.25;
     }
     .cam-frame {
@@ -175,15 +179,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       object-fit: cover;
     }
     .table-wrapper {
-      overflow: auto;
+      overflow-x: auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       max-inline-size: 100%;
       max-block-size: min(520px, 78dvh);
-      container-type: inline-size;
     }
     .table-wrapper table {
       border-collapse: separate;
       border-spacing: 0;
       width: 100%;
+      min-width: 480px;
     }
     .table-wrapper thead {
       position: sticky;
@@ -195,23 +201,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       inset-inline-start: 0;
       z-index: 1;
     }
-    @container (width < 520px) {
-      .table-wrapper table,
-      .table-wrapper thead,
-      .table-wrapper tbody,
-      .table-wrapper tr,
-      .table-wrapper th,
-      .table-wrapper td {
-        display: block;
-      }
-      .table-wrapper thead {
-        display: none;
-      }
-      .table-wrapper tr {
-        margin-block-end: 0.75rem;
-        border: 1px solid var(--border);
-        border-radius: 0.5rem;
-        padding: 0.5rem;
+    @media (max-width: 640px) {
+      .table-wrapper table {
+        min-width: 420px;
       }
     }
     @media print {
@@ -243,16 +235,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     }
   </style>
 </head>
-<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6">
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-3 sm:p-4 md:p-6">
   <div class="max-w-[1440px] mx-auto space-y-5">
 
     <!-- Header & Central Research Question -->
-    <header class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm print-avoid-break">
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 sm:p-5 shadow-sm print-avoid-break">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div class="space-y-1.5 max-w-4xl">
           <div class="flex flex-wrap items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-700 border border-blue-500/30">
-              Extension: extensions/vla_handover_feasibility (v0.3.0)
+              Extension: extensions/vla_handover_feasibility (v0.4.0)
             </span>
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-700 border border-emerald-500/30">
               Genuine AutoVLA Inference (Qwen2.5-VL-3B + 2048 Physical Action Tokens)
@@ -261,20 +253,34 @@ HTML_TEMPLATE = """<!DOCTYPE html>
               Original 42 Claims Frozen &amp; Unmodified
             </span>
             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-700 border border-purple-500/30">
-              11-Point Provenance Verified
+              11-Point Provenance &amp; 42-Case Browser/Python Parity Verified
             </span>
           </div>
           <h1 class="dashboard-title font-bold text-[var(--foreground)]">
-            VLA-Informed Handover Feasibility Analysis — Research Evaluation Dashboard
+            Vehicle-Aware Human Fallback &amp; AutoVLA Trajectory Explorer — Interactive Engineering Demonstrator
           </h1>
           <p class="text-sm text-[var(--muted-foreground)]">
             <strong>Central Research Question:</strong>
             <span id="rq-text"></span>
           </p>
+          <div class="flex flex-wrap items-center gap-2 pt-1 text-xs no-print">
+            <a href="#interactive-demonstrator-workspace" class="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+              Jump to Interactive Simulator &amp; Animated Trajectory Player
+            </a>
+            <a href="demo_walkthrough.mp4" class="px-3 py-1 rounded-lg bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-800 border border-indigo-500/30 font-semibold transition">
+              &#127916; Watch 40s Authentic Demo Video (MP4)
+            </a>
+            <a href="vla_handover_feasibility_report.pdf" class="px-3 py-1 rounded-lg bg-slate-500/10 hover:bg-slate-500/20 text-slate-800 border border-slate-500/30 font-semibold transition">
+              &#128196; Download PDF Report
+            </a>
+            <a href="https://github.com/fengzhe-li/vehicle-aware-human-fallback" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded-lg bg-slate-500/10 hover:bg-slate-500/20 text-slate-800 border border-slate-500/30 font-semibold transition">
+              GitHub Repository &nearr;
+            </a>
+          </div>
         </div>
-        <div class="text-xs text-[var(--muted-foreground)] bg-[var(--background)] border border-[var(--border)] rounded-lg p-3 space-y-1 min-w-[290px]">
+        <div class="text-xs text-[var(--muted-foreground)] bg-[var(--background)] border border-[var(--border)] rounded-lg p-3 space-y-1 w-full sm:w-auto sm:min-w-[280px]">
           <div><strong>Model:</strong> <span id="prov-model" class="font-medium text-[var(--foreground)]"></span></div>
-          <div><strong>Checkpoint:</strong> <code id="prov-ckpt" class="font-mono text-[var(--foreground)]"></code></div>
+          <div><strong>Checkpoint:</strong> <code id="prov-ckpt" class="font-mono text-[var(--foreground)] break-all"></code></div>
           <div><strong>Dataset:</strong> nuPlan / OpenScene / NAVSIM Mini (7 Real Scenes)</div>
           <div><strong>Manifest SHA-256:</strong> <code id="prov-manifest-sha" class="font-mono"></code></div>
           <div><strong>Predicts Takeover Request?:</strong> <span class="font-semibold text-amber-700">No (False — Evaluated Counterfactually)</span></div>
@@ -453,9 +459,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           <!-- Playback Scrubber & Overlay Toggles -->
           <div class="p-3 rounded-lg bg-[var(--card)] border border-[var(--border)] space-y-2.5 text-xs">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-1.5 no-print">
+              <div class="flex flex-wrap items-center gap-1.5 no-print">
                 <button id="btn-explorer-play" type="button" class="px-2.5 py-1 rounded bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition">
                   &#9654; Play
+                </button>
+                <button id="btn-explorer-pause" type="button" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-semibold transition">
+                  &#9208; Pause
+                </button>
+                <button id="btn-explorer-restart" type="button" class="px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-semibold transition">
+                  &#8634; Restart
                 </button>
                 <button id="btn-explorer-prev" type="button" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-mono font-semibold">
                   &larr; &minus;0.5s
@@ -463,6 +475,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 <button id="btn-explorer-next" type="button" class="px-2 py-1 rounded border border-[var(--border)] bg-[var(--background)] hover:bg-slate-200/60 font-mono font-semibold">
                   +0.5s &rarr;
                 </button>
+                <div class="inline-flex items-center gap-1 ml-1 pl-1.5 border-l border-[var(--border)]">
+                  <span class="text-[11px] font-semibold text-[var(--muted-foreground)]">Speed:</span>
+                  <button type="button" data-playback-speed="0.5" class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--background)] text-[11px] font-mono">0.5x</button>
+                  <button type="button" data-playback-speed="1.0" class="px-1.5 py-0.5 rounded border border-indigo-600 bg-indigo-600 text-white text-[11px] font-mono font-bold">1x</button>
+                  <button type="button" data-playback-speed="2.0" class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--background)] text-[11px] font-mono">2x</button>
+                  <select id="select-explorer-playback-speed" aria-label="Playback speed multiplier" class="sr-only">
+                    <option value="0.5">0.5x</option>
+                    <option value="1.0" selected>1x</option>
+                    <option value="2.0">2x</option>
+                  </select>
+                </div>
               </div>
               <div class="font-mono text-xs">
                 <span class="text-[var(--muted-foreground)]">Active Horizon Time:</span>
@@ -499,6 +522,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 <input id="chk-explorer-smooth" type="checkbox" class="accent-indigo-600" />
                 <span>Smooth 0.1 s Display Interpolation</span>
               </label>
+            </div>
+            <div class="text-[11px] text-[var(--muted-foreground)] bg-[var(--background)] rounded px-2 py-1 border border-[var(--border)]">
+              <strong>Open-Loop Rollout Replay Notice:</strong> Animates saved 10-step (5.0 s, &Delta;t = 0.5 s) AutoVLA trajectory predictions from recorded nuPlan / NAVSIM observations &mdash; not a closed-loop traffic simulator. Recorded 0.5 s waypoints use solid markers; 0.1 s smooth frames are explicitly badged as display interpolation.
             </div>
           </div>
 
@@ -661,8 +687,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
               </div>
             </div>
 
-            <!-- Secondary Physical Parameters Row (t2, t3, a_max, a_sup) -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[var(--border)]">
+            <!-- Secondary Physical Parameters Row (t2, t3, a_max, a_sup, P1 Coastdown Drag, Road Gradient Domain) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-2 border-t border-[var(--border)]">
               <div>
                 <label for="input-r3b-t2" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">Hydraulic Delay t<sub>2</sub> [s]</label>
                 <input id="input-r3b-t2" type="number" step="0.01" value="0.10" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
@@ -682,6 +708,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 <label for="input-r3b-asup" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">P2 Decel a<sub>sup</sub> [m/s&sup2;]</label>
                 <input id="input-r3b-asup" type="number" step="0.1" value="2.00" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-2 py-1 font-mono text-xs" />
                 <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B: [1.00, 3.00]</div>
+              </div>
+              <div>
+                <label for="select-r3b-drag-mode" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">P1 Aero/Coast Drag</label>
+                <select id="select-r3b-drag-mode" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-1.5 py-1 text-[11px] font-semibold">
+                  <option value="epa_midpoint" selected>EPA Midpoint(v)</option>
+                  <option value="epa_p05">EPA P05 Low Drag</option>
+                  <option value="epa_median">EPA Median(v)</option>
+                  <option value="epa_p95">EPA P95 High Drag</option>
+                  <option value="epa_bev_median">EPA BEV Median</option>
+                  <option value="custom">Custom a_drag</option>
+                </select>
+                <input id="input-r3b-adrag" type="number" step="0.02" value="0.25" aria-label="Custom aerodynamic drag deceleration in m/s^2" class="hidden w-full mt-1 rounded border border-[var(--border)] bg-[var(--card)] px-1.5 py-0.5 font-mono text-[11px]" />
+              </div>
+              <div>
+                <label for="select-r3b-grade" class="block text-[11px] font-semibold text-[var(--muted-foreground)]">Road Gradient [%]</label>
+                <select id="select-r3b-grade" class="w-full mt-0.5 rounded border border-[var(--border)] bg-[var(--background)] px-1.5 py-1 text-[11px] font-semibold">
+                  <option value="0.0" selected>0% (Level Road)</option>
+                  <option value="-3.0">&minus;3% (Downhill*)</option>
+                  <option value="3.0">+3% (Uphill*)</option>
+                </select>
+                <div class="text-[10px] font-mono text-[var(--muted-foreground)]">R3B Domain: 0%</div>
               </div>
             </div>
           </div>
@@ -2096,8 +2143,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const expCondSel = document.getElementById("select-explorer-condition");
         const expMuSel = document.getElementById("select-explorer-mu");
         const expPlayBtn = document.getElementById("btn-explorer-play");
+        const expPauseBtn = document.getElementById("btn-explorer-pause");
+        const expRestartBtn = document.getElementById("btn-explorer-restart");
         const expPrevBtn = document.getElementById("btn-explorer-prev");
         const expNextBtn = document.getElementById("btn-explorer-next");
+        const expSpeedSel = document.getElementById("select-explorer-playback-speed");
+        const expSpeedBtns = Array.from(document.querySelectorAll("[data-playback-speed]"));
         const expTimeSlider = document.getElementById("slider-explorer-time");
         const expTimeLabel = document.getElementById("explorer-time-label");
         const expInterpBadge = document.getElementById("explorer-interp-badge");
@@ -2127,14 +2178,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const r3bT3Input = document.getElementById("input-r3b-t3");
         const r3bAmaxInput = document.getElementById("input-r3b-amax");
         const r3bAsupInput = document.getElementById("input-r3b-asup");
+        const r3bDragModeSel = document.getElementById("select-r3b-drag-mode");
+        const r3bAdragInput = document.getElementById("input-r3b-adrag");
+        const r3bGradeSel = document.getElementById("select-r3b-grade");
 
         const GRAVITY = 9.81;
         const STANDSTILL_MARGIN_M = 2.0;
         const MIN_SPEED_MPS = 0.05;
         const CORR_HALF_WIDTH_M = 1.75;
         const CORR_MAX_HEADING_RAD = 0.35;
+        const EPSILON_S = 0.01;
+        const SUPPORTED_DRAG_MODES = ["epa_midpoint", "epa_p05", "epa_median", "epa_p95", "epa_bev_median", "custom"];
 
         let playTimer = null;
+        let playbackSpeedMultiplier = 1.0;
 
         // Populate Scene Selector
         const sceneIds = Object.keys(explorerCatalog.scene_condition_map || {});
@@ -2170,21 +2227,51 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           return ((ang + Math.PI) % (2.0 * Math.PI) + 2.0 * Math.PI) % (2.0 * Math.PI) - Math.PI;
         }
 
-        function epaDragIntervalForSpeedMps(speedMps) {
+        function epaDragRowInterpForSpeedMps(speedMps) {
           const rows = explorerCatalog.epa_coastdown_table || [];
-          if (!rows.length) return [0.16, 0.45];
+          if (!rows.length) {
+            return { p05: 0.16, median: 0.25, p95: 0.45, bevMedian: 0.31 };
+          }
           const vKmh = Math.min(Math.max(speedMps * 3.6, rows[0].speed_kmh), rows[rows.length - 1].speed_kmh);
           for (let i = 0; i < rows.length - 1; i++) {
             const r0 = rows[i], r1 = rows[i + 1];
             if (vKmh >= r0.speed_kmh - 1e-9 && vKmh <= r1.speed_kmh + 1e-9) {
               const alpha = r1.speed_kmh > r0.speed_kmh ? (vKmh - r0.speed_kmh) / (r1.speed_kmh - r0.speed_kmh) : 0.0;
-              const lo = r0.p05_mps2 + alpha * (r1.p05_mps2 - r0.p05_mps2);
-              const hi = r0.p95_mps2 + alpha * (r1.p95_mps2 - r0.p95_mps2);
-              return [lo, hi];
+              return {
+                p05: r0.p05_mps2 + alpha * (r1.p05_mps2 - r0.p05_mps2),
+                median: r0.median_mps2 + alpha * (r1.median_mps2 - r0.median_mps2),
+                p95: r0.p95_mps2 + alpha * (r1.p95_mps2 - r0.p95_mps2),
+                bevMedian: r0.bev_median_mps2 + alpha * (r1.bev_median_mps2 - r0.bev_median_mps2),
+              };
             }
           }
           const last = rows[rows.length - 1];
-          return [last.p05_mps2, last.p95_mps2];
+          return {
+            p05: last.p05_mps2,
+            median: last.median_mps2,
+            p95: last.p95_mps2,
+            bevMedian: last.bev_median_mps2,
+          };
+        }
+
+        function epaDragIntervalForSpeedMps(speedMps) {
+          const interp = epaDragRowInterpForSpeedMps(speedMps);
+          return [interp.p05, interp.p95];
+        }
+
+        function resolveEpaDragForSpeedMps(speedMps, dragMode, customDragMps2) {
+          const interp = epaDragRowInterpForSpeedMps(speedMps);
+          const mode = dragMode || "epa_midpoint";
+          if (mode === "epa_p05") return interp.p05;
+          if (mode === "epa_median") return interp.median;
+          if (mode === "epa_p95") return interp.p95;
+          if (mode === "epa_bev_median") return interp.bevMedian;
+          if (mode === "custom") {
+            if (customDragMps2 !== null && customDragMps2 !== undefined && Number.isFinite(Number(customDragMps2))) {
+              return Number(customDragMps2);
+            }
+          }
+          return 0.5 * (interp.p05 + interp.p95);
         }
 
         function stoppingDistanceR3BExact(v0, aMax, t1, t2, t3, tAuth, aBefore, aAfter, mu) {
@@ -2277,10 +2364,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const marginMaxM = marginMaxS * vReqMps;
           let underlying = "PARAMETER-SENSITIVE";
           let presStatus = "PARAMETER_SENSITIVE";
-          if (marginMinS >= 0.0) {
+          if (marginMinS > EPSILON_S) {
             underlying = "ROBUSTLY SATISFIED";
             presStatus = "NECESSARY_CONDITION_SATISFIED";
-          } else if (marginMaxS < 0.0) {
+          } else if (marginMaxS < -EPSILON_S) {
             underlying = "ROBUSTLY UNSATISFIED";
             presStatus = "NECESSARY_CONDITION_VIOLATED";
           }
@@ -2290,6 +2377,394 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             dReqMin: tReqMin * vReqMps, dReqMax: tReqMax * vReqMps,
             marginMinS, marginMaxS, marginMinM, marginMaxM,
             underlying, presStatus,
+          };
+        }
+
+        // Exact Browser Equivalent of Python evaluate_interactive_r3b(params)
+        function evaluateInteractiveR3BInBrowser(params) {
+          const p = params || {};
+          let speedUnit = String(p.speed_unit || "mps").trim().toLowerCase();
+          let rawV = Number(p.v_mps);
+          if (p.v0_mps !== undefined && p.v0_mps !== null) {
+            rawV = Number(p.v0_mps);
+            speedUnit = "mps";
+          } else if (p.v0_kmh !== undefined && p.v0_kmh !== null) {
+            rawV = Number(p.v0_kmh);
+            speedUnit = "kmh";
+          }
+
+          const rawD0Val = p.obstacle_distance_d0_m !== undefined ? p.obstacle_distance_d0_m : p.d0_m;
+          const rawD0 = rawD0Val === null || rawD0Val === undefined ? null : Number(rawD0Val);
+          const rawMu = Number(p.mu !== undefined ? p.mu : 1.0);
+          const rawTauReq = Number(p.tau_req_s !== undefined ? p.tau_req_s : 0.0);
+          const rawT1 = Number(p.t1_s !== undefined ? p.t1_s : 1.65);
+          const rawT2 = Number(p.t2_s !== undefined ? p.t2_s : 0.10);
+          const rawT3 = Number(p.t3_s !== undefined ? p.t3_s : 0.60);
+          const rawAmax = Number(p.a_max_mps2 !== undefined ? p.a_max_mps2 : 8.00);
+          const rawAsup = Number(p.a_sup_mps2 !== undefined ? p.a_sup_mps2 : 2.00);
+          const aDragMode = String(p.a_drag_mode || "epa_midpoint").trim().toLowerCase();
+          const rawAdragCustom = p.a_drag_custom_mps2 === null || p.a_drag_custom_mps2 === undefined ? null : Number(p.a_drag_custom_mps2);
+          const rawGradePct = Number(p.road_grade_pct !== undefined ? p.road_grade_pct : 0.0);
+          const policyBranch = String(p.selected_branch || p.policy_branch || "P1").trim().toUpperCase();
+
+          let obsMode = String(p.obstacle_source_mode || p.obstacle_source || "counterfactual").trim();
+          if (obsMode === "OBSERVED_IN_LANE_ANNOTATION" || obsMode.toLowerCase() === "observed") {
+            obsMode = "observed";
+          } else if (obsMode === "NONE_INSUFFICIENT_EVIDENCE" || obsMode.toLowerCase() === "none") {
+            obsMode = "none";
+          } else {
+            obsMode = "counterfactual";
+          }
+
+          const egoX = Number(p.ego_x_at_req_m !== undefined ? p.ego_x_at_req_m : (p.coupled_ego_x_m !== undefined ? p.coupled_ego_x_m : 0.0));
+          const egoY = Number(p.ego_y_at_req_m !== undefined ? p.ego_y_at_req_m : (p.coupled_ego_y_m !== undefined ? p.coupled_ego_y_m : 0.0));
+          const egoHead = Number(p.ego_heading_at_req_rad !== undefined ? p.ego_heading_at_req_rad : (p.coupled_ego_heading_rad !== undefined ? p.coupled_ego_heading_rad : 0.0));
+          const leadSpeedRaw = p.observed_lead_speed_mps !== undefined ? p.observed_lead_speed_mps : p.coupled_lead_speed_mps;
+          const leadSpeed = leadSpeedRaw === null || leadSpeedRaw === undefined ? null : Number(leadSpeedRaw);
+
+          let stateSrc = "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0";
+          let obsSrcClass = "COUNTERFACTUAL_ASSUMPTION";
+          const safeTauForState = Number.isFinite(rawTauReq) ? rawTauReq : 0.0;
+          if (obsMode === "none" || (obsMode === "observed" && rawD0 === null)) {
+            obsSrcClass = "NONE_INSUFFICIENT_EVIDENCE";
+            stateSrc = Math.abs(safeTauForState) <= 1e-6 ? "OBSERVED_EGO_T0_NO_CREDIBLE_OBSTACLE" : "HYPOTHETICAL_VLA_STATE_NO_CREDIBLE_OBSTACLE";
+          } else if (obsMode === "observed") {
+            obsSrcClass = "OBSERVED_IN_LANE_ANNOTATION";
+            const isMovingLead = leadSpeed !== null && Math.abs(leadSpeed) > 0.1;
+            if (Math.abs(safeTauForState) <= 1e-6) {
+              stateSrc = isMovingLead ? "OBSERVED_EGO_T0_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE";
+            } else {
+              stateSrc = isMovingLead ? "HYPOTHETICAL_VLA_STATE_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE";
+            }
+          } else {
+            obsSrcClass = "COUNTERFACTUAL_ASSUMPTION";
+            stateSrc = Math.abs(safeTauForState) <= 1e-6 ? "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0" : "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0";
+          }
+
+          const validationErrors = [];
+          if (speedUnit !== "mps" && speedUnit !== "kmh") {
+            validationErrors.push(`Unsupported speed_unit='${speedUnit}'. Must be 'mps' or 'kmh'.`);
+          }
+          const v0Mps = speedUnit === "kmh" ? rawV / 3.6 : rawV;
+          const v0Kmh = v0Mps * 3.6;
+
+          if (!Number.isFinite(v0Mps) || v0Mps < 0.0 || v0Mps > 60.0) {
+            validationErrors.push(`Invalid or nonphysical vehicle speed v=${rawV} ${speedUnit} (converted v_mps=${v0Mps.toFixed(3)} m/s; valid range is [0.0, 60.0] m/s).`);
+          }
+          if (!Number.isFinite(rawMu) || rawMu <= 0.0 || rawMu > 1.2) {
+            validationErrors.push(`Invalid road friction coefficient mu=${rawMu} (must satisfy 0.0 < mu <= 1.2).`);
+          }
+          if (!Number.isFinite(rawTauReq) || rawTauReq < -1e-6 || rawTauReq > 3.0 + 1e-6) {
+            validationErrors.push(`Unsupported takeover request delay tau_req=${rawTauReq} s (R3B trajectory handover domain is [0.0, 3.0] s).`);
+          }
+          if (!Number.isFinite(rawT1) || rawT1 < 0.0 || rawT1 > 10.0) {
+            validationErrors.push(`Invalid human reaction delay t1=${rawT1} s (must satisfy 0.0 <= t1 <= 10.0 s).`);
+          }
+          if (!Number.isFinite(rawT2) || rawT2 < 0.0 || rawT2 > 2.0) {
+            validationErrors.push(`Invalid hydraulic actuation delay t2=${rawT2} s (must satisfy 0.0 <= t2 <= 2.0 s).`);
+          }
+          if (!Number.isFinite(rawT3) || rawT3 < 0.0 || rawT3 > 5.0) {
+            validationErrors.push(`Invalid brake ramp buildup time t3=${rawT3} s (must satisfy 0.0 <= t3 <= 5.0 s).`);
+          }
+          if (!Number.isFinite(rawAmax) || rawAmax <= 0.0 || rawAmax > 15.0) {
+            validationErrors.push(`Invalid maximum braking deceleration a_max=${rawAmax} m/s^2 (must satisfy 0.0 < a_max <= 15.0 m/s^2).`);
+          }
+          if (!Number.isFinite(rawAsup) || rawAsup < 0.0 || rawAsup > 5.0) {
+            validationErrors.push(`Invalid P2 pre-deceleration a_sup=${rawAsup} m/s^2 (must satisfy 0.0 <= a_sup <= 5.0 m/s^2).`);
+          }
+          if (!SUPPORTED_DRAG_MODES.includes(aDragMode)) {
+            validationErrors.push(`Unsupported aerodynamic drag mode '${aDragMode}'.`);
+          }
+          if (aDragMode === "custom") {
+            if (rawAdragCustom === null || !Number.isFinite(rawAdragCustom) || rawAdragCustom < 0.0 || rawAdragCustom > 1.5) {
+              validationErrors.push(`Invalid custom aerodynamic drag deceleration a_drag=${rawAdragCustom} m/s^2 (must satisfy 0.0 <= a_drag <= 1.5 m/s^2).`);
+            }
+          }
+          if (!Number.isFinite(rawGradePct) || Math.abs(rawGradePct) > 25.0) {
+            validationErrors.push(`Invalid road gradient road_grade_pct=${rawGradePct}% (must satisfy -25% <= grade <= +25%).`);
+          }
+          if (!["P0", "P1", "P2"].includes(policyBranch)) {
+            validationErrors.push(`Unsupported policy branch '${policyBranch}'. Must be P0, P1, or P2.`);
+          }
+          if (obsMode !== "none" && rawD0 !== null) {
+            if (!Number.isFinite(rawD0) || rawD0 <= 0.0 || rawD0 > 500.0) {
+              validationErrors.push(`Invalid initial obstacle distance d0=${rawD0} m (must satisfy 0.0 < d0 <= 500.0 m when provided).`);
+            }
+          }
+
+          if (validationErrors.length > 0) {
+            return {
+              valid_inputs: false,
+              r3b_applicable: false,
+              presentation_status: "NOT_APPLICABLE",
+              raw_r3b_status: "INVALID_PARAMETERS",
+              underlying_r3b_status: "INVALID_PARAMETERS",
+              state_source: stateSrc,
+              state_source_classification: stateSrc,
+              obstacle_source_classification: obsSrcClass,
+              validation_errors: validationErrors,
+              non_applicability_reasons: validationErrors,
+              d_avail_m: null,
+              t_avail_s: null,
+              selected_branch: policyBranch,
+              selected_policy_point: null,
+              selected_policy_interval: null,
+              point_breakdown_by_branch: {},
+              point_results_by_branch: {},
+              interval_by_branch: {},
+              interval_results_by_branch: {},
+            };
+          }
+
+          if (obsMode === "none" || rawD0 === null) {
+            const reason = "No observed 3D in-corridor obstacle exists in the dataset annotations for this scene and no counterfactual obstacle distance d0 was assumed.";
+            return {
+              valid_inputs: true,
+              r3b_applicable: false,
+              presentation_status: "INSUFFICIENT_EVIDENCE",
+              raw_r3b_status: "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              underlying_r3b_status: "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              state_source: stateSrc,
+              state_source_classification: stateSrc,
+              obstacle_source_classification: "NONE_INSUFFICIENT_EVIDENCE",
+              validation_errors: [],
+              non_applicability_reasons: [reason],
+              d_avail_m: null,
+              t_avail_s: null,
+              selected_branch: policyBranch,
+              selected_policy_point: null,
+              selected_policy_interval: null,
+              point_breakdown_by_branch: {},
+              point_results_by_branch: {},
+              interval_by_branch: {},
+              interval_results_by_branch: {},
+            };
+          }
+
+          const nonAppReasons = [];
+          if (Math.abs(rawGradePct) > 1e-6) {
+            nonAppReasons.push(`Road gradient road_grade_pct=${rawGradePct.toFixed(1)}% is non-zero; the frozen R3A/R3B analytical stopping-distance equations are defined strictly for level road (0.0% grade).`);
+          }
+          if (v0Mps <= MIN_SPEED_MPS) {
+            nonAppReasons.push(`Vehicle speed v=${v0Mps.toFixed(4)} m/s (${v0Kmh.toFixed(2)} km/h) <= ${MIN_SPEED_MPS} m/s (stationary or near-stationary ego vehicle).`);
+          }
+          const withinCorridor = Math.abs(egoY) <= CORR_HALF_WIDTH_M && Math.abs(egoHead) <= CORR_MAX_HEADING_RAD;
+          if (!withinCorridor) {
+            nonAppReasons.push(`Coupled trajectory pose (|y|=${Math.abs(egoY).toFixed(2)} m, |heading|=${Math.abs(egoHead).toFixed(2)} rad) exits the +-1.75 m / +-0.35 rad 1D longitudinal corridor.`);
+          }
+          const dRemM = rawD0 - egoX;
+          if (dRemM <= 0.0) {
+            nonAppReasons.push(`Remaining obstacle distance d_rem=${dRemM.toFixed(2)} m <= 0.0 m.`);
+          }
+
+          if (nonAppReasons.length > 0) {
+            return {
+              valid_inputs: true,
+              r3b_applicable: false,
+              presentation_status: "NOT_APPLICABLE",
+              raw_r3b_status: "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              underlying_r3b_status: "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE",
+              state_source: stateSrc,
+              state_source_classification: stateSrc,
+              obstacle_source_classification: obsSrcClass,
+              validation_errors: [],
+              non_applicability_reasons: nonAppReasons,
+              d_avail_m: Number(dRemM.toFixed(4)),
+              t_avail_s: null,
+              selected_branch: policyBranch,
+              selected_policy_point: null,
+              selected_policy_interval: null,
+              point_breakdown_by_branch: {},
+              point_results_by_branch: {},
+              interval_by_branch: {},
+              interval_results_by_branch: {},
+            };
+          }
+
+          const tAvailS = dRemM / v0Mps;
+          const aDragPointMps2 = resolveEpaDragForSpeedMps(v0Mps, aDragMode, rawAdragCustom);
+          const pointByBranch = {};
+          const intervalByBranch = {};
+
+          ["P0", "P1", "P2"].forEach((bid) => {
+            const aBefore = bid === "P0" ? 0.0 : (bid === "P1" ? aDragPointMps2 : rawAsup);
+            const tAuth = bid === "P0" ? 0.0 : Infinity;
+            const pt = stoppingDistanceR3BExact(v0Mps, rawAmax, rawT1, rawT2, rawT3, tAuth, aBefore, 0.0, rawMu);
+            const mM = dRemM - pt.dReq;
+            const mS = tAvailS - pt.tReq;
+            const ptPres = mS >= 0.0 ? "NECESSARY_CONDITION_SATISFIED" : "NECESSARY_CONDITION_VIOLATED";
+            const ptUnd = mS >= 0.0 ? "POINT_SATISFIED" : "POINT_VIOLATED";
+            pointByBranch[bid] = {
+              branch_id: bid,
+              a_pre_decel_mps2: Number(aBefore.toFixed(5)),
+              pre_control_decel_mps2: Number(aBefore.toFixed(5)),
+              a_drag_mode: aDragMode,
+              d_pre_m: Number(pt.dPre.toFixed(4)),
+              d_pre_control_m: Number(pt.dPre.toFixed(4)),
+              d_delay_m: Number(pt.dDelay.toFixed(4)),
+              d_actuation_delay_m: Number(pt.dDelay.toFixed(4)),
+              d_brake_m: Number(pt.dBrake.toFixed(4)),
+              d_braking_phase_m: Number(pt.dBrake.toFixed(4)),
+              d_stop_m: Number(pt.dStop.toFixed(4)),
+              standstill_margin_m: STANDSTILL_MARGIN_M,
+              d_req_m: Number(pt.dReq.toFixed(4)),
+              t_req_s: Number(pt.tReq.toFixed(4)),
+              d_avail_m: Number(dRemM.toFixed(4)),
+              t_avail_s: Number(tAvailS.toFixed(4)),
+              margin_m: Number(mM.toFixed(4)),
+              margin_s: Number(mS.toFixed(4)),
+              v_after_t1_mps: Number(pt.vAfterT1.toFixed(5)),
+              v_at_effective_braking_mps: Number(pt.vAfterT1.toFixed(5)),
+              a_eff_mps2: Number(pt.aEff.toFixed(5)),
+              effective_braking_decel_mps2: Number(pt.aEff.toFixed(5)),
+              friction_cap_mps2: Number(pt.frictionCap.toFixed(5)),
+              friction_cap_mu_g_mps2: Number(pt.frictionCap.toFixed(5)),
+              is_friction_capped: Boolean(pt.isFrictionCapped),
+              presentation_status: ptPres,
+              underlying_point_status: ptUnd,
+            };
+
+            const iv = evaluateR3BIntervalForBranch(v0Mps, dRemM, rawMu, bid);
+            const intervalCls = iv.underlying === "ROBUSTLY SATISFIED"
+              ? "UNIFORMLY_POSITIVE"
+              : (iv.underlying === "ROBUSTLY UNSATISFIED" ? "UNIFORMLY_VIOLATED" : "PARAMETER_SENSITIVE");
+            intervalByBranch[bid] = {
+              branch_id: bid,
+              t_avail_s: Number(iv.tAvailS.toFixed(4)),
+              d_avail_m: Number(iv.dAvailM.toFixed(4)),
+              t_req_min_s: Number(iv.tReqMin.toFixed(4)),
+              t_req_max_s: Number(iv.tReqMax.toFixed(4)),
+              d_req_min_m: Number(iv.dReqMin.toFixed(4)),
+              d_req_max_m: Number(iv.dReqMax.toFixed(4)),
+              d_stop_min_m: Number(iv.dReqMin.toFixed(4)),
+              d_stop_max_m: Number(iv.dReqMax.toFixed(4)),
+              margin_min_s: Number(iv.marginMinS.toFixed(4)),
+              margin_max_s: Number(iv.marginMaxS.toFixed(4)),
+              margin_min_m: Number(iv.marginMinM.toFixed(4)),
+              margin_max_m: Number(iv.marginMaxM.toFixed(4)),
+              underlying_r3b_status: iv.underlying,
+              interval_classification: intervalCls,
+              presentation_status: iv.presStatus,
+            };
+          });
+
+          const selPt = pointByBranch[policyBranch];
+          const selIv = intervalByBranch[policyBranch];
+          return {
+            valid_inputs: true,
+            r3b_applicable: true,
+            presentation_status: selPt.presentation_status,
+            raw_r3b_status: "EVALUATED",
+            underlying_r3b_status: selIv.underlying_r3b_status,
+            interval_presentation_status: selIv.presentation_status,
+            state_source: stateSrc,
+            state_source_classification: stateSrc,
+            obstacle_source_classification: obsSrcClass,
+            validation_errors: [],
+            non_applicability_reasons: [],
+            d_avail_m: Number(dRemM.toFixed(4)),
+            t_avail_s: Number(tAvailS.toFixed(4)),
+            selected_branch: policyBranch,
+            selected_policy_point: selPt,
+            selected_policy_interval: selIv,
+            point_breakdown_by_branch: pointByBranch,
+            point_results_by_branch: pointByBranch,
+            interval_by_branch: intervalByBranch,
+            interval_results_by_branch: intervalByBranch,
+          };
+        }
+
+        function verifyAllParityCasesInBrowser() {
+          const suite = explorerCatalog.r3b_browser_parity_reference_cases || {};
+          const cases = suite.cases || explorerCatalog.r3b_parity_cases || [];
+          const results = [];
+          let passedCount = 0;
+          let failedCount = 0;
+          let maxAbsFloatDiff = 0.0;
+
+          cases.forEach((c) => {
+            const jsOut = evaluateInteractiveR3BInBrowser(c.inputs);
+            const pyOut = c.expected;
+            const mismatches = [];
+
+            if (Boolean(jsOut.valid_inputs) !== Boolean(pyOut.valid_inputs)) {
+              mismatches.push(`valid_inputs: js=${jsOut.valid_inputs} vs py=${pyOut.valid_inputs}`);
+            }
+            if (jsOut.presentation_status !== pyOut.presentation_status) {
+              mismatches.push(`presentation_status: js=${jsOut.presentation_status} vs py=${pyOut.presentation_status}`);
+            }
+            if (jsOut.raw_r3b_status !== pyOut.raw_r3b_status) {
+              mismatches.push(`raw_r3b_status: js=${jsOut.raw_r3b_status} vs py=${pyOut.raw_r3b_status}`);
+            }
+            if (jsOut.state_source !== pyOut.state_source) {
+              mismatches.push(`state_source: js=${jsOut.state_source} vs py=${pyOut.state_source}`);
+            }
+
+            const selBranch = pyOut.selected_branch || "P1";
+            const pyPt = (pyOut.point_results_by_branch || {})[selBranch] || null;
+            const jsPt = (jsOut.point_results_by_branch || {})[selBranch] || null;
+            const pyIv = (pyOut.interval_results_by_branch || {})[selBranch] || null;
+            const jsIv = (jsOut.interval_results_by_branch || {})[selBranch] || null;
+
+            if (pyOut.raw_r3b_status === "EVALUATED" && pyPt && jsPt && pyIv && jsIv) {
+              const ptFields = [
+                "d_pre_control_m", "d_actuation_delay_m", "d_braking_phase_m", "d_stop_m",
+                "d_req_m", "t_req_s", "d_avail_m", "t_avail_s",
+                "margin_m", "margin_s", "v_at_effective_braking_mps", "effective_braking_decel_mps2", "pre_control_decel_mps2"
+              ];
+              ptFields.forEach((f) => {
+                const jv = Number(jsPt[f]);
+                const pv = Number(pyPt[f]);
+                const diff = Math.abs(jv - pv);
+                if (diff > maxAbsFloatDiff) maxAbsFloatDiff = diff;
+                if (diff > 1e-3) {
+                  mismatches.push(`point.${f}: js=${jv} vs py=${pv} (diff=${diff})`);
+                }
+              });
+
+              const ivFields = [
+                "t_req_min_s", "t_req_max_s", "d_stop_min_m", "d_stop_max_m",
+                "margin_min_s", "margin_max_s", "margin_min_m", "margin_max_m"
+              ];
+              ivFields.forEach((f) => {
+                const jv = Number(jsIv[f]);
+                const pv = Number(pyIv[f]);
+                const diff = Math.abs(jv - pv);
+                if (diff > maxAbsFloatDiff) maxAbsFloatDiff = diff;
+                if (diff > 1e-3) {
+                  mismatches.push(`interval.${f}: js=${jv} vs py=${pv} (diff=${diff})`);
+                }
+              });
+              if (jsIv.presentation_status !== pyIv.presentation_status) {
+                mismatches.push(`interval.presentation_status: js=${jsIv.presentation_status} vs py=${pyIv.presentation_status}`);
+              }
+              if (jsIv.interval_classification !== pyIv.interval_classification) {
+                mismatches.push(`interval.interval_classification: js=${jsIv.interval_classification} vs py=${pyIv.interval_classification}`);
+              }
+            }
+
+            const passed = mismatches.length === 0;
+            if (passed) passedCount++;
+            else failedCount++;
+            results.push({
+              case_id: c.case_id,
+              description: c.description,
+              passed,
+              mismatches,
+              js_status: jsOut.presentation_status,
+              py_status: pyOut.presentation_status,
+              js_margin_m: jsPt ? jsPt.margin_m : null,
+              py_margin_m: pyPt ? pyPt.margin_m : null,
+            });
+          });
+
+          return {
+            total_cases: cases.length,
+            passed_count: passedCount,
+            failed_count: failedCount,
+            max_abs_float_diff: Number(maxAbsFloatDiff.toFixed(6)),
+            all_passed: failedCount === 0 && cases.length >= 25,
+            results,
           };
         }
 
@@ -2392,31 +2867,55 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             });
           }
 
-          const predPts = steps.map((s) => `${xToPx(s.x_m)},${yToPx(s.y_m)}`).join(" ");
-          svg += `<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="${predPts}" />`;
+          // Full 5.0s planned path (subtle reference) + Progressive animated trail up to currentStep.t_s
+          const fullPredPts = steps.map((s) => `${xToPx(s.x_m)},${yToPx(s.y_m)}`).join(" ");
+          svg += `<polyline fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="3 2" points="${fullPredPts}" />`;
+
+          const activeTrailSteps = steps.filter((s) => s.t_s <= currentStep.t_s + 1e-4);
+          const trailPtsArr = activeTrailSteps.map((s) => `${xToPx(s.x_m)},${yToPx(s.y_m)}`);
+          if (currentStep.isInterpolatedDisplay) {
+            trailPtsArr.push(`${xToPx(currentStep.x_m)},${yToPx(currentStep.y_m)}`);
+          }
+          if (trailPtsArr.length > 1) {
+            svg += `<polyline fill="none" stroke="#2563eb" stroke-width="3.0" points="${trailPtsArr.join(" ")}" />`;
+          }
+
           steps.forEach((s) => {
             const hasViol = (s.checks || []).some((c) => c.evaluation_scope === "TIME_LOCAL_STEP" && c.step_status === "VIOLATED");
+            const isReached = s.t_s <= currentStep.t_s + 1e-4;
             const ptColor = hasViol ? "#ef4444" : (s.within_longitudinal_corridor ? "#2563eb" : "#d97706");
-            svg += `<circle cx="${xToPx(s.x_m)}" cy="${yToPx(s.y_m)}" r="3.2" fill="${ptColor}" stroke="#ffffff" stroke-width="1" />`;
+            svg += `<circle cx="${xToPx(s.x_m)}" cy="${yToPx(s.y_m)}" r="${isReached ? 3.5 : 2.6}" fill="${ptColor}" fill-opacity="${isReached ? "1.0" : "0.45"}" stroke="#ffffff" stroke-width="1" />`;
           });
 
-          // Draw Active Ego Pose Marker + Heading Vector
+          // Draw Active Ego Vehicle Footprint + Heading Vector (distinguishing recorded 0.5s sample vs display interpolation)
           const curX = xToPx(currentStep.x_m);
           const curY = yToPx(currentStep.y_m);
-          const headLen = 18.0;
+          const headLen = 20.0;
           const hx = curX + headLen * Math.cos(currentStep.heading_rad);
           const hy = curY - headLen * Math.sin(currentStep.heading_rad);
-          const stepColor = currentStep.within_longitudinal_corridor ? "#4f46e5" : "#e11d48";
-          svg += `<line x1="${curX}" y1="${curY}" x2="${hx}" y2="${hy}" stroke="${stepColor}" stroke-width="2.8" />`;
-          svg += `<circle cx="${curX}" cy="${curY}" r="6.5" fill="${stepColor}" stroke="#ffffff" stroke-width="2" />`;
+          const stepColor = currentStep.isInterpolatedDisplay
+            ? "#d97706"
+            : (currentStep.within_longitudinal_corridor ? "#4f46e5" : "#e11d48");
+          const rotDeg = -(currentStep.heading_rad * 180.0 / Math.PI);
+
+          svg += `<g id="bev-ego-vehicle-marker" transform="translate(${curX}, ${curY}) rotate(${rotDeg.toFixed(2)})">`;
+          svg += `<rect x="-8" y="-4.5" width="16" height="9" rx="2" fill="${stepColor}" fill-opacity="0.22" stroke="${stepColor}" stroke-width="1.8" ${currentStep.isInterpolatedDisplay ? 'stroke-dasharray="2.5 1.5"' : ""} />`;
+          svg += `</g>`;
+          svg += `<line x1="${curX}" y1="${curY}" x2="${hx}" y2="${hy}" stroke="${stepColor}" stroke-width="2.6" />`;
+          svg += `<circle cx="${curX}" cy="${curY}" r="5.5" fill="${stepColor}" stroke="#ffffff" stroke-width="1.8" />`;
+
+          const sampleTag = currentStep.isInterpolatedDisplay
+            ? `DISPLAY INTERPOLATION (t=${currentStep.t_s.toFixed(2)}s)`
+            : `RECORDED 0.5s SAMPLE (Step ${currentStep.step}, t=${currentStep.t_s.toFixed(1)}s)`;
+          svg += `<text x="${padL + 6}" y="${h - padB - 6}" text-anchor="start" font-size="8.5" font-family="monospace" font-weight="bold" fill="${stepColor}">${sampleTag}</text>`;
 
           svg += `<g transform="translate(${padL + 6}, ${padT + 10})" font-size="9" fill="currentColor">`;
-          svg += `<line x1="0" y1="-3" x2="12" y2="-3" stroke="#2563eb" stroke-width="2.5" /><text x="15" y="0">Active Rollout (${condObj.driving_command})</text>`;
+          svg += `<line x1="0" y1="-3" x2="12" y2="-3" stroke="#2563eb" stroke-width="2.8" /><text x="15" y="0">Active Rollout (${condObj.driving_command})</text>`;
           if (showGt) {
-            svg += `<line x1="150" y1="-3" x2="162" y2="-3" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3" /><text x="165" y="0">Logged GT</text>`;
+            svg += `<line x1="148" y1="-3" x2="160" y2="-3" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3" /><text x="163" y="0">Logged GT</text>`;
           }
           if (showCounterpart && counterpartCond) {
-            svg += `<line x1="230" y1="-3" x2="242" y2="-3" stroke="#9333ea" stroke-width="2" stroke-dasharray="2 2" /><text x="245" y="0">Counterpart (${counterpartCond.driving_command})</text>`;
+            svg += `<line x1="222" y1="-3" x2="234" y2="-3" stroke="#9333ea" stroke-width="2" stroke-dasharray="2 2" /><text x="237" y="0">Counterpart (${counterpartCond.driving_command})</text>`;
           }
           svg += `</g></svg>`;
           container.innerHTML = svg;
@@ -2501,8 +3000,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           if (obsLead && r3bObsModeSel.value === "observed") {
             r3bD0Slider.value = obsLead.x_m.toFixed(2);
             r3bD0Input.value = obsLead.x_m.toFixed(2);
-          } else if (!obsLead && r3bObsModeSel.value === "observed") {
-            // Keep observed selected so user sees explicit INSUFFICIENT_EVIDENCE unless they switch to counterfactual
           }
           renderR3BSimulator();
         }
@@ -2637,9 +3134,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const w = 520, h = 148, padL = 118, padR = 24, padT = 22, padB = 24;
           const maxD = Math.max(
             dAvailM * 1.15,
-            pointByBranch.P0.dReq * 1.12,
-            pointByBranch.P1.dReq * 1.12,
-            pointByBranch.P2.dReq * 1.12,
+            pointByBranch.P0.d_req_m * 1.12,
+            pointByBranch.P1.d_req_m * 1.12,
+            pointByBranch.P2.d_req_m * 1.12,
             25.0
           );
           const xToPx = (d) => padL + (Math.max(0, d) / maxD) * (w - padL - padR);
@@ -2666,10 +3163,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             svg += `<text x="${padL - 6}" y="${yRow + 12}" text-anchor="end" font-size="9.5" font-weight="${isSel ? "bold" : "normal"}" fill="currentColor">${labels[bid]}</text>`;
 
             const x0 = xToPx(0);
-            const x1 = xToPx(b.dPre);
-            const x2 = xToPx(b.dPre + b.dDelay);
-            const x3 = xToPx(b.dStop);
-            const x4 = xToPx(b.dReq);
+            const x1 = xToPx(b.d_pre_m);
+            const x2 = xToPx(b.d_pre_m + b.d_delay_m);
+            const x3 = xToPx(b.d_stop_m);
+            const x4 = xToPx(b.d_req_m);
 
             svg += `<rect x="${x0}" y="${yRow}" width="${Math.max(0, x1 - x0)}" height="${barH}" fill="#f59e0b" />`;
             svg += `<rect x="${x1}" y="${yRow}" width="${Math.max(0, x2 - x1)}" height="${barH}" fill="#9333ea" />`;
@@ -2678,9 +3175,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             if (isSel) {
               svg += `<rect x="${x0}" y="${yRow - 1}" width="${Math.max(2, x4 - x0)}" height="${barH + 2}" fill="none" stroke="#0f172a" stroke-width="1.5" />`;
             }
-            const marginM = dAvailM - b.dReq;
+            const marginM = dAvailM - b.d_req_m;
             const mCol = marginM >= 0 ? "#047857" : "#be123c";
-            svg += `<text x="${Math.min(w - 4, x4 + 5)}" y="${yRow + 12}" font-size="8.5" font-family="monospace" font-weight="bold" fill="${mCol}">D_req=${b.dReq.toFixed(1)}m (${marginM >= 0 ? "+" : ""}${marginM.toFixed(1)}m)</text>`;
+            svg += `<text x="${Math.min(w - 4, x4 + 5)}" y="${yRow + 12}" font-size="8.5" font-family="monospace" font-weight="bold" fill="${mCol}">D_req=${b.d_req_m.toFixed(1)}m (${marginM >= 0 ? "+" : ""}${marginM.toFixed(1)}m)</text>`;
           });
 
           const availPx = xToPx(dAvailM);
@@ -2730,13 +3227,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const t3 = parseFloat(r3bT3Input.value);
           const aMax = parseFloat(r3bAmaxInput.value);
           const aSup = parseFloat(r3bAsupInput.value);
+          const aDragMode = r3bDragModeSel ? r3bDragModeSel.value : "epa_midpoint";
+          const aDragCustom = r3bAdragInput ? parseFloat(r3bAdragInput.value) : 0.25;
+          const roadGradePct = r3bGradeSel ? parseFloat(r3bGradeSel.value) : 0.0;
           const selectedBranch = r3bPolicySel.value || "P1";
 
-          // Determine coupled ego pose if in connected mode
+          if (r3bAdragInput) {
+            if (aDragMode === "custom") r3bAdragInput.classList.remove("hidden");
+            else r3bAdragInput.classList.add("hidden");
+          }
+
           let egoX = 0.0, egoY = 0.0, egoHeadRad = 0.0;
           let obsLead = null;
           if (isConnected && condObj) {
-            const stepAtTau = getInterpolatedExplorerStep(condObj, Number.isFinite(tauReq) ? tauReq : 0.0, mu);
+            const stepAtTau = getInterpolatedExplorerStep(condObj, Number.isFinite(tauReq) ? tauReq : 0.0, Number.isFinite(mu) ? mu : 1.0);
             egoX = stepAtTau.x_m;
             egoY = stepAtTau.y_m;
             egoHeadRad = stepAtTau.heading_rad;
@@ -2744,49 +3248,42 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           }
 
           let effectiveD0 = null;
-          let obstacleSourceType = "COUNTERFACTUAL_ASSUMPTION";
+          let evalObsMode = "counterfactual";
           if (isConnected && obsMode === "observed") {
             if (obsLead) {
               effectiveD0 = obsLead.x_m;
-              obstacleSourceType = "OBSERVED_IN_LANE_ANNOTATION";
+              evalObsMode = "observed";
             } else {
               effectiveD0 = null;
-              obstacleSourceType = "NONE_INSUFFICIENT_EVIDENCE";
+              evalObsMode = "none";
             }
           } else {
             effectiveD0 = rawD0;
-            obstacleSourceType = "COUNTERFACTUAL_ASSUMPTION";
+            evalObsMode = "counterfactual";
           }
 
-          // Validate inputs
-          const validationErrors = [];
-          if (!Number.isFinite(vReqMps) || vReqMps < 0.0 || vReqMps > 60.0) {
-            validationErrors.push(`Invalid or nonphysical speed v = ${rawSpeedVal} ${unit} (must be in [0, 60] m/s).`);
-          }
-          if (obstacleSourceType !== "NONE_INSUFFICIENT_EVIDENCE" && (!Number.isFinite(effectiveD0) || effectiveD0 <= 0.0 || effectiveD0 > 500.0)) {
-            validationErrors.push(`Invalid obstacle distance d0 = ${rawD0} m (must be in (0, 500] m).`);
-          }
-          if (!Number.isFinite(mu) || mu <= 0.05 || mu > 1.5) {
-            validationErrors.push(`Invalid road friction mu = ${mu} (must be in (0.05, 1.50]).`);
-          }
-          if (!Number.isFinite(tauReq) || tauReq < 0.0 || tauReq > 3.0) {
-            validationErrors.push(`Invalid takeover request delay tau_req = ${tauReq} s (supported domain is [0.0, 3.0] s).`);
-          }
-          if (!Number.isFinite(t1) || t1 < 0.0 || t1 > 10.0) {
-            validationErrors.push(`Invalid human reaction delay t1 = ${t1} s (must be in [0.0, 10.0] s).`);
-          }
-          if (!Number.isFinite(t2) || t2 < 0.0 || t2 > 2.0) {
-            validationErrors.push(`Invalid hydraulic actuation delay t2 = ${t2} s (must be in [0.0, 2.0] s).`);
-          }
-          if (!Number.isFinite(t3) || t3 < 0.0 || t3 > 5.0) {
-            validationErrors.push(`Invalid brake ramp buildup t3 = ${t3} s (must be in [0.0, 5.0] s).`);
-          }
-          if (!Number.isFinite(aMax) || aMax <= 0.5 || aMax > 15.0) {
-            validationErrors.push(`Invalid max deceleration a_max = ${aMax} m/s^2 (must be in (0.5, 15.0] m/s^2).`);
-          }
-          if (!Number.isFinite(aSup) || aSup < 0.0 || aSup > 6.0) {
-            validationErrors.push(`Invalid P2 pre-deceleration a_sup = ${aSup} m/s^2 (must be in [0.0, 6.0] m/s^2).`);
-          }
+          const evalOut = evaluateInteractiveR3BInBrowser({
+            v_mps: rawSpeedVal,
+            speed_unit: unit,
+            d0_m: effectiveD0,
+            mu,
+            tau_req_s: tauReq,
+            t1_s: t1,
+            t2_s: t2,
+            t3_s: t3,
+            a_max_mps2: aMax,
+            a_sup_mps2: aSup,
+            a_drag_mode: aDragMode,
+            a_drag_custom_mps2: aDragCustom,
+            road_grade_pct: roadGradePct,
+            policy_branch: selectedBranch,
+            obstacle_source_mode: evalObsMode,
+            coupled_ego_x_m: isConnected ? egoX : 0.0,
+            coupled_ego_y_m: isConnected ? egoY : 0.0,
+            coupled_ego_heading_rad: isConnected ? egoHeadRad : 0.0,
+            coupled_lead_speed_mps: obsLead ? obsLead.speed_mps : null,
+            coupled_scene_id: isConnected && condObj ? condObj.scene_id : null,
+          });
 
           // Render Layer 1 (Observed / Recorded Evidence) & Layer 2 (Assumed Counterfactual Inputs)
           const layerObsEl = document.getElementById("r3b-layer-observed");
@@ -2809,19 +3306,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
               `<div><strong>Frozen R3B Baseline:</strong> 42 original research claims preserved unmodified</div>`;
           }
 
-          const d0AssumedNote = obstacleSourceType === "OBSERVED_IN_LANE_ANNOTATION"
+          const d0AssumedNote = evalOut.obstacle_source_classification === "OBSERVED_IN_LANE_ANNOTATION"
             ? (obsLead && Math.abs(obsLead.speed_mps) > 0.1
               ? `Static-target R3B projection of moving lead at d<sub>0</sub> = ${effectiveD0.toFixed(2)} m (v<sub>lead</sub> = ${obsLead.speed_mps.toFixed(2)} m/s)`
               : `Observed stationary 3D obstacle at d<sub>0</sub> = ${effectiveD0.toFixed(2)} m (no counterfactual d<sub>0</sub> needed)`)
-            : (obstacleSourceType === "NONE_INSUFFICIENT_EVIDENCE"
+            : (evalOut.obstacle_source_classification === "NONE_INSUFFICIENT_EVIDENCE"
               ? "No obstacle assumed (Observed mode on open-road scene &rarr; Insufficient Evidence)"
               : `Counterfactual stationary obstacle at d<sub>0</sub> = ${Number.isFinite(effectiveD0) ? effectiveD0.toFixed(2) : "?"} m`);
 
+          const resolvedDrag = Number.isFinite(vReqMps) ? resolveEpaDragForSpeedMps(Math.max(0, vReqMps), aDragMode, aDragCustom) : 0.25;
           layerAssEl.innerHTML =
             `<div class="font-bold text-pink-900">Layer 2 &mdash; Assumed Counterfactual &amp; Model Inputs</div>` +
             `<div><strong>Obstacle Target:</strong> ${d0AssumedNote}</div>` +
-            `<div><strong>Takeover Timing:</strong> &tau;<sub>req</sub> = ${Number.isFinite(tauReq) ? tauReq.toFixed(2) : "?"} s (AutoVLA does not emit a TOR)</div>` +
-            `<div><strong>Surface &amp; Policy:</strong> &mu; = ${Number.isFinite(mu) ? mu.toFixed(2) : "?"} (&mu;&middot;g = ${Number.isFinite(mu) ? (mu * GRAVITY).toFixed(2) : "?"} m/s&sup2;) | Branch <strong>${selectedBranch}</strong></div>` +
+            `<div><strong>Takeover Timing:</strong> &tau;<sub>req</sub> = ${Number.isFinite(tauReq) ? tauReq.toFixed(2) : "?"} s | Road Grade = ${Number.isFinite(roadGradePct) ? roadGradePct.toFixed(1) : "0.0"}%</div>` +
+            `<div><strong>Surface &amp; Policy:</strong> &mu; = ${Number.isFinite(mu) ? mu.toFixed(2) : "?"} (&mu;&middot;g = ${Number.isFinite(mu) ? (mu * GRAVITY).toFixed(2) : "?"} m/s&sup2;) | Branch <strong>${selectedBranch}</strong> (P1 drag=${resolvedDrag.toFixed(2)} m/s&sup2;)</div>` +
             `<div><strong>Human/Brake Params:</strong> t<sub>1</sub>=${Number.isFinite(t1) ? t1.toFixed(2) : "?"}s, t<sub>2</sub>=${Number.isFinite(t2) ? t2.toFixed(2) : "?"}s, t<sub>3</sub>=${Number.isFinite(t3) ? t3.toFixed(2) : "?"}s, a<sub>max</sub>=${Number.isFinite(aMax) ? aMax.toFixed(2) : "?"}m/s&sup2;</div>`;
 
           const statusBadgeEl = document.getElementById("r3b-sim-status-badge");
@@ -2830,24 +3328,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           const metricsGridEl = document.getElementById("r3b-sim-metrics-grid");
           const causalEl = document.getElementById("r3b-sim-causal-explanation");
 
-          if (validationErrors.length > 0) {
+          if (!evalOut.valid_inputs) {
             statusBadgeEl.textContent = "NOT_APPLICABLE";
             statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("NOT_APPLICABLE");
             underlyingEl.textContent = "Underlying R3B: INVALID_PARAMETERS (Withheld)";
             stateBadgeEl.innerHTML = `<span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-800 border border-rose-500/30 font-semibold">Input Validation Guardrail Triggered</span>`;
-            metricsGridEl.innerHTML = `<div class="col-span-4 p-2.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-900 font-medium">${validationErrors.join(" ")}</div>`;
+            metricsGridEl.innerHTML = `<div class="col-span-4 p-2.5 rounded bg-rose-500/10 border border-rose-500/30 text-rose-900 font-medium">${evalOut.validation_errors.join(" ")}</div>`;
             renderR3BStoppingBreakdownSvg(null, null, selectedBranch);
             causalEl.className = "p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-950 leading-relaxed";
-            causalEl.innerHTML = `<strong>Invalid / Out-of-Range Parameters Rejected:</strong> ${validationErrors.join(" ")} Numerical R3B margins are never fabricated for nonphysical inputs.`;
+            causalEl.innerHTML = `<strong>Invalid / Out-of-Range Parameters Rejected:</strong> ${evalOut.validation_errors.join(" ")} Numerical R3B margins are never fabricated for nonphysical inputs.`;
             return;
           }
 
-          // Check Insufficient Evidence (no observed obstacle in observed mode)
-          if (obstacleSourceType === "NONE_INSUFFICIENT_EVIDENCE") {
+          if (evalOut.presentation_status === "INSUFFICIENT_EVIDENCE") {
             statusBadgeEl.textContent = "INSUFFICIENT_EVIDENCE";
             statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("INSUFFICIENT_EVIDENCE");
             underlyingEl.textContent = "Underlying R3B: INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE";
-            stateBadgeEl.innerHTML = formatStateSourceBadge(tauReq <= 1e-6 ? "OBSERVED_EGO_T0_NO_CREDIBLE_OBSTACLE" : "HYPOTHETICAL_VLA_STATE_NO_CREDIBLE_OBSTACLE");
+            stateBadgeEl.innerHTML = formatStateSourceBadge(evalOut.state_source_classification);
             metricsGridEl.innerHTML =
               `<div class="col-span-4 p-2.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-950">` +
               `<strong>Insufficient Evidence:</strong> No observed 3D in-corridor obstacle exists in the dataset annotations for <code>${condObj ? condObj.scene_id : "this scene"}</code>. Switch Obstacle Source to <strong>"Assumed Stationary d0 [m]"</strong> to evaluate a counterfactual obstacle.` +
@@ -2858,70 +3355,34 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             return;
           }
 
-          // Check Non-Applicability (stationary speed, corridor exit, or d_rem <= 0)
-          const nonAppReasons = [];
-          if (vReqMps <= MIN_SPEED_MPS) {
-            nonAppReasons.push(`Vehicle speed v = ${vReqMps.toFixed(3)} m/s (${vReqKmh.toFixed(2)} km/h) is stationary or near-zero (<= ${MIN_SPEED_MPS} m/s); the 1D R3B stopping model requires forward motion.`);
-          }
-          if (isConnected && (Math.abs(egoY) > CORR_HALF_WIDTH_M || Math.abs(egoHeadRad) > CORR_MAX_HEADING_RAD)) {
-            nonAppReasons.push(`At tau_req = ${tauReq.toFixed(1)} s, the AutoVLA trajectory state (|y| = ${Math.abs(egoY).toFixed(2)} m, |psi| = ${Math.abs(egoHeadRad).toFixed(2)} rad) exits the validated +-1.75 m / +-0.35 rad 1D longitudinal corridor during a turning maneuver.`);
-          }
-          const dRemM = isConnected ? (effectiveD0 - egoX) : effectiveD0;
-          if (dRemM <= 0.0) {
-            nonAppReasons.push(`Remaining obstacle distance d_rem = ${dRemM.toFixed(2)} m <= 0.0 m (ego longitudinal progress x = ${egoX.toFixed(2)} m has already reached or passed initial obstacle position d0 = ${effectiveD0.toFixed(2)} m).`);
-          }
+          stateBadgeEl.innerHTML = formatStateSourceBadge(evalOut.state_source_classification);
 
-          let stateSourceToken = "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0";
-          if (obstacleSourceType === "OBSERVED_IN_LANE_ANNOTATION") {
-            const isMoving = obsLead && Math.abs(obsLead.speed_mps) > 0.1;
-            if (tauReq <= 1e-6) {
-              stateSourceToken = isMoving ? "OBSERVED_EGO_T0_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "OBSERVED_EGO_T0_AND_OBSERVED_STATIONARY_OBSTACLE";
-            } else {
-              stateSourceToken = isMoving ? "HYPOTHETICAL_VLA_STATE_PLUS_STATIC_PROJECTION_OF_MOVING_LEAD" : "HYPOTHETICAL_VLA_STATE_WITH_OBSERVED_STATIONARY_OBSTACLE";
-            }
-          } else {
-            stateSourceToken = tauReq <= 1e-6 ? "OBSERVED_EGO_T0_PLUS_ASSUMED_OBSTACLE_D0" : "HYPOTHETICAL_VLA_STATE_PLUS_ASSUMED_OBSTACLE_D0";
-          }
-          stateBadgeEl.innerHTML = formatStateSourceBadge(stateSourceToken);
-
-          if (nonAppReasons.length > 0) {
+          if (!evalOut.r3b_applicable) {
             statusBadgeEl.textContent = "NOT_APPLICABLE";
             statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus("NOT_APPLICABLE");
             underlyingEl.textContent = "Underlying R3B: INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE";
             metricsGridEl.innerHTML =
               `<div class="col-span-4 p-2.5 rounded bg-slate-500/10 border border-slate-500/30 text-slate-800">` +
-              `<strong>1D Braking-Only R3B Not Applicable:</strong> ${nonAppReasons.join(" ")}` +
+              `<strong>1D Braking-Only R3B Not Applicable:</strong> ${evalOut.non_applicability_reasons.join(" ")}` +
               `</div>`;
             renderR3BStoppingBreakdownSvg(null, null, selectedBranch);
             causalEl.className = "p-2.5 rounded-lg bg-slate-500/10 border border-slate-500/30 text-slate-900 leading-relaxed";
-            causalEl.innerHTML = `<strong>Why Evaluation is Withheld (<code>NOT_APPLICABLE</code>):</strong> ${nonAppReasons.join(" ")}`;
+            causalEl.innerHTML = `<strong>Why Evaluation is Withheld (<code>NOT_APPLICABLE</code>):</strong> ${evalOut.non_applicability_reasons.join(" ")}`;
             return;
           }
 
-          // Valid 1D R3B State -> Compute exact 4-phase point breakdown and 16/32-corner interval box
-          const [dragLo, dragHi] = epaDragIntervalForSpeedMps(vReqMps);
-          const dragMid = 0.5 * (dragLo + dragHi);
-          const pointByBranch = {
-            P0: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, 0.0, 0.0, 0.0, mu),
-            P1: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, Infinity, dragMid, 0.0, mu),
-            P2: stoppingDistanceR3BExact(vReqMps, aMax, t1, t2, t3, Infinity, aSup, 0.0, mu),
-          };
-          const intervalByBranch = {
-            P0: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P0"),
-            P1: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P1"),
-            P2: evaluateR3BIntervalForBranch(vReqMps, dRemM, mu, "P2"),
-          };
-
-          const selPt = pointByBranch[selectedBranch];
-          const selIv = intervalByBranch[selectedBranch];
-          const tAvailS = dRemM / vReqMps;
-          const marginM = dRemM - selPt.dReq;
-          const marginS = tAvailS - selPt.tReq;
-          const pointPresStatus = marginS >= 0.0 ? "NECESSARY_CONDITION_SATISFIED" : "NECESSARY_CONDITION_VIOLATED";
+          const pointByBranch = evalOut.point_breakdown_by_branch;
+          const selPt = evalOut.selected_policy_point;
+          const selIv = evalOut.selected_policy_interval;
+          const dRemM = evalOut.d_avail_m;
+          const tAvailS = evalOut.t_avail_s;
+          const marginM = selPt.margin_m;
+          const marginS = selPt.margin_s;
+          const pointPresStatus = selPt.presentation_status;
 
           statusBadgeEl.textContent = pointPresStatus;
           statusBadgeEl.className = "inline-block px-3 py-1 rounded-full text-xs font-bold " + badgeClassForPresentationStatus(pointPresStatus);
-          underlyingEl.textContent = `Point: ${marginS >= 0 ? "SATISFIED" : "VIOLATED"} | Frozen Box Interval: ${selIv.presStatus} (${selIv.underlying})`;
+          underlyingEl.textContent = `Point: ${marginS >= 0 ? "SATISFIED" : "VIOLATED"} | Frozen Box Interval: ${selIv.presentation_status} (${selIv.underlying_r3b_status})`;
 
           metricsGridEl.innerHTML =
             `<div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]">` +
@@ -2931,30 +3392,82 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             `</div>` +
             `<div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]">` +
             `<div class="text-[11px] text-[var(--muted-foreground)]">Required D<sub>req</sub> (${selectedBranch})</div>` +
-            `<div class="font-mono font-bold text-sm mt-0.5">${selPt.dReq.toFixed(2)} m</div>` +
-            `<div class="font-mono text-[11px] text-[var(--muted-foreground)]">T<sub>req</sub> = ${selPt.tReq.toFixed(2)} s (+2.0m margin)</div>` +
+            `<div class="font-mono font-bold text-sm mt-0.5">${selPt.d_req_m.toFixed(2)} m</div>` +
+            `<div class="font-mono text-[11px] text-[var(--muted-foreground)]">T<sub>req</sub> = ${selPt.t_req_s.toFixed(2)} s (+2.0m margin)</div>` +
             `</div>` +
             `<div class="p-2 rounded border ${badgeClassForPresentationStatus(pointPresStatus)}">` +
             `<div class="text-[11px] opacity-85">Point Margin (${selectedBranch})</div>` +
             `<div class="font-mono font-bold text-sm mt-0.5">${marginM >= 0 ? "+" : ""}${marginM.toFixed(2)} m</div>` +
             `<div class="font-mono text-[11px]">${marginS >= 0 ? "+" : ""}${marginS.toFixed(2)} s</div>` +
             `</div>` +
-            `<div class="p-2 rounded border ${badgeClassForPresentationStatus(selIv.presStatus)}">` +
+            `<div class="p-2 rounded border ${badgeClassForPresentationStatus(selIv.presentation_status)}">` +
             `<div class="text-[11px] opacity-85">R3B Parameter Box (${selectedBranch})</div>` +
-            `<div class="font-mono font-bold text-xs mt-0.5">[${selIv.marginMinM.toFixed(1)}, ${selIv.marginMaxM.toFixed(1)}] m</div>` +
-            `<div class="font-mono text-[10px]">${selIv.presStatus}</div>` +
+            `<div class="font-mono font-bold text-xs mt-0.5">[${selIv.margin_min_m.toFixed(1)}, ${selIv.margin_max_m.toFixed(1)}] m</div>` +
+            `<div class="font-mono text-[9.5px] break-all leading-tight mt-0.5">${selIv.presentation_status}</div>` +
             `</div>`;
 
           renderR3BStoppingBreakdownSvg(pointByBranch, dRemM, selectedBranch);
 
-          const capExplain = selPt.isFrictionCapped
-            ? `road friction &mu;&middot;g = ${selPt.frictionCap.toFixed(2)} m/s&sup2; caps chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2;`
-            : `chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2; is below the road-friction cap &mu;&middot;g = ${selPt.frictionCap.toFixed(2)} m/s&sup2;`;
-          const p2SavingM = pointByBranch.P0.dReq - pointByBranch.P2.dReq;
+          const capExplain = selPt.is_friction_capped
+            ? `road friction &mu;&middot;g = ${selPt.friction_cap_mps2.toFixed(2)} m/s&sup2; caps chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2;`
+            : `chassis capability a<sub>max</sub> = ${aMax.toFixed(2)} m/s&sup2; is below the road-friction cap &mu;&middot;g = ${selPt.friction_cap_mps2.toFixed(2)} m/s&sup2;`;
+          const p2SavingM = pointByBranch.P0.d_req_m - pointByBranch.P2.d_req_m;
 
           causalEl.className = "p-2.5 rounded-lg bg-blue-500/10 border border-blue-500/25 text-[var(--foreground)] leading-relaxed";
           causalEl.innerHTML =
-            `<strong>Causal 4-Phase Breakdown (${selectedBranch}):</strong> At v = <strong>${vReqMps.toFixed(2)} m/s (${vReqKmh.toFixed(1)} km/h)</strong> and remaining obstacle distance D<sub>avail</sub> = <strong>${dRemM.toFixed(2)} m</strong> (T<sub>avail</sub> = ${tAvailS.toFixed(2)} s), policy <strong>${selectedBranch}</strong> travels <strong>${selPt.dPre.toFixed(2)} m</strong> during human reaction delay t<sub>1</sub> = ${t1.toFixed(2)} s (reaching v<sub>1</sub> = ${selPt.vAfterT1.toFixed(2)} m/s), <strong>${selPt.dDelay.toFixed(2)} m</strong> during hydraulic delay t<sub>2</sub> = ${t2.toFixed(2)} s, and <strong>${selPt.dBrake.toFixed(2)} m</strong> during brake ramp/full braking (where ${capExplain}, giving a<sub>eff</sub> = ${selPt.aEff.toFixed(2)} m/s&sup2;). Including the mandatory <strong>+2.0 m</strong> standstill margin yields D<sub>req</sub> = <strong>${selPt.dReq.toFixed(2)} m</strong> (T<sub>req</sub> = ${selPt.tReq.toFixed(2)} s) and a point margin of <strong>${marginM >= 0 ? "+" : ""}${marginM.toFixed(2)} m (${marginS >= 0 ? "+" : ""}${marginS.toFixed(2)} s &rarr; <code>${pointPresStatus}</code>)</strong>. Across policies at these parameters, system-supported pre-deceleration (<code>P2</code>) reduces required stopping distance by <strong>${p2SavingM.toFixed(2)} m</strong> compared to unmitigated hold-speed (<code>P0</code>). <em>Note: Satisfying this 1D braking-only necessary condition does not establish collision avoidance or safety.</em>`;
+            `<strong>Causal 4-Phase Breakdown (${selectedBranch}):</strong> At v = <strong>${vReqMps.toFixed(2)} m/s (${vReqKmh.toFixed(1)} km/h)</strong> and remaining obstacle distance D<sub>avail</sub> = <strong>${dRemM.toFixed(2)} m</strong> (T<sub>avail</sub> = ${tAvailS.toFixed(2)} s), policy <strong>${selectedBranch}</strong> travels <strong>${selPt.d_pre_m.toFixed(2)} m</strong> during human reaction delay t<sub>1</sub> = ${t1.toFixed(2)} s (reaching v<sub>1</sub> = ${selPt.v_after_t1_mps.toFixed(2)} m/s), <strong>${selPt.d_delay_m.toFixed(2)} m</strong> during hydraulic delay t<sub>2</sub> = ${t2.toFixed(2)} s, and <strong>${selPt.d_brake_m.toFixed(2)} m</strong> during brake ramp/full braking (where ${capExplain}, giving a<sub>eff</sub> = ${selPt.a_eff_mps2.toFixed(2)} m/s&sup2;). Including the mandatory <strong>+2.0 m</strong> standstill margin yields D<sub>req</sub> = <strong>${selPt.d_req_m.toFixed(2)} m</strong> (T<sub>req</sub> = ${selPt.t_req_s.toFixed(2)} s) and a point margin of <strong>${marginM >= 0 ? "+" : ""}${marginM.toFixed(2)} m (${marginS >= 0 ? "+" : ""}${marginS.toFixed(2)} s &rarr; <code>${pointPresStatus}</code>)</strong>. Across policies at these parameters, system-supported pre-deceleration (<code>P2</code>) reduces required stopping distance by <strong>${p2SavingM.toFixed(2)} m</strong> compared to unmitigated hold-speed (<code>P0</code>). <em>Note: Satisfying this 1D braking-only necessary condition does not establish collision avoidance or safety.</em>`;
+        }
+
+        // Playback helper functions
+        function updatePlaybackSpeedUi(speedMult) {
+          playbackSpeedMultiplier = Number(speedMult) || 1.0;
+          if (expSpeedSel) expSpeedSel.value = playbackSpeedMultiplier.toFixed(1);
+          expSpeedBtns.forEach((btn) => {
+            const bVal = parseFloat(btn.getAttribute("data-playback-speed") || "1.0");
+            if (Math.abs(bVal - playbackSpeedMultiplier) < 1e-3) {
+              btn.className = "px-1.5 py-0.5 rounded border border-indigo-600 bg-indigo-600 text-white text-[11px] font-mono font-bold";
+            } else {
+              btn.className = "px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--background)] text-[11px] font-mono";
+            }
+          });
+          if (playTimer) {
+            startPlayback();
+          }
+        }
+
+        function pausePlayback() {
+          if (playTimer) {
+            clearInterval(playTimer);
+            playTimer = null;
+          }
+          expPlayBtn.innerHTML = "&#9654; Play";
+        }
+
+        function startPlayback() {
+          if (playTimer) {
+            clearInterval(playTimer);
+            playTimer = null;
+          }
+          expPlayBtn.innerHTML = "&#9654; Playing...";
+          const dtStep = expChkSmooth.checked ? 0.1 : 0.5;
+          const baseIntervalMs = expChkSmooth.checked ? 120 : 440;
+          const intervalMs = Math.max(30, Math.round(baseIntervalMs / playbackSpeedMultiplier));
+          playTimer = setInterval(() => {
+            let cur = parseFloat(expTimeSlider.value || "0.0");
+            if (cur >= 5.0 - 1e-4) {
+              cur = 0.0;
+            } else {
+              cur = Math.min(5.0, Number((cur + dtStep).toFixed(2)));
+            }
+            expTimeSlider.value = String(cur);
+            renderExplorerView();
+          }, intervalMs);
+        }
+
+        function restartPlayback() {
+          pausePlayback();
+          expTimeSlider.value = "0.0";
+          renderExplorerView();
         }
 
         // Event Listeners for Trajectory Explorer
@@ -2977,17 +3490,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             const snapped = Math.round(parseFloat(expTimeSlider.value) * 2.0) / 2.0;
             expTimeSlider.value = snapped.toFixed(1);
           }
+          if (playTimer) startPlayback();
           renderExplorerView();
         });
         expTimeSlider.addEventListener("input", renderExplorerView);
 
         expPrevBtn.addEventListener("click", () => {
+          pausePlayback();
           const cur = parseFloat(expTimeSlider.value || "0.0");
           const next = Math.max(0.0, Math.round((cur - 0.5) * 2.0) / 2.0);
           expTimeSlider.value = next.toFixed(1);
           renderExplorerView();
         });
         expNextBtn.addEventListener("click", () => {
+          pausePlayback();
           const cur = parseFloat(expTimeSlider.value || "0.0");
           const next = Math.min(5.0, Math.round((cur + 0.5) * 2.0) / 2.0);
           expTimeSlider.value = next.toFixed(1);
@@ -2995,24 +3511,27 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         });
         expPlayBtn.addEventListener("click", () => {
           if (playTimer) {
-            clearInterval(playTimer);
-            playTimer = null;
-            expPlayBtn.innerHTML = "&#9654; Play";
-            return;
+            pausePlayback();
+          } else {
+            startPlayback();
           }
-          expPlayBtn.innerHTML = "&#9208; Pause";
-          const dtStep = expChkSmooth.checked ? 0.1 : 0.5;
-          playTimer = setInterval(() => {
-            let cur = parseFloat(expTimeSlider.value || "0.0");
-            if (cur >= 5.0 - 1e-4) {
-              cur = 0.0;
-            } else {
-              cur = Math.min(5.0, Number((cur + dtStep).toFixed(2)));
-            }
-            expTimeSlider.value = String(cur);
-            renderExplorerView();
-          }, expChkSmooth.checked ? 120 : 450);
         });
+        if (expPauseBtn) {
+          expPauseBtn.addEventListener("click", pausePlayback);
+        }
+        if (expRestartBtn) {
+          expRestartBtn.addEventListener("click", restartPlayback);
+        }
+        expSpeedBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            updatePlaybackSpeedUi(parseFloat(btn.getAttribute("data-playback-speed") || "1.0"));
+          });
+        });
+        if (expSpeedSel) {
+          expSpeedSel.addEventListener("change", () => {
+            updatePlaybackSpeedUi(parseFloat(expSpeedSel.value || "1.0"));
+          });
+        }
 
         expSendBtn.addEventListener("click", () => {
           const condObj = explorerCatalog.conditions[expCondSel.value];
@@ -3125,9 +3644,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           renderR3BSimulator();
         });
 
-        [r3bT2Input, r3bT3Input, r3bAmaxInput, r3bAsupInput].forEach((inp) => {
-          inp.addEventListener("input", renderR3BSimulator);
+        [r3bT2Input, r3bT3Input, r3bAmaxInput, r3bAsupInput, r3bAdragInput].forEach((inp) => {
+          if (inp) inp.addEventListener("input", renderR3BSimulator);
         });
+        if (r3bDragModeSel) {
+          r3bDragModeSel.addEventListener("change", renderR3BSimulator);
+        }
+        if (r3bGradeSel) {
+          r3bGradeSel.addEventListener("change", renderR3BSimulator);
+        }
 
         r3bResetBtn.addEventListener("click", () => {
           r3bMuSlider.value = "1.00";
@@ -3138,6 +3663,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           r3bT3Input.value = "0.60";
           r3bAmaxInput.value = "8.00";
           r3bAsupInput.value = "2.00";
+          if (r3bDragModeSel) r3bDragModeSel.value = "epa_midpoint";
+          if (r3bAdragInput) r3bAdragInput.value = "0.25";
+          if (r3bGradeSel) r3bGradeSel.value = "0.0";
           r3bPolicySel.value = "P1";
           renderR3BSimulator();
         });
@@ -3147,8 +3675,28 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           catalog: explorerCatalog,
           stoppingDistanceR3BExact,
           evaluateR3BIntervalForBranch,
+          evaluateInteractiveR3BInBrowser,
+          verifyAllParityCasesInBrowser,
           renderExplorerView,
           renderR3BSimulator,
+          startPlayback,
+          pausePlayback,
+          restartPlayback,
+          updatePlaybackSpeedUi,
+          isPlaying: () => Boolean(playTimer),
+          getPlaybackSpeed: () => playbackSpeedMultiplier,
+          setTime: (tSec) => {
+            const clamped = Math.max(0.0, Math.min(5.0, parseFloat(tSec) || 0.0));
+            expTimeSlider.value = clamped.toFixed(1);
+            renderExplorerView();
+          },
+          getPlaybackState: () => ({
+            playing: Boolean(playTimer),
+            speed: playbackSpeedMultiplier,
+            time_s: parseFloat(expTimeSlider.value) || 0.0,
+            scene_key: expSceneSel.value,
+            condition_key: expCondSel.value,
+          }),
         };
 
         // Initialize Trajectory Explorer & R3B Simulator on Scene 02 (which has both an observed stationary obstacle d0=55.49m AND a command intervention!)

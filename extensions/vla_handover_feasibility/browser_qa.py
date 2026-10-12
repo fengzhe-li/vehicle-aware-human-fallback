@@ -1,18 +1,29 @@
-"""Automated Browser Interaction Smoke Test, Screenshot Capture, and PDF Export QA (Priority 4 & 5).
+"""Automated Browser Interaction Smoke Test, R3B Python/Browser Parity QA, Responsive Layout Check,
+Video Walkthrough Recording, Screenshot Capture, and PDF Export QA.
 
 Uses headless Google Chrome via Chrome DevTools Protocol (pure Python stdlib WebSocket client) to:
-1. Verify interactive controls (scenario selector, obstacle source selector, friction selector, takeover slider, quick-jump buttons)
-2. Verify English-only text, untruncated scenario names, corrected P0/P1/P2 policy legends, explicit state-source badges (`OBSERVED_EGO_T0 + ASSUMED_D0`), and both distance [m] and time [s] margins
-3. Capture 4 high-resolution PNG screenshots of the live English dashboard
-4. Export a clean landscape PDF (`vla_handover_feasibility_report.pdf`) with `@media print` styling
+1. Verify 100% mathematical parity between Python and Browser JS R3B evaluators across all 42
+   deterministic reference cases (`r3b_browser_python_parity_report.json`)
+2. Verify animated AutoVLA trajectory playback controls (`Play`, `Pause`, `Restart`, `0.5x`/`1x`/`2x`
+   speed, timeline scrubbing, 7 scenes, 10 rollout variants, progressive BEV trail, ego marker, and
+   recorded-sample vs display-interpolation visual distinction)
+3. Verify responsive layout across Desktop (`1480x1050`), Tablet (`768x1024`), and Mobile (`390x844`)
+   viewports without horizontal overflow or broken controls
+4. Capture 7 high-resolution PNG screenshots of the live English dashboard
+5. Record an authentic 38-second 16:9 (`1280x720`) H.264 MP4 demonstration video (`demo_walkthrough.mp4`)
+   and lightweight animated GIF preview (`demo_preview.gif`) directly from the live browser DOM
+6. Export a clean landscape PDF (`vla_handover_feasibility_report.pdf`) with `@media print` styling
 """
 
 from __future__ import annotations
 
+import argparse
 import base64
+import io
 import json
 import os
 from pathlib import Path
+import shutil
 import socket
 import struct
 import subprocess
@@ -22,7 +33,24 @@ import urllib.parse
 import urllib.request
 
 
-CHROME_BIN = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+def resolve_chrome_binary() -> str:
+    """Resolve Google Chrome or Chromium executable across macOS and Linux CI runners."""
+    env_bin = os.environ.get("CHROME_BIN", "").strip()
+    if env_bin and Path(env_bin).exists():
+        return env_bin
+
+    macos_chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    if macos_chrome.exists():
+        return str(macos_chrome)
+
+    for candidate in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser"):
+        found = shutil.which(candidate)
+        if found:
+            return found
+
+    raise FileNotFoundError(
+        "Could not locate Google Chrome or Chromium binary. Set CHROME_BIN or install Chrome/Chromium."
+    )
 
 
 class SimpleCDPClient:
@@ -133,16 +161,258 @@ class SimpleCDPClient:
             pass
 
 
-def run_browser_qa() -> dict[str, Any]:
+def record_authentic_demo_video(
+    cdp: SimpleCDPClient,
+    mp4_path: Path,
+    gif_path: Path,
+) -> dict[str, Any]:
+    """Capture an authentic 16:9 (1280x720) walkthrough video and animated GIF from the live browser."""
+    import av
+    from PIL import Image
+
+    fps = 10
+    width, height = 1280, 720
+    cdp.call(
+        "Emulation.setDeviceMetricsOverride",
+        {"width": width, "height": height, "deviceScaleFactor": 1, "mobile": False},
+    )
+
+    frames_With_repeats: list[tuple[bytes, int]] = []
+
+    def capture_step(hold_frames: int = 1) -> None:
+        b64 = cdp.call(
+            "Page.captureScreenshot",
+            {"format": "jpeg", "quality": 92, "fromSurface": True},
+        )["data"]
+        frames_With_repeats.append((base64.b64decode(b64), max(1, int(hold_frames))))
+
+    # Segment 1 (0.0s - 5.5s = 55 frames): Executive overview & smooth scroll to Interactive Trajectory Explorer
+    cdp.eval_js(
+        """(() => {
+            window.VLA_INTERACTIVE_EXPLORER.pausePlayback();
+            const expScene = document.getElementById('select-explorer-scene');
+            expScene.value = 'scene_02_stationary_lead_obstacle';
+            expScene.dispatchEvent(new Event('change'));
+            const smoothChk = document.getElementById('chk-explorer-smooth');
+            if (smoothChk) {
+                smoothChk.checked = true;
+                smoothChk.dispatchEvent(new Event('change'));
+            }
+            window.VLA_INTERACTIVE_EXPLORER.setTime(0.0);
+            window.scrollTo(0, 0);
+        })()"""
+    )
+    time.sleep(0.15)
+    capture_step(hold_frames=18)  # 1.8s at top executive summary
+
+    # Smooth scroll down to #interactive-trajectory-explorer
+    target_y = int(
+        cdp.eval_js(
+            "Math.max(0, document.getElementById('interactive-trajectory-explorer').getBoundingClientRect().top + window.scrollY - 12)"
+        )
+        or 500
+    )
+    for frac in (0.25, 0.50, 0.75, 1.0):
+        cdp.eval_js(f"window.scrollTo(0, {int(target_y * frac)})")
+        capture_step(hold_frames=3)
+    capture_step(hold_frames=25)  # 2.5s inspecting initial state at t=0.0s
+
+    # Segment 2 (5.5s - 17.5s = 120 frames): Animated AutoVLA trajectory playback across 0.0s -> 5.0s
+    # Step in 0.1s increments (51 steps x 2 frames = 102 frames + 18 hold frames = 120 frames = 12.0s)
+    for step_idx in range(51):
+        t_val = round(step_idx * 0.1, 2)
+        cdp.eval_js(f"window.VLA_INTERACTIVE_EXPLORER.setTime({t_val})")
+        hold = 6 if t_val in (0.0, 1.0, 1.5, 5.0) else 2
+        capture_step(hold_frames=hold)
+
+    # Segment 3 (17.5s - 26.5s = 90 frames): Command-sensitivity intervention ('keep forward') & Scene 05 C10 ablation
+    # 3A: Scrub back to t=1.5s on Scene 02 ('turn left' exits 1D corridor -> NOT_APPLICABLE)
+    cdp.eval_js("window.VLA_INTERACTIVE_EXPLORER.setTime(1.5)")
+    capture_step(hold_frames=15)
+
+    # Switch rollout condition to 'keep forward' -> stays in 1D corridor (NECESSARY_CONDITION_SATISFIED)
+    cdp.eval_js(
+        """(() => {
+            const cond = document.getElementById('select-explorer-condition');
+            cond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
+            cond.dispatchEvent(new Event('change'));
+        })()"""
+    )
+    for t_val in (1.5, 2.0, 2.5, 3.0, 3.5):
+        cdp.eval_js(f"window.VLA_INTERACTIVE_EXPLORER.setTime({t_val})")
+        capture_step(hold_frames=6)
+
+    # 3B: Switch to Scene 05 Active Braking Deceleration to show C10 violation vs Signed-Accel Ablation
+    cdp.eval_js(
+        """(() => {
+            const expScene = document.getElementById('select-explorer-scene');
+            expScene.value = 'scene_05_active_braking_deceleration';
+            expScene.dispatchEvent(new Event('change'));
+            window.VLA_INTERACTIVE_EXPLORER.setTime(0.5);
+        })()"""
+    )
+    capture_step(hold_frames=22)
+
+    cdp.eval_js(
+        """(() => {
+            const cond = document.getElementById('select-explorer-condition');
+            cond.value = 'scene_05_active_braking_deceleration__ablation_signed_accel';
+            cond.dispatchEvent(new Event('change'));
+            window.VLA_INTERACTIVE_EXPLORER.setTime(0.5);
+        })()"""
+    )
+    capture_step(hold_frames=23)
+
+    # Segment 4 (26.5s - 38.5s = 120 frames): Interactive R3B Simulator Parameter & Policy Sweep
+    r3b_y = int(
+        cdp.eval_js(
+            "Math.max(0, document.getElementById('interactive-r3b-simulator').getBoundingClientRect().top + window.scrollY - 16)"
+        )
+        or 950
+    )
+    for frac in (0.35, 0.70, 1.0):
+         y_pos = int(target_y + (r3b_y - target_y) * frac)
+         cdp.eval_js(f"window.scrollTo(0, {y_pos})")
+         capture_step(hold_frames=3)
+
+    # Reset to Scene 02 keep_forward at t=1.0s and sweep speed, friction, reaction delay, and policy P0/P1/P2
+    cdp.eval_js(
+        """(() => {
+            const expScene = document.getElementById('select-explorer-scene');
+            expScene.value = 'scene_02_stationary_lead_obstacle';
+            expScene.dispatchEvent(new Event('change'));
+            const cond = document.getElementById('select-explorer-condition');
+            cond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
+            cond.dispatchEvent(new Event('change'));
+            window.VLA_INTERACTIVE_EXPLORER.setTime(1.0);
+            document.getElementById('btn-r3b-reset-defaults').click();
+            document.getElementById('btn-send-step-to-r3b').click();
+        })()"""
+    )
+    capture_step(hold_frames=18)
+
+    # Toggle unit to km/h and back to m/s
+    cdp.eval_js(
+        """(() => {
+            const u = document.getElementById('select-r3b-speed-unit');
+            u.value = 'kmh';
+            u.dispatchEvent(new Event('change'));
+        })()"""
+    )
+    capture_step(hold_frames=12)
+    cdp.eval_js(
+        """(() => {
+            const u = document.getElementById('select-r3b-speed-unit');
+            u.value = 'mps';
+            u.dispatchEvent(new Event('change'));
+        })()"""
+    )
+
+    # Sweep speed from 14.0 m/s to 21.0 m/s
+    for spd in (14.5, 16.0, 17.5, 19.0, 20.5):
+        cdp.eval_js(
+            f"""(() => {{
+                const el = document.getElementById('input-r3b-speed');
+                el.value = '{spd}';
+                el.dispatchEvent(new Event('input'));
+            }})()"""
+        )
+        capture_step(hold_frames=6)
+
+    # Sweep friction mu from 0.8 (Dry) -> 0.5 (Wet) -> 0.3 (Snow)
+    for mu_val in (0.8, 0.5, 0.3):
+        cdp.eval_js(
+            f"""(() => {{
+                const el = document.getElementById('input-r3b-mu');
+                el.value = '{mu_val}';
+                el.dispatchEvent(new Event('input'));
+            }})()"""
+        )
+        capture_step(hold_frames=10)
+
+    # Compare policy branch P0 vs P2 vs non-zero road grade domain boundary
+    for pol in ("P0", "P2", "P1"):
+        cdp.eval_js(
+            f"""(() => {{
+                const el = document.getElementById('input-r3b-mu');
+                el.value = '0.75';
+                el.dispatchEvent(new Event('input'));
+                const p = document.getElementById('select-r3b-policy');
+                p.value = '{pol}';
+                p.dispatchEvent(new Event('change'));
+            }})()"""
+        )
+        capture_step(hold_frames=9)
+
+    total_frames = sum(count for _, count in frames_With_repeats)
+    duration_s = round(total_frames / float(fps), 2)
+
+    # Encode H.264 MP4 using PyAV
+    mp4_path.parent.mkdir(parents=True, exist_ok=True)
+    container = av.open(str(mp4_path), mode="w")
+    stream = container.add_stream("libx264", rate=fps)
+    stream.width = width
+    stream.height = height
+    stream.pix_fmt = "yuv420p"
+    stream.options = {"crf": "23", "preset": "fast", "movflags": "+faststart"}
+
+    gif_pil_frames: list[Image.Image] = []
+    gif_step_stride = 8  # covers full 39s walkthrough in ~49 lightweight frames
+    frame_counter = 0
+
+    for jpg_bytes, repeat_count in frames_With_repeats:
+        pil_img = Image.open(io.BytesIO(jpg_bytes)).convert("RGB")
+        av_frame = av.VideoFrame.from_image(pil_img)
+        for _ in range(repeat_count):
+            for packet in stream.encode(av_frame):
+                container.mux(packet)
+            if frame_counter % gif_step_stride == 0 and len(gif_pil_frames) < 52:
+                resized = pil_img.resize((640, 360), Image.Resampling.LANCZOS)
+                gif_pil_frames.append(resized.quantize(colors=96, method=Image.Quantize.FASTOCTREE))
+            frame_counter += 1
+
+    for packet in stream.encode():
+        container.mux(packet)
+    container.close()
+
+    # Save animated GIF preview
+    if gif_pil_frames:
+        gif_pil_frames[0].save(
+            str(gif_path),
+            save_all=True,
+            append_images=gif_pil_frames[1:],
+            optimize=True,
+            duration=int(1000 * gif_step_stride / fps),
+            loop=0,
+        )
+
+    return {
+        "mp4_path": str(mp4_path),
+        "mp4_size_kb": round(mp4_path.stat().st_size / 1024.0, 2),
+        "gif_path": str(gif_path),
+        "gif_size_kb": round(gif_path.stat().st_size / 1024.0, 2),
+        "fps": fps,
+        "resolution": f"{width}x{height}",
+        "total_frames": total_frames,
+        "duration_s": duration_s,
+    }
+
+
+def run_browser_qa(record_video: bool = True) -> dict[str, Any]:
     ext_root = Path(__file__).resolve().parent
     report_dir = ext_root / "artifacts" / "report"
     html_path = report_dir / "index.html"
     screenshots_dir = report_dir / "screenshots"
     screenshots_dir.mkdir(parents=True, exist_ok=True)
     pdf_path = report_dir / "vla_handover_feasibility_report.pdf"
+    mp4_path = report_dir / "demo_walkthrough.mp4"
+    gif_path = report_dir / "demo_preview.gif"
+    parity_report_path = ext_root / "artifacts" / "r3b_browser_python_parity_report.json"
 
     if not html_path.exists():
         raise FileNotFoundError(f"Missing HTML report at {html_path}")
+
+    chrome_bin = resolve_chrome_binary()
 
     # Pick a free localhost port
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -155,9 +425,11 @@ def run_browser_qa() -> dict[str, Any]:
     url = f"file://{html_path.resolve()}"
     proc = subprocess.Popen(
         [
-            CHROME_BIN,
+            chrome_bin,
             "--headless=new",
             "--disable-gpu",
+            "--no-sandbox",
+            "--disable-dev-shm-usage",
             "--no-first-run",
             "--no-default-browser-check",
             f"--remote-debugging-port={port}",
@@ -173,7 +445,7 @@ def run_browser_qa() -> dict[str, Any]:
     try:
         # Wait for DevTools HTTP endpoint
         ws_url = None
-        for _ in range(40):
+        for _ in range(50):
             try:
                 with urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list", timeout=1.0) as resp:
                     targets = json.loads(resp.read().decode("utf-8"))
@@ -207,6 +479,18 @@ def run_browser_qa() -> dict[str, Any]:
         overview_rows = cdp.eval_js("document.querySelectorAll('#tbody-all-scenes tr').length")
         if overview_rows != 7:
             raise RuntimeError(f"Expected 7 overview rows in dashboard, found {overview_rows}")
+
+        # 0. Verify Python vs. Browser JS R3B Mathematical Parity across all 42 Reference Cases
+        parity_report = cdp.eval_js("window.VLA_INTERACTIVE_EXPLORER.verifyAllParityCasesInBrowser()")
+        if not isinstance(parity_report, dict):
+            raise RuntimeError(f"Failed to execute verifyAllParityCasesInBrowser(): {parity_report}")
+        parity_report_path.write_text(json.dumps(parity_report, indent=2) + "\n", encoding="utf-8")
+        if parity_report.get("total_cases", 0) < 42 or parity_report.get("failed_count", 1) != 0 or not parity_report.get("all_passed"):
+            failed_details = [c for c in parity_report.get("results", []) if not c.get("passed")]
+            raise RuntimeError(
+                f"Browser vs. Python R3B parity check failed ({parity_report.get('failed_count')} mismatches): "
+                f"{json.dumps(failed_details[:3], indent=2)}"
+            )
 
         # 1. Capture Screenshot 01: Executive Research Findings & Interactive Selector Bar
         cdp.eval_js("window.scrollTo(0, 0)")
@@ -332,7 +616,7 @@ def run_browser_qa() -> dict[str, Any]:
             if not item["camFrontOk"] or not item["bevHasSvg"] or not item["speedHasSvg"] or not item["accelHasSvg"] or item["checksRows"] < 10:
                 raise RuntimeError(f"Scene render check failed for {item['key']}: {item}")
 
-        # 6. Verify Interactive AutoVLA Trajectory Explorer & Interactive R3B Simulator (Priority Interactive Demonstrator QA)
+        # 6. Verify Interactive AutoVLA Trajectory Explorer, Animation Playback Controls & R3B Simulator
         interactive_qa = cdp.eval_js(
             """(() => {
                 const expScene = document.getElementById('select-explorer-scene');
@@ -359,8 +643,21 @@ def run_browser_qa() -> dict[str, Any]:
                 expSlider.dispatchEvent(new Event('input'));
                 const s02TurnLeftStatusAt15s = r3bStatus.innerText.trim();
                 const s02TurnLeftTelemetry = document.getElementById('explorer-step-telemetry').innerText;
+                const interpBadgeAt15s = document.getElementById('explorer-interp-badge').innerText.trim();
+
+                // B2. Enable smooth 0.1s interpolation and scrub to t = 1.2s -> DISPLAY INTERPOLATION badge
+                const smoothChk = document.getElementById('chk-explorer-smooth');
+                smoothChk.checked = true;
+                smoothChk.dispatchEvent(new Event('change'));
+                expSlider.value = '1.2';
+                expSlider.dispatchEvent(new Event('input'));
+                const interpBadgeAt12s = document.getElementById('explorer-interp-badge').innerText.trim();
+                smoothChk.checked = false;
+                smoothChk.dispatchEvent(new Event('change'));
 
                 // C. Switch Scene 02 to 'keep forward' intervention at t = 1.5s -> Remains in 1D corridor -> NECESSARY_CONDITION_SATISFIED
+                expSlider.value = '1.5';
+                expSlider.dispatchEvent(new Event('input'));
                 expCond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
                 expCond.dispatchEvent(new Event('change'));
                 const s02KeepForwardStatusAt15s = r3bStatus.innerText.trim();
@@ -383,28 +680,41 @@ def run_browser_qa() -> dict[str, Any]:
                 const p2MetricsTxt = r3bMetrics.innerText;
 
                 // F. Verify invalid input guardrail (negative speed -5 m/s) returns NOT_APPLICABLE without fabricating margin
-                const savedSpeed = r3bSpeedInput.value;
                 r3bSpeedInput.value = '-5.0';
                 r3bSpeedInput.dispatchEvent(new Event('input'));
                 const invalidStatus = r3bStatus.innerText.trim();
                 const invalidMetricsTxt = r3bMetrics.innerText;
 
-                // Restore clean Scene 02 keep_forward state at t=1.5s in Connected Mode for screenshot
+                // G. Verify all 7 scenes and 10 rollout variants load cleanly in the explorer
+                let totalVariantsTested = 0;
+                for (const sOpt of Array.from(expScene.options)) {
+                    expScene.value = sOpt.value;
+                    expScene.dispatchEvent(new Event('change'));
+                    for (const cOpt of Array.from(expCond.options)) {
+                        expCond.value = cOpt.value;
+                        expCond.dispatchEvent(new Event('change'));
+                        if (document.querySelector('#svg-explorer-bev svg #bev-ego-vehicle-marker')) {
+                            totalVariantsTested += 1;
+                        }
+                    }
+                }
+
+                // Restore Scene 02 keep_forward at t=0.0s to test live Play/Pause/Restart animation
                 expScene.value = 'scene_02_stationary_lead_obstacle';
                 expScene.dispatchEvent(new Event('change'));
                 expCond.value = 'scene_02_stationary_lead_obstacle__intervention_keep_forward';
                 expCond.dispatchEvent(new Event('change'));
-                expSlider.value = '1.5';
-                expSlider.dispatchEvent(new Event('input'));
-                document.getElementById('select-r3b-obstacle-mode').value = 'observed';
-                document.getElementById('btn-r3b-reset-defaults').click();
-                document.getElementById('btn-send-step-to-r3b').click();
+                document.getElementById('btn-explorer-restart').click();
+                document.querySelector('[data-playback-speed="2.0"]').click();
+                document.getElementById('btn-explorer-play').click();
 
                 return {
                     t0HasNotApp,
                     t0HasTrajWide,
                     s02TurnLeftStatusAt15s,
                     s02TurnLeftExitedCorridor: s02TurnLeftTelemetry.includes('EXITED 1D CORRIDOR'),
+                    interpBadgeAt15s,
+                    interpBadgeAt12s,
                     s02KeepForwardStatusAt15s,
                     s02KeepForwardMetrics,
                     speedMpsBefore,
@@ -412,14 +722,41 @@ def run_browser_qa() -> dict[str, Any]:
                     p0MetricsTxt,
                     p2MetricsTxt,
                     invalidStatus,
-                    invalidRejected: invalidMetricsTxt.includes('Invalid or nonphysical speed'),
+                    invalidRejected: invalidMetricsTxt.includes('Invalid or nonphysical vehicle speed'),
+                    totalVariantsTested,
+                    playingStarted: window.VLA_INTERACTIVE_EXPLORER.getPlaybackState().playing,
+                    speedMultiplierSet: window.VLA_INTERACTIVE_EXPLORER.getPlaybackState().speed,
                 };
             })()"""
         )
+        time.sleep(0.35)
+        playback_progress = cdp.eval_js(
+            """(() => {
+                const stateWhilePlaying = window.VLA_INTERACTIVE_EXPLORER.getPlaybackState();
+                document.getElementById('btn-explorer-pause').click();
+                const stateAfterPause = window.VLA_INTERACTIVE_EXPLORER.getPlaybackState();
+                document.getElementById('btn-explorer-restart').click();
+                const stateAfterRestart = window.VLA_INTERACTIVE_EXPLORER.getPlaybackState();
+                document.querySelector('[data-playback-speed="1.0"]').click();
+                // Set to t=1.5s for Screenshot 07
+                window.VLA_INTERACTIVE_EXPLORER.setTime(1.5);
+                document.getElementById('select-r3b-obstacle-mode').value = 'observed';
+                document.getElementById('btn-r3b-reset-defaults').click();
+                document.getElementById('btn-send-step-to-r3b').click();
+                return {
+                    timeAdvancedTo: stateWhilePlaying.time_s,
+                    pausedCleanly: !stateAfterPause.playing,
+                    restartedToZero: stateAfterRestart.time_s === 0.0,
+                };
+            })()"""
+        )
+
         if interactive_qa["t0HasNotApp"] != 9 or interactive_qa["t0HasTrajWide"] != 1:
             raise RuntimeError(f"Step check scope verification at t=0 failed: {interactive_qa}")
         if interactive_qa["s02TurnLeftStatusAt15s"] != "NOT_APPLICABLE" or not interactive_qa["s02TurnLeftExitedCorridor"]:
             raise RuntimeError(f"Scene 02 turn-left corridor exit check at t=1.5s failed: {interactive_qa}")
+        if "RECORDED" not in interactive_qa["interpBadgeAt15s"] or "INTERPOLATION" not in interactive_qa["interpBadgeAt12s"]:
+            raise RuntimeError(f"Recorded vs display interpolation label check failed: {interactive_qa}")
         if interactive_qa["s02KeepForwardStatusAt15s"] != "NECESSARY_CONDITION_SATISFIED":
             raise RuntimeError(f"Scene 02 keep-forward R3B coupling at t=1.5s failed: {interactive_qa}")
         if abs(interactive_qa["speedMpsBefore"] * 3.6 - interactive_qa["speedKmhAfter"]) > 0.25:
@@ -428,6 +765,44 @@ def run_browser_qa() -> dict[str, Any]:
             raise RuntimeError("Changing policy branch P0 -> P2 did not update R3B metrics")
         if interactive_qa["invalidStatus"] != "NOT_APPLICABLE" or not interactive_qa["invalidRejected"]:
             raise RuntimeError(f"Invalid speed guardrail check failed: {interactive_qa}")
+        if interactive_qa["totalVariantsTested"] != 10:
+            raise RuntimeError(f"Expected 10 trajectory rollout variants with ego markers, got {interactive_qa['totalVariantsTested']}")
+        if not interactive_qa["playingStarted"] or playback_progress["timeAdvancedTo"] <= 0.05 or not playback_progress["pausedCleanly"] or not playback_progress["restartedToZero"]:
+            raise RuntimeError(f"Trajectory animation playback verification failed: {interactive_qa} / {playback_progress}")
+
+        # 6B. Verify Responsive Layout across Desktop (1480x1050), Tablet (768x1024), and Mobile (390x844)
+        responsive_checks: dict[str, Any] = {}
+        for vp_name, vp_w, vp_h, vp_mobile in (
+            ("desktop_1480x1050", 1480, 1050, False),
+            ("tablet_768x1024", 768, 1024, True),
+            ("mobile_390x844", 390, 844, True),
+        ):
+            cdp.call(
+                "Emulation.setDeviceMetricsOverride",
+                {"width": vp_w, "height": vp_h, "deviceScaleFactor": 2, "mobile": vp_mobile},
+            )
+            time.sleep(0.1)
+            vp_res = cdp.eval_js(
+                """(() => {
+                    const docW = document.documentElement.clientWidth;
+                    const scrollW = document.documentElement.scrollWidth;
+                    const ids = ['select-explorer-scene', 'btn-explorer-play', 'slider-explorer-time', 'input-r3b-speed', 'r3b-sim-status-badge'];
+                    const boxes = ids.map(id => {
+                        const r = document.getElementById(id)?.getBoundingClientRect();
+                        return { id, w: r ? Math.round(r.width) : 0, h: r ? Math.round(r.height) : 0 };
+                    });
+                    return {
+                        clientWidth: docW,
+                        scrollWidth: scrollW,
+                        noHorizontalOverflow: scrollW <= docW + 4,
+                        allControlsUsable: boxes.every(b => b.w >= 24 && b.h >= 14),
+                        boxes,
+                    };
+                })()"""
+            )
+            if not vp_res["noHorizontalOverflow"] or not vp_res["allControlsUsable"]:
+                raise RuntimeError(f"Responsive layout check failed on {vp_name}: {vp_res}")
+            responsive_checks[vp_name] = vp_res
 
         # Capture Screenshot 07: Interactive AutoVLA Trajectory Explorer & Coupled R3B Simulator
         cdp.call(
@@ -454,7 +829,16 @@ def run_browser_qa() -> dict[str, Any]:
         shot6_path = screenshots_dir / "06_scene_05_c10_robustness_matrix.png"
         shot6_path.write_bytes(base64.b64decode(shot6_b64))
 
-        # 7. Export Landscape PDF with @media print styling
+        # 7. Record Authentic 16:9 Demo Video & Animated GIF Preview
+        video_metadata: dict[str, Any] = {}
+        if record_video:
+            video_metadata = record_authentic_demo_video(cdp=cdp, mp4_path=mp4_path, gif_path=gif_path)
+
+        # 8. Export Landscape PDF with @media print styling
+        cdp.call(
+            "Emulation.setDeviceMetricsOverride",
+            {"width": 1480, "height": 1080, "deviceScaleFactor": 2, "mobile": False},
+        )
         cdp.eval_js(
             """(() => {
                 document.querySelector('[data-jump-scene="scene_05_active_braking_deceleration"]').click();
@@ -482,10 +866,20 @@ def run_browser_qa() -> dict[str, Any]:
         cdp.close()
 
         return {
-            "status": "BROWSER_QA_AND_PDF_EXPORT_PASSED",
+            "status": "BROWSER_QA_PARITY_AND_EXPORT_PASSED",
             "overview_rows_verified": overview_rows,
             "scenes_interactively_tested": len(all_scenes_tested),
+            "rollout_variants_tested": interactive_qa["totalVariantsTested"],
             "interactive_explorer_verified": True,
+            "animation_playback_verified": playback_progress,
+            "r3b_browser_python_parity": {
+                "total_cases": parity_report["total_cases"],
+                "passed_cases": parity_report["passed_count"],
+                "failed_cases": parity_report["failed_count"],
+                "all_passed": parity_report["all_passed"],
+                "report_path": str(parity_report_path),
+            },
+            "responsive_viewports_verified": list(responsive_checks.keys()),
             "scene_01_t0_badge": s01_check["firstRowBadge"],
             "scene_01_t05_badge": s01_check["secondRowBadge"],
             "scene_03_t0_badge": s03_check["firstBadge"],
@@ -500,6 +894,7 @@ def run_browser_qa() -> dict[str, Any]:
                 str(shot6_path),
                 str(shot7_path),
             ],
+            "video_walkthrough": video_metadata,
             "pdf_export_path": str(pdf_path),
             "pdf_size_kb": round(len(pdf_bytes) / 1024.0, 2),
         }
@@ -509,10 +904,16 @@ def run_browser_qa() -> dict[str, Any]:
             proc.wait(timeout=5)
         except Exception:
             proc.kill()
-        import shutil
         shutil.rmtree(user_data_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
-    out = run_browser_qa()
+    parser = argparse.ArgumentParser(description="Run headless Chrome QA, R3B parity verification, and video capture.")
+    parser.add_argument(
+        "--skip-video",
+        action="store_true",
+        help="Skip recording demo_walkthrough.mp4 and demo_preview.gif (for fast CI parity checks).",
+    )
+    args = parser.parse_args()
+    out = run_browser_qa(record_video=not args.skip_video)
     print(json.dumps(out, indent=2))

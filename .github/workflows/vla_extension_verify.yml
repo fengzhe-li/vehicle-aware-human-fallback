@@ -1,4 +1,4 @@
-name: VLA Handover Feasibility Extension Verification
+name: VLA Handover Feasibility Extension Verification & GitHub Pages Deploy
 
 on:
   push:
@@ -7,9 +7,18 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-and-vla-verify-${{ github.ref }}"
+  cancel-in-progress: false
+
 jobs:
   verify-vla-offline-reproducibility:
-    name: Verify VLA Extension (Offline Evaluation & Provenance Audit)
+    name: Verify VLA Extension, Browser R3B Parity & Build Pages Site
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +36,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run VLA extension unit & integration tests
+      - name: Run VLA extension unit & integration tests (24 tests + frozen file SHA-256 checks)
         run: |
           pytest extensions/vla_handover_feasibility/tests -v
 
@@ -35,17 +44,35 @@ jobs:
         run: |
           python -m extensions.vla_handover_feasibility.provenance_audit
 
-      - name: Run one-command offline demo (recompute C1-C10, 1,011 R3B rows & regenerate dashboard)
+      - name: Run one-command offline demo & regenerate interactive dashboard
         run: |
           python -m extensions.vla_handover_feasibility.demo --no-open
 
-      - name: Verify dashboard, evaluation artifacts, RQ1/RQ2 outputs, and README screenshot links
+      - name: Run headless Chrome browser QA, animation playback & 42-case Python/JS R3B parity verification
         run: |
+          python -m extensions.vla_handover_feasibility.browser_qa --skip-video
+
+      - name: Assemble & hygiene-check static GitHub Pages bundle (_site/)
+        run: |
+          python -m extensions.vla_handover_feasibility.demo --no-open --build-pages _site
+
+      - name: Verify dashboard, evaluation artifacts, RQ1/RQ2 outputs, parity reports, and walkthrough video
+        run: |
+          test -s _site/index.html
+          test -s _site/demo_walkthrough.mp4
+          test -s _site/demo_preview.gif
+          test -s _site/vla_handover_feasibility_report.pdf
+          test -s _site/artifacts/r3b_browser_python_parity_cases.json
+          test -s _site/artifacts/r3b_browser_python_parity_report.json
           test -s extensions/vla_handover_feasibility/artifacts/report/index.html
+          test -s extensions/vla_handover_feasibility/artifacts/report/demo_walkthrough.mp4
+          test -s extensions/vla_handover_feasibility/artifacts/report/demo_preview.gif
           test -s extensions/vla_handover_feasibility/artifacts/evaluation_summary.json
           test -s extensions/vla_handover_feasibility/artifacts/counterfactual_comparison.csv
           test -s extensions/vla_handover_feasibility/artifacts/extension_claim_register.csv
           test -s extensions/vla_handover_feasibility/artifacts/ablation_scene_05_signed_accel.json
+          test -s extensions/vla_handover_feasibility/artifacts/r3b_browser_python_parity_cases.json
+          test -s extensions/vla_handover_feasibility/artifacts/r3b_browser_python_parity_report.json
           test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/scene_02_keep_forward.json
           test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/scene_06_keep_forward.json
           test -s extensions/vla_handover_feasibility/artifacts/command_sensitivity/comparison.csv
@@ -56,3 +83,29 @@ jobs:
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/02_scene_05_braking_violation_and_ablation.png
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/03_scene_03_urban_lead_r3b_handover.png
           test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/04_scene_01_counterfactual_d0_provenance.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/05_scene_02_06_command_sensitivity.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/06_scene_05_c10_robustness_matrix.png
+          test -s extensions/vla_handover_feasibility/artifacts/report/screenshots/07_interactive_r3b_and_trajectory_explorer.png
+
+      - name: Configure GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "_site"
+
+  deploy-github-pages:
+    name: Deploy Interactive Demo to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: verify-vla-offline-reproducibility
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -213,22 +213,86 @@ def kmh_to_mps(speed_kmh: float) -> float:
     return float(speed_kmh) / 3.6
 
 
+SUPPORTED_AERO_DRAG_MODES: dict[str, str] = {
+    "epa_midpoint": "EPA 5th-95th Midpoint (Default R3B)",
+    "epa_p05": "EPA 5th Percentile (Low Aero/Rolling Drag)",
+    "epa_median": "EPA 50th Percentile Median (All Vehicles)",
+    "epa_p95": "EPA 95th Percentile (High Aero/Rolling Drag)",
+    "epa_bev_median": "EPA Battery Electric Median (Road-Load Only, No Regen)",
+    "custom": "Custom Coastdown Drag a_drag [m/s^2]",
+}
+
+
 def load_epa_drag_table_rows(path: str | Path = EPA_TABLE) -> list[dict[str, float]]:
-    """Load the frozen EPA coastdown drag table (`group == 'all'`) for embedding in the interactive bundle."""
-    rows: list[dict[str, float]] = []
+    """Load the frozen EPA coastdown drag table (`group == 'all'` + BEV/ICE medians) for embedding in the interactive bundle."""
+    by_speed: dict[float, dict[str, float]] = {}
     with open(path, newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh):
-            if r["group"] == "all":
-                rows.append(
-                    {
-                        "speed_kmh": float(r["speed_kmh"]),
-                        "p05_mps2": float(r["p05_mps2"]),
-                        "p50_mps2": float(r.get("p50_mps2", 0.5 * (float(r["p05_mps2"]) + float(r["p95_mps2"])))),
-                        "p95_mps2": float(r["p95_mps2"]),
-                    }
-                )
-    rows.sort(key=lambda x: x["speed_kmh"])
+            spd = float(r["speed_kmh"])
+            entry = by_speed.setdefault(spd, {"speed_kmh": spd})
+            grp = r["group"]
+            if grp == "all":
+                p05 = float(r["p05_mps2"])
+                p95 = float(r["p95_mps2"])
+                p50 = float(r.get("median_mps2") or r.get("p50_mps2") or 0.5 * (p05 + p95))
+                entry["p05_mps2"] = p05
+                entry["p25_mps2"] = float(r.get("p25_mps2", p05))
+                entry["p50_mps2"] = p50
+                entry["median_mps2"] = p50
+                entry["p75_mps2"] = float(r.get("p75_mps2", p95))
+                entry["p95_mps2"] = p95
+            elif "electric" in grp.lower() and "non-electric" not in grp.lower():
+                entry["bev_median_mps2"] = float(r.get("median_mps2", 0.0))
+            elif grp == "non-electric":
+                entry["ice_median_mps2"] = float(r.get("median_mps2", 0.0))
+    rows = sorted(by_speed.values(), key=lambda x: x["speed_kmh"])
     return rows
+
+
+def resolve_epa_drag_for_speed_mps(
+    v_mps: float,
+    a_drag_mode: str = "epa_midpoint",
+    a_drag_custom_mps2: float | None = None,
+    path: str | Path = EPA_TABLE,
+) -> tuple[float, float, float]:
+    """Return `(drag_lo_mps2, drag_hi_mps2, selected_point_drag_mps2)` at speed `v_mps`."""
+    rows = load_epa_drag_table_rows(path)
+    v_kmh = max(rows[0]["speed_kmh"], min(rows[-1]["speed_kmh"], float(v_mps) * 3.6))
+
+    interp_row = dict(rows[-1])
+    for i in range(len(rows) - 1):
+        r0, r1 = rows[i], rows[i + 1]
+        if r0["speed_kmh"] - 1e-9 <= v_kmh <= r1["speed_kmh"] + 1e-9:
+            alpha = (
+                (v_kmh - r0["speed_kmh"]) / (r1["speed_kmh"] - r0["speed_kmh"])
+                if r1["speed_kmh"] > r0["speed_kmh"]
+                else 0.0
+            )
+            interp_row = {
+                k: r0[k] + alpha * (r1[k] - r0[k])
+                for k in r0.keys()
+                if k in r1
+            }
+            break
+
+    drag_lo = float(interp_row["p05_mps2"])
+    drag_hi = float(interp_row["p95_mps2"])
+    drag_mid = 0.5 * (drag_lo + drag_hi)
+
+    if a_drag_mode == "epa_p05":
+        sel = drag_lo
+    elif a_drag_mode == "epa_median":
+        sel = float(interp_row.get("median_mps2", drag_mid))
+    elif a_drag_mode == "epa_p95":
+        sel = drag_hi
+    elif a_drag_mode == "epa_bev_median":
+        sel = float(interp_row.get("bev_median_mps2", drag_mid))
+    elif a_drag_mode == "custom" and a_drag_custom_mps2 is not None:
+        sel = float(a_drag_custom_mps2)
+    else:
+        sel = drag_mid
+
+    return drag_lo, drag_hi, sel
 
 
 def map_r3b_interval_to_presentation_status(raw_r3b_classification: str) -> str:
@@ -376,12 +440,15 @@ def evaluate_interactive_r3b(
     t3_s: float = 0.60,
     a_max_mps2: float = 8.00,
     a_sup_mps2: float = 2.00,
+    a_drag_mode: str = "epa_midpoint",
+    a_drag_custom_mps2: float | None = None,
+    road_grade_pct: float = 0.0,
     selected_branch: str = "P1",
     tau_req_s: float = 0.0,
     ego_x_at_req_m: float = 0.0,
     ego_y_at_req_m: float = 0.0,
     ego_heading_at_req_rad: float = 0.0,
-    obstacle_source: ObstacleSourceType = ObstacleSourceType.COUNTERFACTUAL_ASSUMPTION,
+    obstacle_source: ObstacleSourceType | str = ObstacleSourceType.COUNTERFACTUAL_ASSUMPTION,
     observed_lead_speed_mps: float | None = None,
     strict_longitudinal_corridor: bool = True,
 ) -> dict[str, Any]:
@@ -389,8 +456,11 @@ def evaluate_interactive_r3b(
 
     Accepts speed in either `v0_mps` or `v0_kmh` (if both are provided, checks consistency).
     Never fabricates a numerical margin when inputs are invalid, out of corridor, stationary,
-    or lacking obstacle geometry.
+    outside the validated level-road R3A/R3B domain, or lacking obstacle geometry.
     """
+    if isinstance(obstacle_source, str):
+        obstacle_source = ObstacleSourceType(obstacle_source)
+
     validation_errors: list[str] = []
     not_applicable_reasons: list[str] = []
     insufficient_evidence_reasons: list[str] = []
@@ -427,6 +497,7 @@ def evaluate_interactive_r3b(
         ("t3_s", t3_s),
         ("a_max_mps2", a_max_mps2),
         ("a_sup_mps2", a_sup_mps2),
+        ("road_grade_pct", road_grade_pct),
         ("tau_req_s", tau_req_s),
         ("ego_x_at_req_m", ego_x_at_req_m),
         ("ego_y_at_req_m", ego_y_at_req_m),
@@ -438,6 +509,10 @@ def evaluate_interactive_r3b(
     if selected_branch not in POLICY_METADATA:
         validation_errors.append(
             f"Unsupported policy branch {selected_branch!r}; supported branches are {list(POLICY_METADATA.keys())}."
+        )
+    if a_drag_mode not in SUPPORTED_AERO_DRAG_MODES:
+        validation_errors.append(
+            f"Unsupported aerodynamic drag mode {a_drag_mode!r}; supported modes are {list(SUPPORTED_AERO_DRAG_MODES.keys())}."
         )
 
     if not validation_errors:
@@ -455,9 +530,9 @@ def evaluate_interactive_r3b(
                 or not math.isfinite(float(obstacle_distance_d0_m))
             ):
                 validation_errors.append(f"Obstacle distance d0 must be finite, got {obstacle_distance_d0_m!r}.")
-            elif float(obstacle_distance_d0_m) <= 0.0:
+            elif float(obstacle_distance_d0_m) <= 0.0 or float(obstacle_distance_d0_m) > 500.0:
                 validation_errors.append(
-                    f"Initial obstacle distance d0 = {float(obstacle_distance_d0_m):.2f} m must be strictly positive (> 0 m)."
+                    f"Initial obstacle distance d0 = {float(obstacle_distance_d0_m):.2f} m must be in (0.0, 500.0] m."
                 )
 
         if float(mu) <= 0.0 or float(mu) > 1.2:
@@ -483,6 +558,22 @@ def evaluate_interactive_r3b(
         if float(a_sup_mps2) < 0.0 or float(a_sup_mps2) > 5.0:
             validation_errors.append(
                 f"Supported pre-control deceleration a_sup = {float(a_sup_mps2):.2f} m/s^2 must be in [0.0, 5.0] m/s^2 (UN R157 non-emergency bound)."
+            )
+        if a_drag_mode == "custom":
+            if (
+                a_drag_custom_mps2 is None
+                or not isinstance(a_drag_custom_mps2, (int, float))
+                or isinstance(a_drag_custom_mps2, bool)
+                or not math.isfinite(float(a_drag_custom_mps2))
+                or float(a_drag_custom_mps2) < 0.0
+                or float(a_drag_custom_mps2) > 1.5
+            ):
+                validation_errors.append(
+                    f"Custom aerodynamic coastdown drag a_drag_custom_mps2 = {a_drag_custom_mps2!r} must be in [0.0, 1.5] m/s^2."
+                )
+        if abs(float(road_grade_pct)) > 25.0:
+            validation_errors.append(
+                f"Road gradient grade = {float(road_grade_pct):+.1f}% exceeds physical highway grade bounds [-25.0%, +25.0%]."
             )
         if float(tau_req_s) < -1e-6 or float(tau_req_s) > 3.0 + 1e-6:
             validation_errors.append(
@@ -529,6 +620,12 @@ def evaluate_interactive_r3b(
             f"(<= {MIN_APPLICABLE_SPEED_MPS} m/s); the 1D R3B braking-only stopping model requires v > {MIN_APPLICABLE_SPEED_MPS} m/s."
         )
 
+    if abs(float(road_grade_pct)) > 1e-6:
+        not_applicable_reasons.append(
+            f"Non-zero road gradient (grade = {float(road_grade_pct):+.1f}%) is outside the validated level-road (0.0% grade) "
+            "R3A/R3B analytical slice; numerical R3B margins are withheld rather than approximated."
+        )
+
     corridor_lat_exceeded = abs(float(ego_y_at_req_m)) > LATERAL_CORRIDOR_HALF_WIDTH_M
     corridor_heading_exceeded = abs(float(ego_heading_at_req_rad)) > MAX_LONGITUDINAL_HEADING_RAD
     corridor_exited = corridor_lat_exceeded or corridor_heading_exceeded
@@ -562,6 +659,8 @@ def evaluate_interactive_r3b(
             "d_rem_m": None,
             "t_avail_s": None,
             "mu": round(float(mu), 3),
+            "road_grade_pct": round(float(road_grade_pct), 2),
+            "a_drag_mode": a_drag_mode,
             "tau_req_s": round(float(tau_req_s), 3),
             "corridor_valid": not corridor_exited,
             "validation_errors": [],
@@ -586,6 +685,8 @@ def evaluate_interactive_r3b(
             "d_rem_m": round(d_rem_m, 4) if d_rem_m is not None else None,
             "t_avail_s": None,
             "mu": round(float(mu), 3),
+            "road_grade_pct": round(float(road_grade_pct), 2),
+            "a_drag_mode": a_drag_mode,
             "tau_req_s": round(float(tau_req_s), 3),
             "corridor_valid": not corridor_exited,
             "validation_errors": [],
@@ -599,7 +700,11 @@ def evaluate_interactive_r3b(
 
     # 4. Valid R3B evaluation: compute both exact point results and frozen interval box results
     t_avail_s = float(d_rem_m) / float(resolved_v_mps)
-    drag_lo, drag_hi = epa_drag_interval_for_speed_mps(resolved_v_mps)
+    drag_lo, drag_hi, selected_a_drag = resolve_epa_drag_for_speed_mps(
+        resolved_v_mps,
+        a_drag_mode=a_drag_mode,
+        a_drag_custom_mps2=a_drag_custom_mps2,
+    )
     drag_mid = 0.5 * (drag_lo + drag_hi)
 
     # Check if selected point parameters lie within frozen R3B sensitivity intervals
@@ -609,6 +714,7 @@ def evaluate_interactive_r3b(
         and PARAMETERS["t3"]["low"] - 1e-6 <= float(t3_s) <= PARAMETERS["t3"]["high"] + 1e-6
         and PARAMETERS["a_max"]["low"] - 1e-6 <= float(a_max_mps2) <= PARAMETERS["a_max"]["high"] + 1e-6
         and PARAMETERS["a_sup"]["low"] - 1e-6 <= float(a_sup_mps2) <= PARAMETERS["a_sup"]["high"] + 1e-6
+        and drag_lo - 1e-6 <= float(selected_a_drag) <= drag_hi + 1e-6
     )
 
     point_results: dict[str, dict[str, Any]] = {}
@@ -621,7 +727,7 @@ def evaluate_interactive_r3b(
             t2_s=float(t2_s),
             t3_s=float(t3_s),
             a_max_mps2=float(a_max_mps2),
-            a_drag_mps2=drag_mid,
+            a_drag_mps2=selected_a_drag,
             a_sup_mps2=float(a_sup_mps2),
         )
         margin_s = t_avail_s - float(bd["t_req_s"])
@@ -687,6 +793,9 @@ def evaluate_interactive_r3b(
         "d_rem_m": round(float(d_rem_m), 4),
         "t_avail_s": round(t_avail_s, 4),
         "mu": round(float(mu), 3),
+        "road_grade_pct": round(float(road_grade_pct), 2),
+        "a_drag_mode": a_drag_mode,
+        "selected_a_drag_mps2": round(float(selected_a_drag), 5),
         "tau_req_s": round(float(tau_req_s), 3),
         "t1_s": round(float(t1_s), 3),
         "t2_s": round(float(t2_s), 3),
@@ -1184,12 +1293,18 @@ def build_trajectory_explorer_catalog(
             )
             scene_condition_map[sid].append(abl_id)
 
+    parity_cases = generate_r3b_browser_parity_reference_cases()
+    parity_out_path = EXT_ROOT / "artifacts" / "r3b_browser_python_parity_cases.json"
+    parity_out_path.parent.mkdir(parents=True, exist_ok=True)
+    parity_out_path.write_text(json.dumps(parity_cases, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
     return {
         "total_scenes": len(manifest["scenes"]),
         "total_conditions": len(conditions),
         "scene_condition_map": scene_condition_map,
         "conditions": conditions,
         "epa_coastdown_table": load_epa_drag_table_rows(),
+        "supported_aero_drag_modes": SUPPORTED_AERO_DRAG_MODES,
         "r3b_frozen_parameters": PARAMETERS,
         "r3b_success_criteria": SUCCESS,
         "r3b_policy_metadata": POLICY_METADATA,
@@ -1201,4 +1316,448 @@ def build_trajectory_explorer_catalog(
             "min_applicable_speed_mps": MIN_APPLICABLE_SPEED_MPS,
             "max_takeover_request_tau_s": 3.0,
         },
+        "r3b_browser_parity_reference_cases": parity_cases,
     }
+
+
+def generate_r3b_browser_parity_reference_cases() -> dict[str, Any]:
+    """Generate deterministic Python R3B reference cases to validate browser-side R3B parity.
+
+    Covers:
+    1. Vehicle speed (`v0_mps` & `v0_kmh`) and obstacle distance (`d0_m`) across all 7 scenes + R3B grid speeds.
+    2. Road friction (`mu` across dry 1.0, damp 0.85, wet 0.70, rain 0.50, snow 0.35, ice 0.20).
+    3. Human reaction delay (`t1_s`), hydraulic system latency (`t2_s`), and brake ramp (`t3_s`),
+       including standstill inside pre-control (`t1`) and standstill inside the linear brake ramp (`t3`).
+    4. Policy branches (`P0`, `P1`, `P2`) and chassis / support bounds (`a_max_mps2`, `a_sup_mps2`).
+    5. Supported aerodynamic coastdown drag modes (`epa_midpoint`, `epa_p05`, `epa_median`,
+       `epa_p95`, `epa_bev_median`, and `custom` `a_drag_custom_mps2`).
+    6. Road gradient (`road_grade_pct = 0.0` level road vs non-zero out-of-slice `NOT_APPLICABLE` vs invalid `> 25%`).
+    7. Corridor boundaries (`|y| > 1.75 m`, `|heading| > 0.35 rad`, `d_rem <= 0 m`), stationary speed
+       (`v <= 0.05 m/s`), missing obstacle (`NONE_INSUFFICIENT_EVIDENCE`), boundary proximity (`EPSILON_S = 0.01 s`),
+       and invalid input rejection (`valid_inputs = False`).
+    """
+    raw_specs: list[tuple[str, str, dict[str, Any]]] = [
+        # --- A. Nominal & Scene-Matched Baseline Cases ---
+        (
+            "RC01_scene01_high_speed_p1_dry",
+            "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P1 dry mu=1.0",
+            dict(v0_mps=13.5825, obstacle_distance_d0_m=45.0, mu=1.0, selected_branch="P1"),
+        ),
+        (
+            "RC02_scene01_high_speed_p0_dry",
+            "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P0 dry mu=1.0",
+            dict(v0_mps=13.5825, obstacle_distance_d0_m=45.0, mu=1.0, selected_branch="P0"),
+        ),
+        (
+            "RC03_scene01_high_speed_p2_dry",
+            "Scene 01 t0 v0=13.58 m/s, counterfactual d0=45m, P2 dry mu=1.0",
+            dict(v0_mps=13.5825, obstacle_distance_d0_m=45.0, mu=1.0, selected_branch="P2"),
+        ),
+        (
+            "RC04_scene02_observed_static_lead_t0",
+            "Scene 02 t0 v0=6.95 m/s, observed stationary obstacle d0=55.49m",
+            dict(
+                v0_mps=6.9491,
+                obstacle_distance_d0_m=55.489,
+                mu=1.0,
+                selected_branch="P1",
+                obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+                observed_lead_speed_mps=0.0,
+            ),
+        ),
+        (
+            "RC05_scene02_keep_forward_tau1p5s",
+            "Scene 02 keep_forward intervention at tau_req=1.5s inside 1D corridor",
+            dict(
+                v0_mps=7.5162,
+                obstacle_distance_d0_m=55.489,
+                mu=1.0,
+                selected_branch="P1",
+                tau_req_s=1.5,
+                ego_x_at_req_m=10.8923,
+                ego_y_at_req_m=0.4158,
+                ego_heading_at_req_rad=0.1149,
+                obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+                observed_lead_speed_mps=0.0,
+            ),
+        ),
+        (
+            "RC06_scene03_urban_moving_lead_wet",
+            "Scene 03 t0 v0=13.05 m/s, moving lead d0=37.34m on wet road mu=0.5",
+            dict(
+                v0_mps=13.0475,
+                obstacle_distance_d0_m=37.343,
+                mu=0.5,
+                selected_branch="P1",
+                obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+                observed_lead_speed_mps=11.12,
+            ),
+        ),
+        (
+            "RC07_scene04_arterial_lead_tau2s",
+            "Scene 04 at tau_req=2.0s with moving lead d0=68.04m",
+            dict(
+                v0_mps=6.3941,
+                obstacle_distance_d0_m=68.041,
+                mu=1.0,
+                selected_branch="P2",
+                tau_req_s=2.0,
+                ego_x_at_req_m=12.631,
+                ego_y_at_req_m=0.042,
+                ego_heading_at_req_rad=0.008,
+                obstacle_source=ObstacleSourceType.OBSERVED_IN_LANE_ANNOTATION,
+                observed_lead_speed_mps=11.79,
+            ),
+        ),
+        (
+            "RC08_scene05_active_braking_cf20m",
+            "Scene 05 t0 v0=4.31 m/s, counterfactual d0=20m",
+            dict(v0_mps=4.3103, obstacle_distance_d0_m=20.0, mu=1.0, selected_branch="P1"),
+        ),
+        # --- B. Speed Unit Conversion (km/h Input Parity) ---
+        (
+            "RC09_kmh_60_alks_limit",
+            "UN R157 60 km/h speed input with d0=50m, mu=1.0",
+            dict(v0_kmh=60.0, obstacle_distance_d0_m=50.0, mu=1.0, selected_branch="P1"),
+        ),
+        (
+            "RC10_kmh_100_motorway",
+            "D003 100 km/h speed input with d0=95m, mu=0.7",
+            dict(v0_kmh=100.0, obstacle_distance_d0_m=95.0, mu=0.7, selected_branch="P2"),
+        ),
+        (
+            "RC11_kmh_130_alks_rev1",
+            "UN R157 Rev.1 130 km/h speed input with d0=140m, mu=1.0",
+            dict(v0_kmh=130.0, obstacle_distance_d0_m=140.0, mu=1.0, selected_branch="P0"),
+        ),
+        # --- C. Friction Saturation & Surface Sweep ---
+        (
+            "RC12_friction_damp_0p85",
+            "Damp road mu=0.85 where mu*g=8.3385 > a_max=8.00 (chassis limited)",
+            dict(v0_mps=15.0, obstacle_distance_d0_m=50.0, mu=0.85, a_max_mps2=8.0, selected_branch="P1"),
+        ),
+        (
+            "RC13_friction_wet_0p70",
+            "Wet road mu=0.70 where mu*g=6.867 < a_max=8.00 (friction capped)",
+            dict(v0_mps=15.0, obstacle_distance_d0_m=50.0, mu=0.70, a_max_mps2=8.0, selected_branch="P1"),
+        ),
+        (
+            "RC14_friction_snow_0p35",
+            "Snow surface mu=0.35 where mu*g=3.4335 caps braking strongly",
+            dict(v0_mps=15.0, obstacle_distance_d0_m=50.0, mu=0.35, a_max_mps2=8.5, selected_branch="P1"),
+        ),
+        (
+            "RC15_friction_ice_0p20",
+            "Ice surface mu=0.20 where mu*g=1.962 m/s^2",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=45.0, mu=0.20, a_max_mps2=9.1, selected_branch="P2"),
+        ),
+        # --- D. Reaction Delay t1, System Latency t2, Brake Ramp t3 & Phase-Stop Regimes ---
+        (
+            "RC16_short_reaction_attentive_1p15s",
+            "Lower R3B corner t1=1.15s, t2=0.05s, t3=0.30s, a_max=9.10 m/s^2",
+            dict(
+                v0_mps=20.0,
+                obstacle_distance_d0_m=60.0,
+                mu=1.0,
+                t1_s=1.15,
+                t2_s=0.05,
+                t3_s=0.30,
+                a_max_mps2=9.10,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC17_long_reaction_conservative_3p00s",
+            "Upper R3B corner t1=3.00s, t2=0.17s, t3=1.20s, a_max=6.43 m/s^2",
+            dict(
+                v0_mps=20.0,
+                obstacle_distance_d0_m=60.0,
+                mu=1.0,
+                t1_s=3.00,
+                t2_s=0.17,
+                t3_s=1.20,
+                a_max_mps2=6.43,
+                selected_branch="P0",
+            ),
+        ),
+        (
+            "RC18_standstill_inside_pre_control_phase",
+            "Vehicle reaches standstill inside pre-control t1 under P2 (v0=3.5 m/s, a_sup=2.5 m/s^2, t1=2.0s)",
+            dict(
+                v0_mps=3.5,
+                obstacle_distance_d0_m=15.0,
+                mu=1.0,
+                t1_s=2.0,
+                t2_s=0.12,
+                t3_s=0.80,
+                a_max_mps2=8.0,
+                a_sup_mps2=2.5,
+                selected_branch="P2",
+            ),
+        ),
+        (
+            "RC19_standstill_inside_linear_brake_ramp",
+            "Vehicle reaches standstill inside linear brake ramp t3 (v_after_t1 <= 0.5 * a_eff * t3)",
+            dict(
+                v0_mps=4.2,
+                obstacle_distance_d0_m=18.0,
+                mu=1.0,
+                t1_s=1.2,
+                t2_s=0.10,
+                t3_s=1.40,
+                a_max_mps2=8.5,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC20_zero_delay_zero_ramp_step_braking",
+            "Instantaneous brake buildup t2=0.0s, t3=0.0s (R0 reference profile)",
+            dict(
+                v0_mps=18.0,
+                obstacle_distance_d0_m=55.0,
+                mu=1.0,
+                t1_s=1.50,
+                t2_s=0.0,
+                t3_s=0.0,
+                a_max_mps2=8.0,
+                selected_branch="P0",
+            ),
+        ),
+        # --- E. Supported Aerodynamic / Coastdown Drag Modes ---
+        (
+            "RC21_aero_drag_epa_p05",
+            "EPA 5th percentile low aerodynamic/rolling drag mode at 25 m/s (90 km/h)",
+            dict(
+                v0_mps=25.0,
+                obstacle_distance_d0_m=85.0,
+                mu=1.0,
+                a_drag_mode="epa_p05",
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC22_aero_drag_epa_median",
+            "EPA 50th percentile median drag mode at 25 m/s (90 km/h)",
+            dict(
+                v0_mps=25.0,
+                obstacle_distance_d0_m=85.0,
+                mu=1.0,
+                a_drag_mode="epa_median",
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC23_aero_drag_epa_p95",
+            "EPA 95th percentile high aerodynamic/rolling drag mode at 25 m/s (90 km/h)",
+            dict(
+                v0_mps=25.0,
+                obstacle_distance_d0_m=85.0,
+                mu=1.0,
+                a_drag_mode="epa_p95",
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC24_aero_drag_epa_bev_median",
+            "EPA Battery Electric median coastdown drag mode (road-load only, no regen)",
+            dict(
+                v0_mps=25.0,
+                obstacle_distance_d0_m=85.0,
+                mu=1.0,
+                a_drag_mode="epa_bev_median",
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC25_aero_drag_custom_0p32",
+            "Custom coastdown drag a_drag=0.32 m/s^2 at 22 m/s",
+            dict(
+                v0_mps=22.0,
+                obstacle_distance_d0_m=72.0,
+                mu=0.9,
+                a_drag_mode="custom",
+                a_drag_custom_mps2=0.32,
+                selected_branch="P1",
+            ),
+        ),
+        # --- F. Boundary Proximity (EPSILON_S = 0.01 s) ---
+        (
+            "RC26_boundary_proximity_epsilon_band",
+            "Obstacle distance tuned so conservative time margin lies inside +-0.01s boundary band",
+            dict(
+                v0_mps=10.0,
+                obstacle_distance_d0_m=46.15,
+                mu=1.0,
+                selected_branch="P0",
+            ),
+        ),
+        # --- G. Road Gradient Applicability Boundaries ---
+        (
+            "RC27_road_grade_downhill_minus3pct_not_applicable",
+            "Downhill grade -3.0% is outside level-road R3A/R3B analytical slice -> NOT_APPLICABLE",
+            dict(
+                v0_mps=15.0,
+                obstacle_distance_d0_m=50.0,
+                mu=1.0,
+                road_grade_pct=-3.0,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC28_road_grade_uphill_plus4pct_not_applicable",
+            "Uphill grade +4.0% is outside level-road R3A/R3B analytical slice -> NOT_APPLICABLE",
+            dict(
+                v0_mps=15.0,
+                obstacle_distance_d0_m=50.0,
+                mu=1.0,
+                road_grade_pct=4.0,
+                selected_branch="P1",
+            ),
+        ),
+        # --- H. Corridor Restrictions, Stationary Ego & Insufficient Evidence ---
+        (
+            "RC29_corridor_lateral_exit_scene02_turn_left",
+            "Scene 02 canonical turn-left at tau_req=1.5s exits +-1.75m lateral corridor -> NOT_APPLICABLE",
+            dict(
+                v0_mps=7.6481,
+                obstacle_distance_d0_m=55.489,
+                mu=1.0,
+                tau_req_s=1.5,
+                ego_x_at_req_m=10.674,
+                ego_y_at_req_m=1.961,
+                ego_heading_at_req_rad=0.415,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC30_corridor_heading_exit_only",
+            "Heading |psi|=0.39 rad > 0.35 rad even with |y|=1.10 m <= 1.75 m -> NOT_APPLICABLE",
+            dict(
+                v0_mps=9.0,
+                obstacle_distance_d0_m=40.0,
+                mu=1.0,
+                tau_req_s=1.0,
+                ego_x_at_req_m=8.5,
+                ego_y_at_req_m=1.10,
+                ego_heading_at_req_rad=0.39,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC31_stationary_ego_scene07",
+            "Scene 07 stationary ego v0=0.0019 m/s <= 0.05 m/s -> NOT_APPLICABLE",
+            dict(
+                v0_mps=0.0019,
+                obstacle_distance_d0_m=20.0,
+                mu=1.0,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC32_obstacle_already_passed_d_rem_nonpositive",
+            "Ego x=32.0m >= d0=30.0m (d_rem = -2.0m <= 0) -> NOT_APPLICABLE",
+            dict(
+                v0_mps=12.0,
+                obstacle_distance_d0_m=30.0,
+                mu=1.0,
+                tau_req_s=2.5,
+                ego_x_at_req_m=32.0,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC33_missing_obstacle_insufficient_evidence",
+            "Open-road scene with no observed 3D obstacle and no assumed d0 -> INSUFFICIENT_EVIDENCE",
+            dict(
+                v0_mps=13.5825,
+                obstacle_distance_d0_m=None,
+                mu=1.0,
+                obstacle_source=ObstacleSourceType.NONE_INSUFFICIENT_EVIDENCE,
+                selected_branch="P1",
+            ),
+        ),
+        # --- I. Invalid Parameter Guardrails (valid_inputs = False -> NOT_APPLICABLE) ---
+        (
+            "RC34_invalid_negative_speed",
+            "Negative speed v0=-5.0 m/s rejected",
+            dict(v0_mps=-5.0, obstacle_distance_d0_m=45.0, mu=1.0, selected_branch="P1"),
+        ),
+        (
+            "RC35_invalid_excessive_speed",
+            "Excessive speed v0=72.0 m/s (> 60 m/s) rejected",
+            dict(v0_mps=72.0, obstacle_distance_d0_m=100.0, mu=1.0, selected_branch="P1"),
+        ),
+        (
+            "RC36_invalid_zero_obstacle_distance",
+            "Zero obstacle distance d0=0.0 m rejected",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=0.0, mu=1.0, selected_branch="P1"),
+        ),
+        (
+            "RC37_invalid_friction_zero",
+            "Zero friction mu=0.0 rejected",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=45.0, mu=0.0, selected_branch="P1"),
+        ),
+        (
+            "RC38_invalid_friction_above_1p2",
+            "Excessive friction mu=1.35 (> 1.2) rejected",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=45.0, mu=1.35, selected_branch="P1"),
+        ),
+        (
+            "RC39_invalid_negative_reaction_t1",
+            "Negative reaction delay t1=-0.4 s rejected",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=45.0, mu=1.0, t1_s=-0.4, selected_branch="P1"),
+        ),
+        (
+            "RC40_invalid_tau_req_above_3s",
+            "Takeover request timing tau_req=3.5 s (> 3.0 s) rejected",
+            dict(v0_mps=12.0, obstacle_distance_d0_m=45.0, mu=1.0, tau_req_s=3.5, selected_branch="P1"),
+        ),
+        (
+            "RC41_invalid_custom_drag_negative",
+            "Negative custom aerodynamic drag a_drag=-0.15 m/s^2 rejected",
+            dict(
+                v0_mps=12.0,
+                obstacle_distance_d0_m=45.0,
+                mu=1.0,
+                a_drag_mode="custom",
+                a_drag_custom_mps2=-0.15,
+                selected_branch="P1",
+            ),
+        ),
+        (
+            "RC42_invalid_extreme_road_grade",
+            "Extreme road gradient +35.0% (> 25.0%) rejected",
+            dict(
+                v0_mps=12.0,
+                obstacle_distance_d0_m=45.0,
+                mu=1.0,
+                road_grade_pct=35.0,
+                selected_branch="P1",
+            ),
+        ),
+    ]
+
+    cases_out: list[dict[str, Any]] = []
+    for case_id, description, kwargs in raw_specs:
+        serializable_inputs = {
+            k: (v.value if isinstance(v, ObstacleSourceType) else v)
+            for k, v in kwargs.items()
+        }
+        expected = evaluate_interactive_r3b(**kwargs)
+        cases_out.append(
+            {
+                "case_id": case_id,
+                "description": description,
+                "inputs": serializable_inputs,
+                "expected": expected,
+            }
+        )
+
+    return {
+        "schema_version": "1.0.0",
+        "total_cases": len(cases_out),
+        "numerical_tolerance_unrounded": 1e-9,
+        "numerical_tolerance_rounded_display": 1e-4,
+        "cases": cases_out,
+    }
+

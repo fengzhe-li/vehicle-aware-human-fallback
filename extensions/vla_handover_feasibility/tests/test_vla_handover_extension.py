@@ -1206,5 +1206,116 @@ def test_trajectory_explorer_catalog_step_checks_and_coupled_r3b(tmp_path: Path)
     assert "NOT_DEFINED_AT_T0" in html_text
 
 
+# =============================================================================
+# 14. Public GitHub Pages Demo, 42-Case Browser/Python R3B Parity & Video QA
+# =============================================================================
+
+
+def test_r3b_browser_python_42_reference_cases_and_parity_report() -> None:
+    from extensions.vla_handover_feasibility.interactive_explorer import (
+        evaluate_interactive_r3b,
+        generate_r3b_browser_parity_reference_cases,
+    )
+
+    parity_suite = generate_r3b_browser_parity_reference_cases()
+    assert parity_suite["total_cases"] == 42
+    assert len(parity_suite["cases"]) == 42
+
+    # Verify aerodynamic drag modes and road gradient domain boundaries in Python
+    r_mid = evaluate_interactive_r3b(v0_mps=16.67, obstacle_distance_d0_m=45.0, mu=1.0, a_drag_mode="epa_midpoint")
+    r_p95 = evaluate_interactive_r3b(v0_mps=16.67, obstacle_distance_d0_m=45.0, mu=1.0, a_drag_mode="epa_p95")
+    r_cust = evaluate_interactive_r3b(
+        v0_mps=16.67, obstacle_distance_d0_m=45.0, mu=1.0, a_drag_mode="custom", a_drag_custom_mps2=0.42
+    )
+    assert r_mid["valid_inputs"] is True and r_p95["valid_inputs"] is True and r_cust["valid_inputs"] is True
+    assert r_p95["point_results_by_branch"]["P1"]["d_req_m"] < r_mid["point_results_by_branch"]["P1"]["d_req_m"]
+    assert r_cust["point_results_by_branch"]["P1"]["d_req_m"] < r_p95["point_results_by_branch"]["P1"]["d_req_m"]
+
+    # Non-zero road grade within [-25%, +25%] -> valid input, R3B NOT_APPLICABLE
+    r_grade = evaluate_interactive_r3b(v0_mps=13.58, obstacle_distance_d0_m=45.0, mu=1.0, road_grade_pct=-5.0)
+    assert r_grade["valid_inputs"] is True
+    assert r_grade["presentation_status"] == "NOT_APPLICABLE"
+    assert r_grade["raw_r3b_status"] == "INSUFFICIENT_EVIDENCE_OR_NOT_APPLICABLE"
+    assert any("gradient" in r.lower() for r in r_grade["not_applicable_reasons"])
+
+    # Out-of-range road grade (|grade| > 25%) -> rejected as invalid input
+    r_bad_grade = evaluate_interactive_r3b(v0_mps=13.58, obstacle_distance_d0_m=45.0, mu=1.0, road_grade_pct=35.0)
+    assert r_bad_grade["valid_inputs"] is False
+    assert r_bad_grade["presentation_status"] == "NOT_APPLICABLE"
+
+    # Verify headless Chrome parity report artifact
+    parity_report_path = DEFAULT_ARTIFACTS_DIR / "r3b_browser_python_parity_report.json"
+    assert parity_report_path.exists(), f"Missing browser parity report at {parity_report_path}"
+    parity_report = json.loads(parity_report_path.read_text(encoding="utf-8"))
+    assert parity_report["total_cases"] == 42
+    assert parity_report["passed_count"] == 42
+    assert parity_report["failed_count"] == 0
+    assert parity_report["all_passed"] is True
+
+
+def test_animated_trajectory_explorer_controls_video_and_pages_bundle(tmp_path: Path) -> None:
+    from extensions.vla_handover_feasibility.demo import build_github_pages_site
+
+    report_dir = DEFAULT_ARTIFACTS_DIR / "report"
+    html_text = (report_dir / "index.html").read_text(encoding="utf-8")
+
+    for required_token in (
+        'id="btn-explorer-play"',
+        'id="btn-explorer-pause"',
+        'id="btn-explorer-restart"',
+        'id="select-explorer-playback-speed"',
+        'data-playback-speed="0.5"',
+        'data-playback-speed="1.0"',
+        'data-playback-speed="2.0"',
+        'id="explorer-interp-badge"',
+        'id="bev-ego-vehicle-marker"',
+        'id="select-r3b-drag-mode"',
+        'id="select-r3b-grade"',
+        "verifyAllParityCasesInBrowser",
+        "demo_walkthrough.mp4",
+    ):
+        assert required_token in html_text, f"Missing {required_token} in report index.html"
+
+    # Verify authentic MP4 video and GIF preview exist and meet resolution/duration requirements
+    mp4_path = report_dir / "demo_walkthrough.mp4"
+    gif_path = report_dir / "demo_preview.gif"
+    assert mp4_path.exists() and mp4_path.stat().st_size > 200_000
+    assert gif_path.exists() and gif_path.stat().st_size > 100_000
+
+    # Assemble GitHub Pages static bundle in tmp_path and verify contents & security hygiene
+    bundle_res = build_github_pages_site(output_dir=tmp_path / "_site")
+    site_dir = Path(bundle_res["site_dir"])
+    assert (site_dir / ".nojekyll").exists()
+    assert (site_dir / "index.html").exists()
+    assert (site_dir / "demo_walkthrough.mp4").exists()
+    assert (site_dir / "demo_preview.gif").exists()
+    assert (site_dir / "vla_handover_feasibility_report.pdf").exists()
+    assert (site_dir / "screenshots" / "07_interactive_r3b_and_trajectory_explorer.png").exists()
+    assert (site_dir / "artifacts" / "r3b_browser_python_parity_report.json").exists()
+
+
+def test_frozen_research_files_sha256_invariance() -> None:
+    import hashlib
+
+    repo_root = DEFAULT_ARTIFACTS_DIR.parent.parent.parent
+    expected_hashes = {
+        repo_root / "research" / "R5A_CLAIM_LEDGER.csv": "75e250abc14256fcee1fa1cf2f468baf0850725cce8e389ebc09e1c59c47e6de",
+        DEFAULT_PREDICTIONS_DIR / "scene_01_high_speed_open_road_fast.json": "776a1f5121dd21d1cd2949f2e756a3c2efa6b6171bbec561718051bf663423ca",
+        DEFAULT_PREDICTIONS_DIR / "scene_02_stationary_lead_obstacle_fast.json": "0d257927c044da1f59149ced11ae9d5fc0cf937af0a89fd99115f84fe7d182d4",
+        DEFAULT_PREDICTIONS_DIR / "scene_03_close_urban_lead_following_fast.json": "5a516928de7a3c6c2732c0b4ede31d5e486919315a34fbe22ab2ce291b777aa2",
+        DEFAULT_PREDICTIONS_DIR / "scene_04_fast_arterial_lead_vehicle_fast.json": "de61ef1c170292347f054f63af790c2ae2adc78c3c17d9900f7bd1ffed0bd746",
+        DEFAULT_PREDICTIONS_DIR / "scene_05_active_braking_deceleration_fast.json": "b54884da70ccccfe516202595a44124c596af016b2d93d480dc81fedd2e81fe3",
+        DEFAULT_PREDICTIONS_DIR / "scene_06_intersection_turn_maneuver_fast.json": "a53c5470a8902ecdfda828d65c70ae9a86ceaf620501ad03895302eabc918fd5",
+        DEFAULT_PREDICTIONS_DIR / "scene_07_stationary_ego_baseline_fast.json": "88f5f4edd77fc6139d1eed8b0f4a408fca7764b32d45f15d8dc6862ed780e5a8",
+        DEFAULT_ARTIFACTS_DIR / "command_sensitivity" / "scene_02_keep_forward.json": "0aa56f4d354737b67f4297f6b0039a44aa42bb2eebbd498fae3908b75da571d1",
+        DEFAULT_ARTIFACTS_DIR / "command_sensitivity" / "scene_06_keep_forward.json": "3a3f0f9f80054d5cadc78f65175283b6211ae29c574b56a0936c19c1fed69790",
+        DEFAULT_ARTIFACTS_DIR / "ablation_scene_05_signed_accel.json": "837ea08ea77dcd183b129d32c1c6e266f499e40748e91472611f6b119533d595",
+    }
+    for fpath, expected_sha in expected_hashes.items():
+        actual_sha = hashlib.sha256(fpath.read_bytes()).hexdigest()
+        assert actual_sha == expected_sha, f"Frozen research file modified: {fpath} ({actual_sha} != {expected_sha})"
+
+
+
 
 

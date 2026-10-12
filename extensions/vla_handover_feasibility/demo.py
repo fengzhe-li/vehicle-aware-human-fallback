@@ -238,8 +238,12 @@ def run_offline_demo(
         )
         print("=" * 108)
         print(f"Interactive HTML Dashboard : {report_path}")
+        print("Live Public GitHub Pages   : https://fengzhe-li.github.io/vehicle-aware-human-fallback/")
         if pdf_path.exists():
             print(f"Landscape PDF Report       : {pdf_path}")
+        mp4_path = DEFAULT_REPORT_PATH.parent / "demo_walkthrough.mp4"
+        if mp4_path.exists():
+            print(f"Walkthrough Video (MP4)    : {mp4_path}")
         print("=" * 108)
 
     should_open = (
@@ -270,6 +274,73 @@ def run_offline_demo(
     }
 
 
+def build_github_pages_site(output_dir: str | Path = "_site") -> dict[str, Any]:
+    """Assemble and validate the static GitHub Pages bundle at `output_dir`."""
+    import shutil
+
+    site_dir = Path(output_dir).resolve()
+    site_dir.mkdir(parents=True, exist_ok=True)
+    report_dir = DEFAULT_REPORT_PATH.parent
+
+    if not DEFAULT_REPORT_PATH.exists():
+        generate_interactive_report(output_html_path=DEFAULT_REPORT_PATH)
+
+    # 1. Write .nojekyll so GitHub Pages serves all static files unmodified
+    (site_dir / ".nojekyll").write_text("", encoding="utf-8")
+
+    # 2. Copy index.html and companion report assets
+    copied_files: list[str] = []
+    for fname in (
+        "index.html",
+        "demo_walkthrough.mp4",
+        "demo_preview.gif",
+        "vla_handover_feasibility_report.pdf",
+    ):
+        src = report_dir / fname
+        if src.exists():
+            dst = site_dir / fname
+            shutil.copy2(src, dst)
+            copied_files.append(fname)
+
+    # 3. Copy screenshots
+    src_shots = report_dir / "screenshots"
+    if src_shots.exists():
+        dst_shots = site_dir / "screenshots"
+        dst_shots.mkdir(parents=True, exist_ok=True)
+        for png in sorted(src_shots.glob("*.png")):
+            shutil.copy2(png, dst_shots / png.name)
+            copied_files.append(f"screenshots/{png.name}")
+
+    # 4. Copy reproducible JSON verification artifacts
+    dst_artifacts = site_dir / "artifacts"
+    dst_artifacts.mkdir(parents=True, exist_ok=True)
+    for afname in (
+        "r3b_browser_python_parity_cases.json",
+        "r3b_browser_python_parity_report.json",
+        "evaluation_summary.json",
+        "provenance_audit_report.json",
+    ):
+        src_a = DEFAULT_ARTIFACTS_DIR / afname
+        if src_a.exists():
+            shutil.copy2(src_a, dst_artifacts / afname)
+            copied_files.append(f"artifacts/{afname}")
+
+    # 5. Security & publication hygiene verification on assembled Pages bundle
+    html_text = (site_dir / "index.html").read_text(encoding="utf-8")
+    if "/Users/" in html_text:
+        raise RuntimeError("Security hygiene violation: local '/Users/' path found in _site/index.html")
+    for forbidden_ext in ("*.ckpt", "*.safetensors", "*.pt", "*.jpg", "*.jpeg"):
+        bad = list(site_dir.rglob(forbidden_ext))
+        if bad:
+            raise RuntimeError(f"Security hygiene violation: restricted file(s) in Pages bundle: {bad}")
+
+    return {
+        "site_dir": str(site_dir),
+        "copied_files": copied_files,
+        "index_html_size_kb": round((site_dir / "index.html").stat().st_size / 1024.0, 2),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Run the offline VLA-Informed Handover Feasibility evaluation demo and open the research dashboard."
@@ -284,11 +355,26 @@ def main() -> None:
         action="store_true",
         help="Suppress formatted console table output and print JSON status only.",
     )
+    parser.add_argument(
+        "--build-pages",
+        type=str,
+        default="",
+        metavar="SITE_DIR",
+        help="Optional directory (e.g. _site) into which to assemble the static GitHub Pages bundle.",
+    )
     args = parser.parse_args()
     res = run_offline_demo(open_browser=not args.no_open, quiet=args.quiet)
+    if args.build_pages:
+        res["github_pages_bundle"] = build_github_pages_site(args.build_pages)
+        if not args.quiet:
+            print(
+                f"Assembled GitHub Pages static bundle at {res['github_pages_bundle']['site_dir']} "
+                f"({len(res['github_pages_bundle']['copied_files'])} files)"
+            )
     if args.quiet:
         print(json.dumps(res, indent=2))
 
 
 if __name__ == "__main__":
     main()
+

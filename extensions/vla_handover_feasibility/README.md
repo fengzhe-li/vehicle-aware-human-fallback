@@ -2,6 +2,9 @@
 
 **Author:** Fengzhe Li  
 **Repository:** [`fengzhe-li/vehicle-aware-human-fallback`](https://github.com/fengzhe-li/vehicle-aware-human-fallback)  
+**Live Interactive Demo (GitHub Pages):** **[https://fengzhe-li.github.io/vehicle-aware-human-fallback/](https://fengzhe-li.github.io/vehicle-aware-human-fallback/)**  
+**Walkthrough Video (16:9 H.264 MP4):** [`artifacts/report/demo_walkthrough.mp4`](./artifacts/report/demo_walkthrough.mp4) | [`demo_preview.gif`](./artifacts/report/demo_preview.gif)  
+**Browser/Python R3B Parity Verification (42/42 Cases):** [`artifacts/r3b_browser_python_parity_report.json`](./artifacts/r3b_browser_python_parity_report.json)  
 **License:** MIT (Source Code)
 
 ---
