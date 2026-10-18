@@ -60,3 +60,7 @@ extensions/vla_handover_feasibility/**/.chrome_qa_profile/
 *.pth
 _site/
 
+# Isolated local YOLO experiment
+.venv-yolo/
+extensions/yolo_perception/artifacts/
+extensions/yolo_perception/.runtime/

@@ -1,0 +1,14 @@
+{
+  "imgsz": 640,
+  "conf": 0.25,
+  "iou": 0.7,
+  "threads": 1,
+  "device": "cpu",
+  "precision": "float32",
+  "seed": 0,
+  "rect": true,
+  "max_det": 300,
+  "augment": false,
+  "agnostic_nms": false,
+  "classes": null
+}

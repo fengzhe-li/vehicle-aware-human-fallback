@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+name: YOLO perception software contracts
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'extensions/yolo_perception/**'
+      - '.github/workflows/yolo_perception_verify.yml'
+      - '.gitignore'
+      - 'LICENSING.md'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install pytest==9.1.1 numpy==2.2.6 pillow==11.3.0
+      - run: python -m pytest extensions/yolo_perception/tests -q
+        env:
+          YOLO_TEST_OFFLINE: "1"
+      - run: python -m extensions.yolo_perception.cli check-frozen
