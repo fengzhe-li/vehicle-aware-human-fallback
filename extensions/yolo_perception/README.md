@@ -2,9 +2,33 @@
 
 Phases A–C implement local, offline 2D detection on the existing 84 original camera JPEGs, descriptive statistics, local overlays and a read-only join to saved AutoVLA results. Nothing feeds back into AutoVLA, C1–C10 or R3B. No distance, collision risk, safety, precision, recall or mAP is inferred.
 
+## Architecture and read-only integration
+
+![Independent YOLO workflow with a read-only join to saved AutoVLA results](docs/assets/architecture.png)
+
+Image identity and SHA-256 checks precede inference. Validated 2D records support descriptive summaries and local visualisation; saved AutoVLA predictions and evaluations are associated by scene identity only. No detector output changes trajectory predictions, physical equations or research conclusions. The diagram shows the data relationship, not execution timing.
+
+## Measured local results
+
+The recorded YOLO11n CPU run processed **84/84 images**, yielding **455 retained detections**, **20 empty images** and **zero processing failures**. These are counts across correlated frames and views, not unique physical objects or verified true positives. End-to-end median latency was **22.887 ms**; backend inference median was **18.946 ms**.
+
+![Measured local CPU median, mean and p95 latency; warmup, rendering and writing excluded](docs/assets/measured_latency.png)
+
+Measurements are from the archived local run, not GitHub CI. The chart uses CPU FP32 with one thread; loading/warmup and output rendering/writing are excluded. Host-load dependence prevents a real-time guarantee. Precision, recall and mAP are unavailable without reviewed 2D ground truth. See the [engineering report](ENGINEERING_REPORT.md) for exact environment, measurement boundaries and limitations.
+
+## Validation and provenance
+
+![Historical validation: input hashes, repeatability and scoped software regression results](docs/assets/validation_summary.png)
+
+This figure records the pre-publication checks: 39 extension tests, 74 selected regressions (2 deselected), 84 exact repeated detection matches, and 361 unchanged baseline files. It is historical evidence, not a complete-suite or cross-device claim. The presentation update intentionally changes the root README only among those 361 files; its single snapshot entry is updated explicitly, while the other 360 protected files and all original images remain unchanged. Previous and proposed README hashes are retained in the [visual provenance record](docs/assets/provenance.json).
+
+All three figures are original diagrams/charts under the extension's AGPL-3.0-only licence. They contain no camera pixels, derived detection overlays, pretrained weights or synthetic perception evidence. Their [sources, hashes and sizes](docs/assets/provenance.json) are recorded for review.
+
+The [manually triggered YOLO software-contract workflow](https://github.com/fengzhe-li/vehicle-aware-human-fallback/actions/runs/39082125271) passed on published commit `7d8e6396675c2961b62bd72ab98426f977c85820` (Linux, Python 3.11). It tests synthetic software contracts and frozen-file integrity, not live model accuracy. This local presentation update has not yet been pushed.
+
 ## Licensing and data
 
-New extension source, tests, configuration, workflow and accompanying documentation are AGPL-3.0-only (see LICENSE, SPDX headers and the root LICENSING.md scope notice). Existing repository code retains its existing licence. The repository's root MIT licence does not cover Ultralytics or its weights. Ultralytics 8.3.221 and YOLO11n weights are subject to AGPL-3.0 or an applicable commercial licence. This local integration does not resolve all obligations for any future public distribution or hosted service; review that deployment's licence requirements first. Directory or process separation is not a licence exemption.
+New extension source, tests, configuration, workflow and accompanying documentation are AGPL-3.0-only (see [LICENSE](LICENSE), SPDX headers and the root [LICENSING.md scope notice](../../LICENSING.md)). Existing repository code retains its existing licence. The repository's root MIT licence does not cover Ultralytics or its weights. Ultralytics 8.3.221 and YOLO11n weights are subject to AGPL-3.0 or an applicable commercial licence. This local integration does not resolve all obligations for any future public distribution or hosted service; review that deployment's licence requirements first. Directory or process separation is not a licence exemption.
 
 Original OpenScene/nuPlan imagery remains third-party material, with OpenScene's CC BY-NC-SA 4.0 declaration and applicable upstream terms. Images and overlays are local only. Do not upload image-bearing HTML reports, overlays, weights or original images. The new workflow tests software contracts only and neither downloads weights nor deploys Pages.
 
@@ -72,4 +96,4 @@ AutoVLA association validates scene ID, token, timestamp, log, scene manifest ha
 
 `frozen_inputs.json` freezes the 361 pre-existing tracked files except `.gitignore`; original images receive independent per-file SHA-256 verification. Future deliberate baseline changes require an explicit review of this snapshot, not automatic refresh. Root requirements and the original environment are untouched.
 
-See ENGINEERING_REPORT.md for measured local results, test results and remaining gaps.
+See [ENGINEERING_REPORT.md](ENGINEERING_REPORT.md) for historical measured local results, test results and remaining gaps. Its pre-publication status statements describe that earlier audit.

@@ -20,6 +20,14 @@ Uncertainty and evidence boundaries determine which conclusions are justified. P
 
 ---
 
+## Independent YOLO Perception Extension
+
+**[Explore the YOLO extension →](extensions/yolo_perception/README.md)** — reproducible local 2D detection, descriptive statistics and a read-only association with saved AutoVLA results. The recorded 84-image CPU experiment produced 455 detections, with a 22.887 ms median processing time; these are descriptive results, not accuracy or safety evidence. Architecture, measured latency, validation and reproduction instructions are documented separately.
+
+The original research source retains MIT licensing; the YOLO extension and its documentation are AGPL-3.0-only. See [licence scope](LICENSING.md). Camera images, detection overlays and model weights remain excluded from publication.
+
+---
+
 ## Live Interactive Demo & Video Walkthrough (No Installation Required)
 
 - **Live Public Browser Demo (GitHub Pages):** **[https://fengzhe-li.github.io/vehicle-aware-human-fallback/](https://fengzhe-li.github.io/vehicle-aware-human-fallback/)**

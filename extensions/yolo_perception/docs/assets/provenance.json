@@ -1,0 +1,32 @@
+{
+  "license": "AGPL-3.0-only",
+  "source_commit": "7d8e6396675c2961b62bd72ab98426f977c85820",
+  "assets": [
+    {
+      "file": "architecture.png",
+      "sha256": "5dd179a22f7fe55996ed3b309e62a5154e0bf6a754d40a6fe3b59434aee6bd61",
+      "bytes": 109536,
+      "source": "Original diagram derived from published extension source; no third-party image content."
+    },
+    {
+      "file": "measured_latency.png",
+      "sha256": "0d76976251c1d3300a7594e487281a2f602e809ff60677bae68b1d069d687faa",
+      "bytes": 74518,
+      "source": "Original chart derived from artifacts/final-84/summary.json numerical latency measurements; no camera pixels."
+    },
+    {
+      "file": "validation_summary.png",
+      "sha256": "2778f1423e57c25a7c07b815bbe1bbe2783cf553a7e85fa32ecf51f7d06b08f0",
+      "bytes": 91986,
+      "source": "Original figure derived from recorded 84-image results and pre-publication test/integrity checks; no camera pixels."
+    }
+  ],
+  "measured_summary_sha256": "f519ebcaa419f994ced5fe26d5b05f70e20e631ce7610fb8b51c8de8c2f54898",
+  "documentation_baseline_change": {
+    "path": "README.md",
+    "previous_sha256": "f3437ea691cdea619238bebd51ce620487dfd5376ef6a70f8cab5a515af48bd4",
+    "proposed_sha256": "5e5f57f3343002929a4e78575ce256fe0333e5d70acc2117d6fced5ad8c4eda5",
+    "reason": "User-authorized YOLO documentation entry; existing research presentation retained verbatim. Only this one of 361 snapshot entries changes."
+  },
+  "restrictions": "No camera imagery, model weights or overlays included. Charts are descriptive; accuracy unavailable. Historical runs and test results are not recomputed by rendering these figures."
+}
