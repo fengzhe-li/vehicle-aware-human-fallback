@@ -234,7 +234,7 @@ To maintain strict scientific and assurance integrity, this project explicitly d
 │   └── vla_handover_feasibility/   # Audited AutoVLA trajectory & R3B handover feasibility pipeline
 │       ├── artifacts/        # Evaluation summaries, claim register, command sensitivity, C10 robustness, HTML/PDF report & screenshots
 │       ├── data/             # Scene manifest, SHA-256 camera digest, AutoVLA action codebook (agent_vocab.pkl)
-│       ├── tests/            # 21 unit, synthetic-fixture, R3B-adapter, RQ1/RQ2 sensitivity, interactive explorer, demo, and provenance tests
+│       ├── tests/            # 24 unit, synthetic-fixture, R3B-adapter, RQ1/RQ2 sensitivity, interactive explorer, demo, and provenance tests
 │       ├── action_tokenizer.py     # Action token regex parser & SE(2) trajectory rollout decoder
 │       ├── browser_qa.py           # Headless Chromium visual QA & screenshot generator
 │       ├── c10_robustness.py       # RQ2 Scene 05 C10 numerical robustness audit (5 estimators x 5 windows x 3 thresholds)
@@ -317,7 +317,7 @@ The VLA extension is 100% reproducible offline from a fresh Git clone using only
 # Run the one-command offline evaluation, provenance audit, and dashboard generator
 python -m extensions.vla_handover_feasibility.demo --no-open
 
-# Run the 21 extension unit, synthetic-fixture, R3B-adapter, RQ1/RQ2, interactive explorer, demo, and provenance tests
+# Run the 24 extension unit, synthetic-fixture, R3B-adapter, RQ1/RQ2, interactive explorer, demo, and provenance tests
 pytest extensions/vla_handover_feasibility/tests -v
 
 # Or invoke the individual pipeline stages directly:
