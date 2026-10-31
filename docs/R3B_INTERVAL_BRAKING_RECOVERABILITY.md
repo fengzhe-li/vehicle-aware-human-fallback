@@ -80,10 +80,11 @@ P0 and P2 with authority at TOR are **identical to P1** by construction (tested)
 - `T_required^brake` = (D_stop + 2.0 m) / v0.
 - Margin = `T_available − T_required`, in seconds; the distance margin is v0 × that.
 
-**Classification:**
-- **ROBUSTLY SATISFIED:** worst-case (conservative) margin > 0.
-- **ROBUSTLY UNSATISFIED:** best-case (optimistic) margin < 0.
-- **PARAMETER-SENSITIVE:** otherwise (zero counts as the boundary).
+**Classification (implementation tolerance: ε = 0.01 s):**
+- **ROBUSTLY SATISFIED:** worst-case (conservative) time margin > +ε.
+- **ROBUSTLY UNSATISFIED:** best-case (optimistic) time margin < −ε.
+- **PARAMETER-SENSITIVE:** otherwise; values within the ±ε band remain sensitive.
+- **Boundary flag:** set when either bound has absolute time margin ≤ ε.
 
 ## 5. Interval propagation and cross-check
 
