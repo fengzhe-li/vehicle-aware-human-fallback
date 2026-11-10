@@ -66,9 +66,60 @@ Running YOLO separately after restoration still reproduces the three failures.
 and test-output isolation are reconciled in a separately reviewed change.
 Validated collision avoidance remains outside this model and is also BLOCKED.
 
-## Publication
+## Publication and hosted checks
 
-CAN PR: https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/1
-against main, open and unmerged. Lateral publication is pending the final delivery
-commit; it will be a draft against the CAN branch because of the recorded
-repository-wide acceptance blocker. No merge is authorized automatically.
+- [CAN PR #1](https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/1):
+  open, base main, head `feat/automotive-can-dbc-integration` (`ef3b5e2`).
+- [Lateral PR #2](https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/2):
+  open **draft**, base CAN branch, head `feat/lateral-steering-recoverability`.
+  The implementation and integration record were pushed through `e4a46ba`;
+  this publication record follows as a documentation-only commit.
+- Both branch heads and main were verified using `git ls-remote`. Neither PR is merged.
+
+Hosted CAN [run 42841275772](https://github.com/fengzhe-li/vehicle-aware-human-fallback/actions/runs/42841275772)
+passed native CTest (1/1) but failed
+`tests/test_r6a_figures.py::test_deterministic_rendering` on the unchanged
+`F8_transition_branch_comparison.png`. Regression totals: **427 passed, 1 failed,
+11 skipped, 1 deselected**; this existing workflow excludes the R3B study by default.
+The protected PNG SHA-256 is
+`757b0a9792eecb8c336104c95f844a615b0f4febd90f48701e25e1c464543058`;
+the Ubuntu fresh render is
+`fa5d85f1ac774402b0a861e8af2212b959dbc85878651adbb7b44276490a0244`.
+CI uses Python 3.11, matplotlib 3.11.2, numpy 2.4.6, pandas 3.1.1 and Pillow 13.0.0;
+local validation uses Python 3.14.5 and matplotlib 3.11.1. The exact contribution
+of library/font/platform differences has not been isolated. No original figure
+or hash assertion was replaced to make the job green. The CAN PR's separate VLA
+verification job passed; its Pages deployment was skipped. Lateral hosted checks
+were still running at this recording; no hosted success is claimed.
+
+This hosted frozen-figure mismatch is an additional **BLOCKED** acceptance item.
+The passing local research runs do not establish cross-platform byte determinism.
+
+## Review and handoff procedure
+
+1. Use the clean `vehicle-aware-delivery` checkout or clone the published feature
+   branches. The original `vehicle-aware-human-fallback` checkout deliberately
+   retains its original history and has incomplete historical Git objects.
+2. Review CAN PR #1 against main, including its hosted frozen-figure failure.
+3. Review draft lateral PR #2 against CAN. Review exact frozen-input differences
+   before any baseline reconciliation; retain assertions and research results.
+   Isolate the existing VLA test outputs so one suite cannot rewrite the other's
+   frozen inputs. Resolve/pin the figure rendering environment based on measured
+   evidence, not a regenerated replacement for protected results.
+4. Rerun the documented research, native and extension checks; keep repository-wide
+   acceptance BLOCKED while any required check fails. No real-road safety claim
+   follows even after software checks pass.
+5. After CAN is merged, verify its implementation is present in main and retarget:
+
+   ```sh
+   gh pr edit 2 --repo fengzhe-li/vehicle-aware-human-fallback --base main
+   ```
+
+   Review the resulting diff and rerun checks before marking the lateral PR ready.
+   Do not merge automatically or force-push to resolve the stack.
+
+The original patch remains untouched. A separate sibling
+`vehicle-aware-reviewed-delivery.patch` contains the complete clean delivery
+changes against main `f52230a`; apply with `git am` only in a clean checkout of
+that base (or review conflicts against newer main). Both original commits remain
+available in the original local repository.

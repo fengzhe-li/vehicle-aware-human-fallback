@@ -76,7 +76,31 @@
     "passed": 508,
     "skipped": 11
   },
-  "git_delivery": "see docs/LATERAL_GIT_DELIVERY.md",
+  "git_delivery": {
+    "can_base": "main",
+    "can_pr": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/1",
+    "lateral_base": "feat/automotive-can-dbc-integration",
+    "lateral_draft": true,
+    "lateral_pr": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/2",
+    "merged": false,
+    "verified_implementation_head": "e4a46bae2c0acc7858f8805730d72e22cbeebc6d"
+  },
+  "hosted_ci": {
+    "can_native": "1/1 passed",
+    "can_research": {
+      "deselected": 1,
+      "failed": 1,
+      "passed": 427,
+      "skipped": 11
+    },
+    "can_run": 42841275772,
+    "cross_platform_determinism": "BLOCKED; cause not isolated; protected image/assertion unchanged",
+    "expected_sha256": "757b0a9792eecb8c336104c95f844a615b0f4febd90f48701e25e1c464543058",
+    "failure": "tests/test_r6a_figures.py::test_deterministic_rendering",
+    "figure": "F8_transition_branch_comparison.png",
+    "lateral_at_recording": "in_progress",
+    "observed_sha256": "fa5d85f1ac774402b0a861e8af2212b959dbc85878651adbb7b44276490a0244"
+  },
   "original_artifact_comparison": {
     "identical": 6,
     "intentional_changes": [

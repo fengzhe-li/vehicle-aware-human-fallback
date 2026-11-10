@@ -4,7 +4,8 @@
 
 **PASS for conditional model/software acceptance on the original local tree.**
 **BLOCKED for repository-wide acceptance** by the independently reproduced
-YOLO frozen-input guard failures described in the Git delivery record.
+YOLO frozen-input guard failures and hosted R6A PNG hash mismatch described in
+the Git delivery record.
 **BLOCKED for validated collision avoidance or choosing a safe manoeuvre.** Those
 claims require evidence and models outside this extension. Git delivery and the
 current-main integration check are tracked in [LATERAL_GIT_DELIVERY.md](LATERAL_GIT_DELIVERY.md).
