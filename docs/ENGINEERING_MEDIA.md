@@ -120,3 +120,19 @@ report-writing test interaction. The manifest and assertions are not refreshed.
 The earlier hosted R6A PNG encoding discrepancy has been resolved in the current
 engineering heads; both PRs' checks were green when inspected. Post-merge CI must
 still be run against the actual updated main before approving the next PR.
+
+## GitHub delivery and rendering
+
+Draft [media PR #3](https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/3)
+is published from `codex/engineering-visuals` against main. Initial media commit
+`7fa3c56d15bc500865551464052c47e61309e321` passed hosted VLA verification
+([run 42868760349](https://github.com/fengzhe-li/vehicle-aware-human-fallback/actions/runs/42868760349));
+Pages deployment was correctly skipped. The follow-up delivery record does not
+change the renderer or generated visuals.
+
+Actual GitHub rendering was checked for the root, CAN and lateral README pages.
+The existing VLA GIF, new CAN GIF and all three lateral images loaded at their
+expected natural dimensions. The root preview placement, CAN freshness boundary
+and lateral feasibility map were visually inspected. Local relative links also
+pass automated checks. All three PRs remain open; PRs #2 and #3 remain drafts.
+No merge, release tag or deployment was performed.

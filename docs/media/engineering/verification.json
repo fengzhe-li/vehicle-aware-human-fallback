@@ -20,6 +20,14 @@
     "README.md"
   ],
   "frozen_manifest_modified": false,
+  "github_rendering": {
+    "can_readme": "CAN GIF loaded at 1200x680; actual GitHub rendering visually inspected",
+    "lateral_readme": "All three PNGs loaded: 1296x828, 1650x1500, 1500x600; feasibility map visually inspected",
+    "pages_player": "Existing live demo exercised; no deployment performed",
+    "relative_links": "All local README links resolve in automated checks",
+    "root_readme": "Existing VLA GIF, CAN GIF and lateral feasibility map loaded at natural dimensions; visual section inspected",
+    "verified_commit": "7fa3c56d15bc500865551464052c47e61309e321"
+  },
   "lateral_artifacts_reproduced": {
     "example_result.json": true,
     "feasibility_map.png": true,
@@ -31,6 +39,16 @@
     "summary.json": true
   },
   "main_base": "f52230a5b836fa3049bfa407ca2ebf5768676816",
+  "media_pull_request": {
+    "base": "main",
+    "branch": "codex/engineering-visuals",
+    "ci_run": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/actions/runs/42868760349",
+    "draft": true,
+    "hosted_ci": "VLA verification SUCCESS; Pages deployment SKIPPED",
+    "merged": false,
+    "url": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/3",
+    "verified_head": "7fa3c56d15bc500865551464052c47e61309e321"
+  },
   "media_repeatability": "All 8 generated files byte-identical across two runs, including GIF and MP4",
   "media_tests": {
     "failed": 0,
@@ -84,7 +102,7 @@
     }
   },
   "source_commit": "ed96d22194536e0b3a72197682063052b7111341",
-  "status": "local_checks_complete_github_rendering_pending",
+  "status": "complete_for_review_merges_pending_approval",
   "vla_tests": {
     "failed": 0,
     "isolated_checkout": true,

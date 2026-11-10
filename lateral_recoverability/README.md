@@ -49,7 +49,8 @@ Reproduction and review details: [engineering media guide](../docs/ENGINEERING_M
 
 ## Run
 
-From the repository root, using its existing requirements.txt dependencies:
+From the verified engineering checkout for PR #2, using its existing
+requirements.txt dependencies (this media preview does not include the modules):
 
 ~~~sh
 python3 -m pytest tests/test_lateral_recoverability.py tests/test_lateral_audit.py -q
