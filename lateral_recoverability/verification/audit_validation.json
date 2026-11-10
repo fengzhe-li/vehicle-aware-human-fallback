@@ -8,6 +8,60 @@
     }
   },
   "date": "2026-11-10",
+  "delivery_checkout": {
+    "additional_extensions": {
+      "failed": 3,
+      "passed": 60
+    },
+    "artifacts_match_source_checkout": 8,
+    "audit_commit": "74392f41975d0c95b534ce500b67eb7c7b5c43c3",
+    "audit_outputs_match_source_checkout": 2,
+    "authorized_exception": "tests/test_r2b.py",
+    "base": "f52230a5b836fa3049bfa407ca2ebf5768676816",
+    "can_commit": "ef3b5e270ee53b2e4bf06d957ad3a7f868171754",
+    "frozen_guard_mismatches": [
+      {
+        "already_mismatched_on_main": true,
+        "delivery": "0e14ce6c2aca8d4bacdcaa386c14f19474907499fe6ac748076d9e64fefa0593",
+        "frozen": "5e5f57f3343002929a4e78575ce256fe0333e5d70acc2117d6fced5ad8c4eda5",
+        "main": "f1291520970c5bbf4c749edf72d4e7bd6f47c5b0b3c50b3d9b72e0e74660d18a",
+        "path": "README.md"
+      },
+      {
+        "already_mismatched_on_main": true,
+        "delivery": "4e9e40ddefaa73805ef6196f13086fca55a3b9e5fb376f7161c3e7e6e234ce84",
+        "frozen": "cfe3bf7b8a2ddfb7a3a1a5e7c62a14cfc49975488b089738028238aaea7a5edb",
+        "main": "4e9e40ddefaa73805ef6196f13086fca55a3b9e5fb376f7161c3e7e6e234ce84",
+        "path": "docs/R3B_INTERVAL_BRAKING_RECOVERABILITY.md"
+      },
+      {
+        "already_mismatched_on_main": false,
+        "delivery": "316f2a3efbced7a6c7cc77460067cc13bf18b4a785925c51f1198619042039eb",
+        "frozen": "0ccdbb35a4133d5ea72424f2d04633e891308f662ed62de6ca9cad942a5f1176",
+        "main": "0ccdbb35a4133d5ea72424f2d04633e891308f662ed62de6ca9cad942a5f1176",
+        "path": "tests/test_r2b.py"
+      }
+    ],
+    "isolated_yolo": {
+      "failed": 3,
+      "passed": 36
+    },
+    "lateral_commit": "da713e6d19e5e0cc11c777a0992ed1df7aa39c88",
+    "new_can_test": "tests/test_automotive_can.py",
+    "pristine_main_yolo": {
+      "failed": 3,
+      "passed": 36
+    },
+    "protected_existing_main_files": 257,
+    "protected_existing_main_files_unchanged": 256,
+    "repository_wide_acceptance": "BLOCKED: inherited YOLO frozen-input guard, plus authorized README/test edits; assertions and manifest retained",
+    "research_suite": {
+      "duration_s": 52.48,
+      "failed": 0,
+      "passed": 508,
+      "skipped": 11
+    }
+  },
   "environment": {
     "matplotlib": "3.11.1",
     "numpy": "2.5.3",

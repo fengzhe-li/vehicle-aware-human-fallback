@@ -3,6 +3,8 @@
 ## Assessment and scope
 
 **PASS for conditional model/software acceptance on the original local tree.**
+**BLOCKED for repository-wide acceptance** by the independently reproduced
+YOLO frozen-input guard failures described in the Git delivery record.
 **BLOCKED for validated collision avoidance or choosing a safe manoeuvre.** Those
 claims require evidence and models outside this extension. Git delivery and the
 current-main integration check are tracked in [LATERAL_GIT_DELIVERY.md](LATERAL_GIT_DELIVERY.md).
@@ -181,6 +183,9 @@ contains only revised longitudinal/decision labels; lateral outcomes and reasons
 are unchanged. The summary updates counts, source hashes and scenario-file hash.
 PNG figures, path samples, example result and sensitivity table are unchanged.
 Environment: Python 3.14.5, numpy 2.5.3, pandas 2.3.3, matplotlib 3.11.1.
+The clean delivery research suite also passed 508 tests with 11 skips. The
+additional VLA/YOLO run passed 60 and failed 3 frozen-input checks, also reproduced
+on pristine main; its preserved manifest needs separate reconciliation.
 The separate clean delivery checkout inherits newer main changes; its results
 and inherited baseline differences are reported separately in the Git delivery record.
 
