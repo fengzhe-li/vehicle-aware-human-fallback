@@ -1,0 +1,3846 @@
+{
+  "counts": {
+    "lateral": {
+      "feasible": 258,
+      "infeasible": 1124,
+      "unknown": 7366
+    },
+    "longitudinal": {
+      "feasible": 183,
+      "infeasible": 291,
+      "unknown": 8274
+    }
+  },
+  "coverage_gaps": "Original grid has no missing road/clearance/grip, invalid/future signal or missing braking assumptions; zero reason counts do not establish coverage. Supplementary boundaries are outside the 8,748 denominator.",
+  "decision_counts": {
+    "both_candidates_conditionally_feasible_no_safety_ranking": 120,
+    "insufficient_evidence_or_uncertainty": 8157,
+    "lateral_conditionally_feasible": 138,
+    "longitudinal_conditionally_feasible": 63,
+    "neither_evaluated_candidate_feasible_under_assumptions": 270
+  },
+  "interpretation": "Synthetic scenario frequencies, not probabilities. Primary=first emitted reason; overlaps count a case once per reason/category. Early returns can mask later gates; no counterfactual reasons are invented.",
+  "lateral": {
+    "combinations": {
+      "bounds_overlap_constraints_or_numerical_boundary": 49,
+      "initial_steering_uncertainty_or_mismatch_requires_transient_model": 1458,
+      "speed:sensor_disagreement": 1458,
+      "speed:stale;steering:missing": 729,
+      "speed:stale;steering:stale": 2187,
+      "steering:missing": 1458,
+      "uncertainty_crosses_zero_remaining_distance": 27
+    },
+    "overlapping_categories": {
+      "combined_braking_steering_uncertainty": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_model_assumptions": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_road_or_obstacle_geometry": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_sensor_evidence": {
+        "count": 2187,
+        "percent_all": 25.0,
+        "percent_unknown": 29.69047
+      },
+      "other": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "overlapping_constraint_bounds": {
+        "count": 49,
+        "percent_all": 0.560128,
+        "percent_unknown": 0.665219
+      },
+      "r3b_parameter_sensitive": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "stale_or_invalid_vehicle_state": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 39.587293
+      },
+      "steering_uncertainty": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "uncertain_remaining_distance": {
+        "count": 27,
+        "percent_all": 0.308642,
+        "percent_unknown": 0.366549
+      }
+    },
+    "overlapping_reasons": {
+      "bounds_overlap_constraints_or_numerical_boundary": {
+        "count": 49,
+        "percent_all": 0.560128,
+        "percent_unknown": 0.665219
+      },
+      "initial_steering_uncertainty_or_mismatch_requires_transient_model": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "speed:sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "speed:stale": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 39.587293
+      },
+      "steering:missing": {
+        "count": 2187,
+        "percent_all": 25.0,
+        "percent_unknown": 29.69047
+      },
+      "steering:stale": {
+        "count": 2187,
+        "percent_all": 25.0,
+        "percent_unknown": 29.69047
+      },
+      "uncertainty_crosses_zero_remaining_distance": {
+        "count": 27,
+        "percent_all": 0.308642,
+        "percent_unknown": 0.366549
+      }
+    },
+    "primary_categories": {
+      "combined_braking_steering_uncertainty": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_model_assumptions": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_road_or_obstacle_geometry": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_sensor_evidence": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "other": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "overlapping_constraint_bounds": {
+        "count": 49,
+        "percent_all": 0.560128,
+        "percent_unknown": 0.665219
+      },
+      "r3b_parameter_sensitive": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "stale_or_invalid_vehicle_state": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 39.587293
+      },
+      "steering_uncertainty": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "uncertain_remaining_distance": {
+        "count": 27,
+        "percent_all": 0.308642,
+        "percent_unknown": 0.366549
+      }
+    },
+    "primary_reasons": {
+      "bounds_overlap_constraints_or_numerical_boundary": {
+        "count": 49,
+        "percent_all": 0.560128,
+        "percent_unknown": 0.665219
+      },
+      "initial_steering_uncertainty_or_mismatch_requires_transient_model": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "speed:sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "speed:stale": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 39.587293
+      },
+      "steering:missing": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 19.793646
+      },
+      "uncertainty_crosses_zero_remaining_distance": {
+        "count": 27,
+        "percent_all": 0.308642,
+        "percent_unknown": 0.366549
+      }
+    },
+    "representatives": {
+      "bounds_overlap_constraints_or_numerical_boundary": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 449,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 60.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 1.5,
+                "low": 1.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.1,
+                "low": 0.1
+              },
+              "speed_mps": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.2,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {
+            "curvature_lower_per_m": 0.02277412837136365,
+            "curvature_upper_per_m": 0.027421638069761743,
+            "delay_high_s": 1.8,
+            "delay_low_s": 1.8,
+            "lateral_accel_lower_mps2": 2.0553650855155694,
+            "lateral_accel_upper_mps2": 3.023235597191232,
+            "lateral_capacity_high_mps2": 2.943,
+            "lateral_capacity_low_mps2": 2.943,
+            "path_length_high_m": 37.9,
+            "path_length_low_m": 36.099999999999994,
+            "steering_lower_rad": 0.06368133699569595,
+            "steering_rate_lower_rad_s": 0.1025281091291944,
+            "steering_rate_upper_rad_s": 0.15078714518907635,
+            "steering_upper_rad": 0.0766302375778761
+          },
+          "outcome": "unknown",
+          "reasons": [
+            "bounds_overlap_constraints_or_numerical_boundary"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 1.5,
+              "t_effective_s": 1.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 60.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 1.5,
+                "low": 1.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.1,
+                "low": 0.1
+              },
+              "speed_mps": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 60.0,
+          "data_mode": "complete",
+          "driver_delay_s": 1.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.2,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.1,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "initial_steering_uncertainty_or_mismatch_requires_transient_model": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 4,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.017992686106813878,
+                  "low": -0.037992686106813875
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "initial_steering_uncertainty_or_mismatch_requires_transient_model"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.017992686106813878,
+                  "low": -0.037992686106813875
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "uncertain_steering",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "speed:sensor_disagreement": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 3,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering; redundant_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "sensor_disagreement",
+                "source": "primary_CAN:VehicleSpeed; redundant_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "speed:sensor_disagreement"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering; redundant_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "sensor_disagreement",
+                "source": "primary_CAN:VehicleSpeed; redundant_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "speed:sensor_disagreement"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "speed_disagreement",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "speed:stale": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 9,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "speed:stale",
+            "steering:stale"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "speed:stale"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "complete",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.4,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "steering:missing": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 2,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "missing",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "steering:missing"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "missing",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "missing_steering",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "steering:stale": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 9,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "speed:stale",
+            "steering:stale"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "speed:stale"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "complete",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.4,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "uncertainty_crosses_zero_remaining_distance": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 6505,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 100.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 3.0,
+                "low": 3.0
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 30.5,
+                  "low": 29.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "unknown",
+          "metrics": {
+            "delay_high_s": 3.2,
+            "delay_low_s": 3.2,
+            "path_length_high_m": 0.5999999999999943,
+            "path_length_low_m": -2.6000000000000085
+          },
+          "outcome": "unknown",
+          "reasons": [
+            "uncertainty_crosses_zero_remaining_distance"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 3.0,
+              "t_effective_s": 3.0,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 100.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 3.0,
+                "low": 3.0
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 30.5,
+                  "low": 29.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 100.0,
+          "data_mode": "complete",
+          "driver_delay_s": 3.0,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 30.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      }
+    },
+    "total": 8748,
+    "unknown": 7366
+  },
+  "longitudinal": {
+    "combinations": {
+      "curved_or_unknown_road_requires_joint_grip_model_for_braking": 2916,
+      "nonzero_or_uncertain_steering_requires_joint_braking_model": 486,
+      "speed:sensor_disagreement": 1458,
+      "speed:stale": 2916,
+      "steering:missing": 486,
+      "unchanged_R3B_conditional_braking_model": 12
+    },
+    "overlapping_categories": {
+      "combined_braking_steering_uncertainty": {
+        "count": 3402,
+        "percent_all": 38.888889,
+        "percent_unknown": 41.116751
+      },
+      "missing_model_assumptions": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_road_or_obstacle_geometry": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_sensor_evidence": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "other": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "overlapping_constraint_bounds": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "r3b_parameter_sensitive": {
+        "count": 12,
+        "percent_all": 0.137174,
+        "percent_unknown": 0.145033
+      },
+      "sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 17.621465
+      },
+      "stale_or_invalid_vehicle_state": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "steering_uncertainty": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "uncertain_remaining_distance": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      }
+    },
+    "overlapping_reasons": {
+      "curved_or_unknown_road_requires_joint_grip_model_for_braking": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "nonzero_or_uncertain_steering_requires_joint_braking_model": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "speed:sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 17.621465
+      },
+      "speed:stale": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "steering:missing": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "unchanged_R3B_conditional_braking_model": {
+        "count": 12,
+        "percent_all": 0.137174,
+        "percent_unknown": 0.145033
+      }
+    },
+    "primary_categories": {
+      "combined_braking_steering_uncertainty": {
+        "count": 3402,
+        "percent_all": 38.888889,
+        "percent_unknown": 41.116751
+      },
+      "missing_model_assumptions": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_road_or_obstacle_geometry": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "missing_sensor_evidence": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "other": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "overlapping_constraint_bounds": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "r3b_parameter_sensitive": {
+        "count": 12,
+        "percent_all": 0.137174,
+        "percent_unknown": 0.145033
+      },
+      "sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 17.621465
+      },
+      "stale_or_invalid_vehicle_state": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "steering_uncertainty": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      },
+      "uncertain_remaining_distance": {
+        "count": 0,
+        "percent_all": 0.0,
+        "percent_unknown": 0.0
+      }
+    },
+    "primary_reasons": {
+      "curved_or_unknown_road_requires_joint_grip_model_for_braking": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "nonzero_or_uncertain_steering_requires_joint_braking_model": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "speed:sensor_disagreement": {
+        "count": 1458,
+        "percent_all": 16.666667,
+        "percent_unknown": 17.621465
+      },
+      "speed:stale": {
+        "count": 2916,
+        "percent_all": 33.333333,
+        "percent_unknown": 35.24293
+      },
+      "steering:missing": {
+        "count": 486,
+        "percent_all": 5.555556,
+        "percent_unknown": 5.873822
+      },
+      "unchanged_R3B_conditional_braking_model": {
+        "count": 12,
+        "percent_all": 0.137174,
+        "percent_unknown": 0.145033
+      }
+    },
+    "representatives": {
+      "curved_or_unknown_road_requires_joint_grip_model_for_braking": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 1,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "infeasible",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {
+            "curvature_lower_per_m": 0.06394679934184286,
+            "curvature_upper_per_m": 0.08061359461040278,
+            "delay_high_s": 0.7,
+            "delay_low_s": 0.7,
+            "lateral_accel_lower_mps2": 5.771198640601318,
+            "lateral_accel_upper_mps2": 8.887648805796907,
+            "lateral_capacity_high_mps2": 2.943,
+            "lateral_capacity_low_mps2": 2.943,
+            "path_length_high_m": 18.35,
+            "path_length_low_m": 17.65,
+            "steering_lower_rad": 0.177173605986414,
+            "steering_rate_lower_rad_s": 0.9033423522107933,
+            "steering_rate_upper_rad_s": 1.384557435041232,
+            "steering_upper_rad": 0.22199780167264527
+          },
+          "outcome": "infeasible",
+          "reasons": [
+            "certified_constraint_violation:steering",
+            "certified_constraint_violation:lateral_acceleration_or_grip",
+            "certified_constraint_violation:steering_rate"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "complete",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "nonzero_or_uncertain_steering_requires_joint_braking_model": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 976,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 0.01,
+                  "low": -0.01
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "initial_steering_uncertainty_or_mismatch_requires_transient_model"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 0.01,
+                  "low": -0.01
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "nonzero_or_uncertain_steering_requires_joint_braking_model"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "uncertain_steering",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": 0.0,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "speed:sensor_disagreement": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 3,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering; redundant_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "sensor_disagreement",
+                "source": "primary_CAN:VehicleSpeed; redundant_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "speed:sensor_disagreement"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": -0.027992686106813876,
+                  "low": -0.027992686106813876
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering; redundant_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "sensor_disagreement",
+                "source": "primary_CAN:VehicleSpeed; redundant_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "speed:sensor_disagreement"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "speed_disagreement",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "speed:stale": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 9,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "speed:stale",
+            "steering:stale"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": -0.01,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.4,
+                "low": 0.4
+              },
+              "speed_mps": {
+                "age_s": 0.4,
+                "bounds": null,
+                "evidence": "stale",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "speed:stale"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "complete",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": -0.01,
+          "sensor_latency_s": 0.4,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "steering:missing": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 974,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "unknown",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "missing",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {},
+          "outcome": "unknown",
+          "reasons": [
+            "steering:missing"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.0,
+                "bounds": null,
+                "evidence": "missing",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "speed_mps": {
+                "age_s": 0.0,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {},
+          "outcome": "unknown",
+          "r3b_label": null,
+          "reasons": [
+            "steering:missing"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "missing_steering",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": 0.0,
+          "sensor_latency_s": 0.0,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      },
+      "unchanged_R3B_conditional_braking_model": {
+        "assessment": "insufficient_evidence_or_uncertainty",
+        "case_id": 977,
+        "collision_avoidance": "not_validated",
+        "lateral": {
+          "collision_avoidance": "not_validated",
+          "dynamics": "infeasible",
+          "evidence": {
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 0.0,
+                  "low": 0.0
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.1,
+                "low": 0.1
+              },
+              "speed_mps": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            },
+            "vehicle": {
+              "max_lateral_accel_mps2": 4.0,
+              "max_steering_rad": 0.04,
+              "max_steering_rate_rad_s": 0.5,
+              "wheelbase_m": 2.8
+            }
+          },
+          "geometry": "feasible",
+          "metrics": {
+            "curvature_lower_per_m": 0.06376790289867393,
+            "curvature_upper_per_m": 0.07333161352023843,
+            "delay_high_s": 0.7999999999999999,
+            "delay_low_s": 0.7999999999999999,
+            "lateral_accel_lower_mps2": 5.755053236605322,
+            "lateral_accel_upper_mps2": 8.084810390606286,
+            "lateral_capacity_high_mps2": 2.943,
+            "lateral_capacity_low_mps2": 2.943,
+            "path_length_high_m": 17.4,
+            "path_length_low_m": 16.6,
+            "steering_lower_rad": 0.17668821377289784,
+            "steering_rate_lower_rad_s": 1.0603596338968844,
+            "steering_rate_upper_rad_s": 1.5372206498930248,
+            "steering_upper_rad": 0.20251384518786547
+          },
+          "outcome": "infeasible",
+          "reasons": [
+            "certified_constraint_violation:steering",
+            "certified_constraint_violation:lateral_acceleration_or_grip",
+            "certified_constraint_violation:steering_rate"
+          ],
+          "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+        },
+        "longitudinal": {
+          "assumptions": {
+            "braking": {
+              "a_after_authority_mps2": 0.0,
+              "a_before_authority_mps2": 0.0,
+              "a_max_mps2": 8.0,
+              "brake_buildup_s": 0.5,
+              "brake_delay_s": 0.1,
+              "source": "explicit counterfactual R3B assumptions",
+              "standstill_margin_m": 2.0,
+              "t_authority_s": 0.5,
+              "t_effective_s": 0.5,
+              "u_brake": 1.0
+            },
+            "scenario": {
+              "available_distance_m": 30.0,
+              "clearance": {
+                "center_max_m": 5.0,
+                "center_min_m": -1.0,
+                "corridor_available": true,
+                "longitudinal_buffer_m": 5.0,
+                "required_offset_m": 3.5,
+                "source": "synthetic eroded free corridor including delay and terminal continuation"
+              },
+              "driver_delay_s": {
+                "high": 0.5,
+                "low": 0.5
+              },
+              "friction": {
+                "high": 0.3,
+                "low": 0.3
+              },
+              "road_curvature_per_m": 0.0,
+              "source": "synthetic constant-curvature stationary-obstacle scenario",
+              "steering_delay_s": {
+                "high": 0.2,
+                "low": 0.2
+              },
+              "target_offset_m": 3.5
+            },
+            "state": {
+              "front_steering_rad": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 0.0,
+                  "low": 0.0
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:FrontWheelSteering"
+              },
+              "latency_s": {
+                "high": 0.1,
+                "low": 0.1
+              },
+              "speed_mps": {
+                "age_s": 0.1,
+                "bounds": {
+                  "high": 10.5,
+                  "low": 9.5
+                },
+                "evidence": "measured",
+                "source": "primary_CAN:VehicleSpeed"
+              }
+            }
+          },
+          "metrics": {
+            "distance_margin_high_m": 3.6726627059972827,
+            "distance_margin_low_m": -0.6752306001529078,
+            "stopping_distance_high_m": 28.675230600152908,
+            "stopping_distance_low_m": 24.327337294002717,
+            "time_margin_high_s": 0.38659607431550347,
+            "time_margin_low_s": -0.07107690527925345
+          },
+          "outcome": "unknown",
+          "r3b_label": "PARAMETER-SENSITIVE",
+          "reasons": [
+            "unchanged_R3B_conditional_braking_model"
+          ]
+        },
+        "parameters": {
+          "available_distance_m": 30.0,
+          "data_mode": "complete",
+          "driver_delay_s": 0.5,
+          "friction": 0.3,
+          "max_steering_rad": 0.04,
+          "road_curvature_per_m": 0.0,
+          "sensor_latency_s": 0.1,
+          "speed_mps": 10.0
+        },
+        "recommendation": "none; candidates are assessed, not ranked or commanded"
+      }
+    },
+    "total": 8748,
+    "unknown": 8274
+  },
+  "simultaneous": {
+    "collision_avoidance": "not_validated",
+    "count": 8748,
+    "outcome": "unknown",
+    "percent_all": 100,
+    "reasons": [
+      "simultaneous_braking_steering_requires_joint_grip_and_transient_model"
+    ]
+  },
+  "supplementary_boundaries": {
+    "missing_braking_assumptions": {
+      "assessment": "lateral_conditionally_feasible",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "feasible",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "feasible",
+        "metrics": {
+          "curvature_lower_per_m": 0.007478425007310339,
+          "curvature_upper_per_m": 0.008034623714752812,
+          "delay_high_s": 1.7,
+          "delay_low_s": 1.7,
+          "lateral_accel_lower_mps2": 2.8436711090297564,
+          "lateral_accel_upper_mps2": 3.3765506161248693,
+          "lateral_capacity_high_mps2": 4.0,
+          "lateral_capacity_low_mps2": 4.0,
+          "path_length_high_m": 51.85,
+          "path_length_low_m": 50.15,
+          "steering_lower_rad": 0.02093653038959366,
+          "steering_rate_lower_rad_s": 0.0822556342174876,
+          "steering_rate_upper_rad_s": 0.097023957138986,
+          "steering_upper_rad": 0.022493152224084326
+        },
+        "outcome": "feasible",
+        "reasons": [
+          "conservative_bounds_satisfy_all_constraints"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": null,
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {},
+        "outcome": "unknown",
+        "r3b_label": null,
+        "reasons": [
+          "missing_explicit_braking_assumptions"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "missing_clearance": {
+      "assessment": "longitudinal_conditionally_feasible",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": null,
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "unknown",
+        "metrics": {},
+        "outcome": "unknown",
+        "reasons": [
+          "missing_clearance_assumptions"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": null,
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {
+          "distance_margin_high_m": 27.78083256880734,
+          "distance_margin_low_m": 23.3824125891947,
+          "stopping_distance_high_m": 64.6175874108053,
+          "stopping_distance_low_m": 60.21916743119266,
+          "time_margin_high_s": 1.4246580804516584,
+          "time_margin_low_s": 1.140605492155839
+        },
+        "outcome": "feasible",
+        "r3b_label": "ROBUSTLY SATISFIED",
+        "reasons": [
+          "unchanged_R3B_conditional_braking_model"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "missing_distance": {
+      "assessment": "insufficient_evidence_or_uncertainty",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": null,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "unknown",
+        "metrics": {},
+        "outcome": "unknown",
+        "reasons": [
+          "missing_road_geometry"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": null,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {},
+        "outcome": "unknown",
+        "r3b_label": null,
+        "reasons": [
+          "missing_longitudinal_distance_or_friction"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "missing_grip": {
+      "assessment": "insufficient_evidence_or_uncertainty",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": null,
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "feasible",
+        "metrics": {
+          "delay_high_s": 1.7,
+          "delay_low_s": 1.7,
+          "path_length_high_m": 51.85,
+          "path_length_low_m": 50.15
+        },
+        "outcome": "unknown",
+        "reasons": [
+          "missing_tyre_grip"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": null,
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {},
+        "outcome": "unknown",
+        "r3b_label": null,
+        "reasons": [
+          "missing_longitudinal_distance_or_friction"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "missing_road": {
+      "assessment": "insufficient_evidence_or_uncertainty",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": null,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "unknown",
+        "metrics": {},
+        "outcome": "unknown",
+        "reasons": [
+          "missing_road_geometry"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": null,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {},
+        "outcome": "unknown",
+        "r3b_label": null,
+        "reasons": [
+          "curved_or_unknown_road_requires_joint_grip_model_for_braking"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "simultaneous_braking_steering": {
+      "collision_avoidance": "not_validated",
+      "outcome": "unknown",
+      "reasons": [
+        "simultaneous_braking_steering_requires_joint_grip_and_transient_model"
+      ]
+    },
+    "tiny_positive_horizon": {
+      "assessment": "insufficient_evidence_or_uncertainty",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 39.00001,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20,
+                "low": 20
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "feasible",
+        "metrics": {
+          "delay_high_s": 1.7,
+          "delay_low_s": 1.7,
+          "path_length_high_m": 1.0000000003174137e-05,
+          "path_length_low_m": 1.0000000003174137e-05
+        },
+        "outcome": "unknown",
+        "reasons": [
+          "outside_numerically_supported_domain"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 39.00001,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20,
+                "low": 20
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {
+          "distance_margin_high_m": -25.4024397961264,
+          "distance_margin_low_m": -25.4024397961264,
+          "stopping_distance_high_m": 62.402449796126405,
+          "stopping_distance_low_m": 62.402449796126405,
+          "time_margin_high_s": -1.27012198980632,
+          "time_margin_low_s": -1.27012198980632
+        },
+        "outcome": "infeasible",
+        "r3b_label": "ROBUSTLY UNSATISFIED",
+        "reasons": [
+          "unchanged_R3B_conditional_braking_model"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "unknown_corridor": {
+      "assessment": "longitudinal_conditionally_feasible",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "feasible",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": null,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "unknown",
+        "metrics": {
+          "curvature_lower_per_m": 0.007478425007310339,
+          "curvature_upper_per_m": 0.008034623714752812,
+          "delay_high_s": 1.7,
+          "delay_low_s": 1.7,
+          "lateral_accel_lower_mps2": 2.8436711090297564,
+          "lateral_accel_upper_mps2": 3.3765506161248693,
+          "lateral_capacity_high_mps2": 4.0,
+          "lateral_capacity_low_mps2": 4.0,
+          "path_length_high_m": 51.85,
+          "path_length_low_m": 50.15,
+          "steering_lower_rad": 0.02093653038959366,
+          "steering_rate_lower_rad_s": 0.0822556342174876,
+          "steering_rate_upper_rad_s": 0.097023957138986,
+          "steering_upper_rad": 0.022493152224084326
+        },
+        "outcome": "unknown",
+        "reasons": [
+          "corridor_availability_unknown",
+          "conservative_bounds_satisfy_all_constraints"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": null,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20.5,
+                "low": 19.5
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {
+          "distance_margin_high_m": 27.78083256880734,
+          "distance_margin_low_m": 23.3824125891947,
+          "stopping_distance_high_m": 64.6175874108053,
+          "stopping_distance_low_m": 60.21916743119266,
+          "time_margin_high_s": 1.4246580804516584,
+          "time_margin_low_s": 1.140605492155839
+        },
+        "outcome": "feasible",
+        "r3b_label": "ROBUSTLY SATISFIED",
+        "reasons": [
+          "unchanged_R3B_conditional_braking_model"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "zero_remaining_distance": {
+      "assessment": "neither_evaluated_candidate_feasible_under_assumptions",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 39.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20,
+                "low": 20
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "infeasible",
+        "metrics": {
+          "delay_high_s": 1.7,
+          "delay_low_s": 1.7,
+          "path_length_high_m": 0.0,
+          "path_length_low_m": 0.0
+        },
+        "outcome": "infeasible",
+        "reasons": [
+          "no_distance_after_delay_for_specified_path"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 39.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 20,
+                "low": 20
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {
+          "distance_margin_high_m": -25.402449796126405,
+          "distance_margin_low_m": -25.402449796126405,
+          "stopping_distance_high_m": 62.402449796126405,
+          "stopping_distance_low_m": 62.402449796126405,
+          "time_margin_high_s": -1.2701224898063201,
+          "time_margin_low_s": -1.2701224898063201
+        },
+        "outcome": "infeasible",
+        "r3b_label": "ROBUSTLY UNSATISFIED",
+        "reasons": [
+          "unchanged_R3B_conditional_braking_model"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    },
+    "zero_speed": {
+      "assessment": "insufficient_evidence_or_uncertainty",
+      "collision_avoidance": "not_validated",
+      "lateral": {
+        "collision_avoidance": "not_validated",
+        "dynamics": "unknown",
+        "evidence": {
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0,
+                "low": 0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          },
+          "vehicle": {
+            "max_lateral_accel_mps2": 4.0,
+            "max_steering_rad": 0.35,
+            "max_steering_rate_rad_s": 0.5,
+            "wheelbase_m": 2.8
+          }
+        },
+        "geometry": "feasible",
+        "metrics": {},
+        "outcome": "unknown",
+        "reasons": [
+          "stationary_or_zero_crossing_speed_outside_model"
+        ],
+        "scope": "specified quintic path; constant speed; conditional on stated assumptions"
+      },
+      "longitudinal": {
+        "assumptions": {
+          "braking": {
+            "a_after_authority_mps2": 0.0,
+            "a_before_authority_mps2": 0.0,
+            "a_max_mps2": 8.0,
+            "brake_buildup_s": 0.5,
+            "brake_delay_s": 0.1,
+            "source": "explicit counterfactual R3B assumptions",
+            "standstill_margin_m": 2.0,
+            "t_authority_s": 1.5,
+            "t_effective_s": 1.5,
+            "u_brake": 1.0
+          },
+          "scenario": {
+            "available_distance_m": 90.0,
+            "clearance": {
+              "center_max_m": 5.0,
+              "center_min_m": -1.0,
+              "corridor_available": true,
+              "longitudinal_buffer_m": 5.0,
+              "required_offset_m": 3.5,
+              "source": "synthetic eroded free corridor including delay and terminal continuation"
+            },
+            "driver_delay_s": {
+              "high": 1.5,
+              "low": 1.5
+            },
+            "friction": {
+              "high": 0.8,
+              "low": 0.8
+            },
+            "road_curvature_per_m": 0.0,
+            "source": "synthetic constant-curvature stationary-obstacle scenario",
+            "steering_delay_s": {
+              "high": 0.2,
+              "low": 0.2
+            },
+            "target_offset_m": 3.5
+          },
+          "state": {
+            "front_steering_rad": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0.0,
+                "low": 0.0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:FrontWheelSteering"
+            },
+            "latency_s": {
+              "high": 0.0,
+              "low": 0.0
+            },
+            "speed_mps": {
+              "age_s": 0.0,
+              "bounds": {
+                "high": 0,
+                "low": 0
+              },
+              "evidence": "measured",
+              "source": "primary_CAN:VehicleSpeed"
+            }
+          }
+        },
+        "metrics": {},
+        "outcome": "unknown",
+        "r3b_label": null,
+        "reasons": [
+          "outside_supported_positive_speed_and_braking_domain"
+        ]
+      },
+      "recommendation": "none; candidates are assessed, not ranked or commanded"
+    }
+  },
+  "unknown_input_conditions": {
+    "data_mode": {
+      "complete": 805,
+      "missing_steering": 2187,
+      "speed_disagreement": 2187,
+      "uncertain_steering": 2187
+    },
+    "sensor_latency_s": {
+      "0.0": 2242,
+      "0.1": 2208,
+      "0.4": 2916
+    }
+  }
+}

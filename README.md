@@ -5,6 +5,15 @@
 **License:** MIT (Source Code)  
 **Python Version:** Python >= 3.10 (tested on Python 3.14.5)
 
+**Phase 2 extension:** [Lateral steering recoverability](lateral_recoverability/README.md)
+adds a configurable bicycle-model candidate, explicit uncertainty/evidence gates,
+CAN VehicleState integration, synthetic sweeps and engineering plots. It reports
+geometric and dynamic feasibility separately and calls the existing R3B solver
+through an additive decision layer. Outcomes are conditional on stated assumptions;
+collision avoidance remains unvalidated. Run the module with
+python3 -m lateral_recoverability.experiments and see the
+[validation record](docs/LATERAL_VALIDATION.md).
+
 ---
 
 ## Project at a Glance

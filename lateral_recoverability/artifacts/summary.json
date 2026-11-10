@@ -1,0 +1,188 @@
+{
+  "synthetic_only": true,
+  "collision_avoidance": "not_validated",
+  "n_scenarios": 8748,
+  "lateral_counts": {
+    "feasible": 258,
+    "infeasible": 1124,
+    "unknown": 7366
+  },
+  "longitudinal_counts": {
+    "feasible": 183,
+    "infeasible": 291,
+    "unknown": 8274
+  },
+  "decision_counts": {
+    "both_candidates_conditionally_feasible_no_safety_ranking": 120,
+    "insufficient_evidence_or_uncertainty": 8157,
+    "lateral_conditionally_feasible": 138,
+    "longitudinal_conditionally_feasible": 63,
+    "neither_evaluated_candidate_feasible_under_assumptions": 270
+  },
+  "axes": {
+    "speed_mps": [
+      10.0,
+      20.0,
+      30.0
+    ],
+    "road_curvature_per_m": [
+      -0.01,
+      0.0,
+      0.01
+    ],
+    "available_distance_m": [
+      30.0,
+      60.0,
+      100.0
+    ],
+    "max_steering_rad": [
+      0.04,
+      0.2,
+      0.4
+    ],
+    "friction": [
+      0.3,
+      0.6,
+      0.9
+    ],
+    "driver_delay_s": [
+      0.5,
+      1.5,
+      3.0
+    ],
+    "sensor_latency_s": [
+      0.0,
+      0.1,
+      0.4
+    ],
+    "data_mode": [
+      "complete",
+      "missing_steering",
+      "speed_disagreement",
+      "uncertain_steering"
+    ]
+  },
+  "fixed_baseline": {
+    "speed_mps": 20.0,
+    "road_curvature_per_m": 0.0,
+    "available_distance_m": 90.0,
+    "max_steering_rad": 0.35,
+    "friction": 0.8,
+    "driver_delay_s": 1.5,
+    "sensor_latency_s": 0.0,
+    "data_mode": "complete"
+  },
+  "example_config": {
+    "vehicle": {
+      "wheelbase_m": 2.8,
+      "max_steering_rad": 0.35,
+      "max_steering_rate_rad_s": 0.5,
+      "max_lateral_accel_mps2": 4.0
+    },
+    "scenario": {
+      "road_curvature_per_m": 0.0,
+      "available_distance_m": 90.0,
+      "target_offset_m": 3.5,
+      "driver_delay_s": {
+        "low": 1.0,
+        "high": 1.5
+      },
+      "steering_delay_s": {
+        "low": 0.15,
+        "high": 0.25
+      },
+      "friction": {
+        "low": 0.6,
+        "high": 0.9
+      },
+      "clearance": {
+        "center_min_m": -1.0,
+        "center_max_m": 5.0,
+        "required_offset_m": 3.5,
+        "longitudinal_buffer_m": 5.0,
+        "corridor_available": true,
+        "source": "Synthetic assumption: vehicle footprint and margins already removed from an obstacle-free corridor, including terminal continuation"
+      },
+      "source": "Synthetic constant-curvature stationary-obstacle scenario; no measured road data"
+    },
+    "state": {
+      "speed_mps": {
+        "bounds": {
+          "low": 19.5,
+          "high": 20.5
+        },
+        "evidence": "assumed",
+        "source": "Synthetic speed interval, constant throughout manoeuvre",
+        "age_s": 0.05
+      },
+      "front_steering_rad": {
+        "bounds": {
+          "low": 0.0,
+          "high": 0.0
+        },
+        "evidence": "assumed",
+        "source": "Ideal initial road following; front road-wheel angle",
+        "age_s": 0.05
+      },
+      "latency_s": {
+        "low": 0.05,
+        "high": 0.1
+      }
+    }
+  },
+  "heatmap_grid": {
+    "speed_mps": [
+      5,
+      40,
+      50
+    ],
+    "distance_m": [
+      20,
+      160,
+      70
+    ],
+    "convention": "[minimum, maximum, number of evenly spaced points]"
+  },
+  "sweep_constants": {
+    "wheelbase_m": 2.8,
+    "max_lateral_accel_mps2": 4.0,
+    "steering_rate_rad_s": 0.5,
+    "steering_delay_s": 0.2,
+    "target_offset_m": 3.5,
+    "speed_error_mps": 0.5,
+    "freshness_limit_s": 0.25,
+    "longitudinal_buffer_m": 5.0,
+    "corridor_center_bounds_m": [
+      -1.0,
+      5.0
+    ],
+    "braking_a_max_mps2": 8.0,
+    "brake_delay_s": 0.1,
+    "brake_buildup_s": 0.5,
+    "standstill_margin_m": 2.0
+  },
+  "method": "analytic conservative curvature and steering-rate bounds; no sampled feasibility certification",
+  "environment": {
+    "python": "3.14.5",
+    "numpy": "2.5.3"
+  },
+  "source_sha256": {
+    "__init__.py": "326c861f40c6a529d943a5777cc3eacfa40b5cc1de91f7eb295feb36020a2ec2",
+    "audit.py": "177c15577b3c1ac3bf608a09d6c4a2aab154078e73f252ed5ea8dd839796d996",
+    "can_adapter.py": "e4091c3fac26bd4abb03903e49ec9374b0d24300164c5be52a4ea8cb7eb6598a",
+    "decision.py": "1c2745d00b49605daa9d6fd6703f59a8715e2ccf78015a08417bff7c9ce57b24",
+    "experiments.py": "e2712d047d1b8cd7319c868980c8a397b443be95c01172085cb9b05181473446",
+    "kinematics.py": "ceb4c43d3658783517e2ee2bd00f2672c737b568bf05b8cc5e92938501843817",
+    "model.py": "caee10cfaa7c739a9852d9c3fa74126d2de6a8e87653f906f28877c33527a097",
+    "schema.py": "129cdd3267349af3fadb4441d11fe93ba9d1aa08504948ce0168246cd7f6a8a3"
+  },
+  "artifact_sha256": {
+    "example_result.json": "6daac88fb85c9cd9c6eab2db0764b6ecde99c4fec4493733f83c67d01c81b490",
+    "feasibility_map.png": "576e561c0f3ea8cf33a615b026ab4d84d3a7e66fd16f67a9a840b1b0d68cd8ea",
+    "path_geometry.png": "16eed2b9afb9b6f3e31740bc68a90d73f8e8e079419ea7dacf3d22757b098c57",
+    "path_samples.csv": "01f0b494f4678bc5d8dcc1c8f35a1bfca86e70ceadbe2901560685d506e2d2e3",
+    "scenarios.csv": "24483a1ea4295d538f044ffb4204d1ff0fc66c87ff27b7e0d4f7c9fd42b836e7",
+    "sensitivity.csv": "f00405897d6c60253e52a1ffd5c125f5bce792e7ccc33efcd67d1928dda32efa",
+    "sensitivity.png": "b71aec6c4ad5ed92fc344b1d0dfbfebe73c4f887bfca0df045471879bad72d10"
+  }
+}

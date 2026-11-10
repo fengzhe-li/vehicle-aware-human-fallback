@@ -1,0 +1,173 @@
+{
+  "acceptance": "PASS conditional model/software; BLOCKED validated collision avoidance",
+  "audit_tests": 28,
+  "authorized_test_only_exception": {
+    "tests/test_r2b.py": {
+      "after": "4138f83cbab0ca826a34a54003269550cd4d098f3d3e9dbf41b0f5bc8fc52aaa",
+      "before": "06353396cd0649a37adfb716e301725152c4f9b2ee8b03a5359bec3856e66672"
+    }
+  },
+  "date": "2026-11-10",
+  "delivery_checkout": {
+    "additional_extensions": {
+      "failed": 3,
+      "passed": 60
+    },
+    "artifacts_match_source_checkout": 8,
+    "audit_commit": "74392f41975d0c95b534ce500b67eb7c7b5c43c3",
+    "audit_outputs_match_source_checkout": 2,
+    "authorized_exception": [
+      "tests/test_r2b.py",
+      "tests/test_r6a_figures.py"
+    ],
+    "authorized_test_only_exceptions_on_delivery_baseline": {
+      "tests/test_r2b.py": {
+        "after": "316f2a3efbced7a6c7cc77460067cc13bf18b4a785925c51f1198619042039eb",
+        "before": "0ccdbb35a4133d5ea72424f2d04633e891308f662ed62de6ca9cad942a5f1176"
+      },
+      "tests/test_r6a_figures.py": {
+        "after": "6167838e90c2ecd385783911cd68df64f03ec75cccb55b9e2ced8dcaed713c9e",
+        "before": "6dd8373defe0a4ef8e78ca7d5e5ce7003f13f196ef116bae69a6790c41d4ce3a"
+      }
+    },
+    "base": "f52230a5b836fa3049bfa407ca2ebf5768676816",
+    "can_commit": "16f18d6108f04697244b07da7432676509027440",
+    "can_initial_commit": "ef3b5e270ee53b2e4bf06d957ad3a7f868171754",
+    "frozen_guard_mismatches": [
+      {
+        "already_mismatched_on_main": true,
+        "delivery": "0e14ce6c2aca8d4bacdcaa386c14f19474907499fe6ac748076d9e64fefa0593",
+        "frozen": "5e5f57f3343002929a4e78575ce256fe0333e5d70acc2117d6fced5ad8c4eda5",
+        "main": "f1291520970c5bbf4c749edf72d4e7bd6f47c5b0b3c50b3d9b72e0e74660d18a",
+        "path": "README.md"
+      },
+      {
+        "already_mismatched_on_main": true,
+        "delivery": "4e9e40ddefaa73805ef6196f13086fca55a3b9e5fb376f7161c3e7e6e234ce84",
+        "frozen": "cfe3bf7b8a2ddfb7a3a1a5e7c62a14cfc49975488b089738028238aaea7a5edb",
+        "main": "4e9e40ddefaa73805ef6196f13086fca55a3b9e5fb376f7161c3e7e6e234ce84",
+        "path": "docs/R3B_INTERVAL_BRAKING_RECOVERABILITY.md"
+      },
+      {
+        "already_mismatched_on_main": false,
+        "delivery": "316f2a3efbced7a6c7cc77460067cc13bf18b4a785925c51f1198619042039eb",
+        "frozen": "0ccdbb35a4133d5ea72424f2d04633e891308f662ed62de6ca9cad942a5f1176",
+        "main": "0ccdbb35a4133d5ea72424f2d04633e891308f662ed62de6ca9cad942a5f1176",
+        "path": "tests/test_r2b.py"
+      },
+      {
+        "already_mismatched_on_main": false,
+        "delivery": "6167838e90c2ecd385783911cd68df64f03ec75cccb55b9e2ced8dcaed713c9e",
+        "frozen": "6dd8373defe0a4ef8e78ca7d5e5ce7003f13f196ef116bae69a6790c41d4ce3a",
+        "main": "6dd8373defe0a4ef8e78ca7d5e5ce7003f13f196ef116bae69a6790c41d4ce3a",
+        "path": "tests/test_r6a_figures.py"
+      }
+    ],
+    "isolated_yolo": {
+      "failed": 3,
+      "passed": 36
+    },
+    "lateral_commit": "da713e6d19e5e0cc11c777a0992ed1df7aa39c88",
+    "new_can_test": "tests/test_automotive_can.py",
+    "pristine_main_yolo": {
+      "failed": 3,
+      "passed": 36
+    },
+    "protected_existing_main_files": 257,
+    "protected_existing_main_files_unchanged": 255,
+    "repository_wide_acceptance": "BLOCKED: inherited YOLO frozen-input guard (stale since 8849864 vs e46c9f0/f52230a on main), plus authorized README/test edits; assertions and manifest retained",
+    "research_suite": {
+      "duration_s": 48.61,
+      "failed": 0,
+      "passed": 508,
+      "skipped": 11
+    }
+  },
+  "environment": {
+    "fonttools": "4.65.0",
+    "linux_ci": {
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "fonttools": "4.65.0",
+      "jsonschema": "4.26.0",
+      "kiwisolver": "1.5.1",
+      "matplotlib": "3.11.1",
+      "numpy": "2.4.6",
+      "pandas": "3.1.1",
+      "pillow": "12.3.0",
+      "pyparsing": "3.3.2",
+      "pytest": "9.2.0",
+      "python": "3.11.18",
+      "scipy": "1.17.1",
+      "sympy": "1.14.0"
+    },
+    "matplotlib": "3.11.1",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "pillow": "12.3.0",
+    "python": "3.14.5"
+  },
+  "fresh_native_can_ctest": "1/1 passed",
+  "full_suite": {
+    "deselected": 0,
+    "duration_s": 59.1,
+    "failed": 0,
+    "passed": 508,
+    "skipped": 11
+  },
+  "git_delivery": {
+    "can_base": "main",
+    "can_pr": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/1",
+    "lateral_base": "feat/automotive-can-dbc-integration",
+    "lateral_draft": true,
+    "lateral_pr": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/2",
+    "merged": false,
+    "verified_implementation_head": "e4a46bae2c0acc7858f8805730d72e22cbeebc6d"
+  },
+  "hosted_ci": {
+    "can_initial_run": 42841275772,
+    "can_native": "1/1 passed",
+    "can_pr_run": 42847646926,
+    "can_push_run": 42847631755,
+    "can_research": {
+      "deselected": 1,
+      "failed": 0,
+      "passed": 428,
+      "skipped": 11
+    },
+    "can_vla_run": 42847646873,
+    "cross_platform_determinism": "RESOLVED: F8_transition_branch_comparison.png (and F1-F9, FA1, FA2) decompressed IDAT scanlines (2,624,643 B) and RGBA pixels are 100% identical across macOS arm64 and Linux x86_64; file SHA-256 differed solely in platform libz DEFLATE stream framing (58,506 B vs 69,663 B). Protected thesis/figures/* unchanged.",
+    "expected_sha256": "757b0a9792eecb8c336104c95f844a615b0f4febd90f48701e25e1c464543058",
+    "figure": "F8_transition_branch_comparison.png",
+    "initial_failure": "tests/test_r6a_figures.py::test_deterministic_rendering",
+    "lateral_initial_run": 42841988209,
+    "lateral_research_linux_ci": {
+      "deselected": 1,
+      "failed": 0,
+      "passed": 507,
+      "skipped": 11
+    },
+    "observed_sha256": "fa5d85f1ac774402b0a861e8af2212b959dbc85878651adbb7b44276490a0244"
+  },
+  "original_artifact_comparison": {
+    "identical": 6,
+    "intentional_changes": [
+      "summary.json",
+      "scenarios.csv"
+    ]
+  },
+  "original_lateral_tests": 51,
+  "original_source_commit": "d5911a483b573b62144ff5bbc0099c08d0c0a051",
+  "protected_files": 258,
+  "two_final_runs": {
+    "example_result.json": true,
+    "feasibility_map.png": true,
+    "path_geometry.png": true,
+    "path_samples.csv": true,
+    "scenarios.csv": true,
+    "sensitivity.csv": true,
+    "sensitivity.png": true,
+    "summary.json": true
+  },
+  "unchanged_protected_files": 257
+}

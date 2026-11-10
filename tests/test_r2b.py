@@ -98,7 +98,8 @@ def test_exposure_order_and_participant_counts(summary, trials):
     assert b["trials_per_participant"] == {"9": 57}
     assert b["distinct_cells_per_participant"] == {"9": 57}
     assert sorted(trials.exposure.unique()) == list(range(1, 10))
-    assert (trials.groupby("participant_id").exposure.apply(sorted).apply(list) == [list(range(1, 10))] * 57).all()
+    # Compare Python lists: pandas otherwise broadcasts a (57, 9) RHS against a (57,) Series.
+    assert trials.groupby("participant_id").exposure.apply(sorted).tolist() == [list(range(1, 10))] * 57
     assert summary["order_reconstructable"] is True
 
 

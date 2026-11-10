@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lateral recoverability SI input v1",
+  "description": "Runtime validators additionally reject NaN/Infinity, reversed/negative physical intervals, unsupported steering domains and latency smaller than observation age.",
+  "type": "object",
+  "properties": {
+    "vehicle": {
+      "type": "object",
+      "properties": {
+        "wheelbase_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_steering_rad": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1.5707963267948966
+        },
+        "max_steering_rate_rad_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_lateral_accel_mps2": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "wheelbase_m",
+        "max_steering_rad",
+        "max_steering_rate_rad_s",
+        "max_lateral_accel_mps2"
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "road_curvature_per_m": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "available_distance_m": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "target_offset_m": {
+          "type": "number"
+        },
+        "driver_delay_s": {
+          "$ref": "#/$defs/interval"
+        },
+        "steering_delay_s": {
+          "$ref": "#/$defs/interval"
+        },
+        "friction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/interval"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "clearance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/clearance"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "road_curvature_per_m",
+        "available_distance_m",
+        "target_offset_m",
+        "driver_delay_s",
+        "steering_delay_s",
+        "friction",
+        "clearance",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "state": {
+      "type": "object",
+      "properties": {
+        "speed_mps": {
+          "$ref": "#/$defs/observation"
+        },
+        "front_steering_rad": {
+          "$ref": "#/$defs/observation"
+        },
+        "latency_s": {
+          "$ref": "#/$defs/interval"
+        }
+      },
+      "required": [
+        "speed_mps",
+        "front_steering_rad",
+        "latency_s"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "vehicle",
+    "scenario",
+    "state"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "interval": {
+      "type": "object",
+      "properties": {
+        "low": {
+          "type": "number"
+        },
+        "high": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "low",
+        "high"
+      ],
+      "additionalProperties": false,
+      "description": "Closed uncertainty bounds in the named SI unit; runtime also enforces low <= high."
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "bounds": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/interval"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence": {
+          "enum": [
+            "assumed",
+            "measured",
+            "missing",
+            "stale",
+            "invalid",
+            "sensor_disagreement",
+            "future_timestamp"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "age_s": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "bounds",
+        "evidence",
+        "source",
+        "age_s"
+      ],
+      "additionalProperties": false
+    },
+    "clearance": {
+      "type": "object",
+      "properties": {
+        "center_min_m": {
+          "type": "number"
+        },
+        "center_max_m": {
+          "type": "number"
+        },
+        "required_offset_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "longitudinal_buffer_m": {
+          "type": "number",
+          "minimum": 0
+        },
+        "corridor_available": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "center_min_m",
+        "center_max_m",
+        "required_offset_m",
+        "longitudinal_buffer_m",
+        "corridor_available",
+        "source"
+      ],
+      "additionalProperties": false,
+      "description": "Explicit vehicle-centre corridor already eroded for complete vehicle footprint and clearance margins; availability covers delay, manoeuvre and terminal continuation. No perception validation implied."
+    }
+  }
+}

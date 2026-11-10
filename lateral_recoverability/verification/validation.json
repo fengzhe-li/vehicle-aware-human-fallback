@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-10",
+  "branch": "feat/lateral-steering-recoverability",
+  "base_commit": "f0c5e61edb128055d586ada2128f6a93dc4b394d",
+  "command": "python3 -m pytest -o addopts= -q",
+  "full_suite": {
+    "passed": 479,
+    "failed": 1,
+    "skipped": 11,
+    "deselected": 0,
+    "failures": [
+      "tests.test_r2b::test_exposure_order_and_participant_counts"
+    ]
+  },
+  "new_lateral_tests_passed": 51,
+  "r3b_full_reproduction": "passed; temporary output only",
+  "native_can_ctest": "1/1 passed",
+  "protected_scientific_files": 258,
+  "protected_files_changed": [],
+  "deterministic_artifacts": "all 8 files reproduced byte-for-byte across two runs",
+  "environment": {
+    "python": "3.14.5",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "matplotlib": "3.11.1"
+  },
+  "hosted_ci": "not run",
+  "independent_R2B_data_check": "all 57 participants have sorted exposure values 1..9",
+  "skip_reasons": {
+    "collection skipped": 1,
+    "D003 archive not present at data/external/d003/tu_delft_takeover.zip": 9,
+    "EPA file not present at data/external/epa/24-testcar-2025-05.xlsx": 1
+  }
+}
