@@ -1,123 +1,197 @@
-# Phase 2 validation record — 2026-11-10
+# Phase 2 safety acceptance audit — 2026-11-10
 
-## Actual local results
+## Assessment and scope
 
-| Check | Result |
+**PASS for conditional model/software acceptance on the original local tree.**
+**BLOCKED for validated collision avoidance or choosing a safe manoeuvre.** Those
+claims require evidence and models outside this extension. Git delivery and the
+current-main integration check are tracked in [LATERAL_GIT_DELIVERY.md](LATERAL_GIT_DELIVERY.md).
+
+This audit extends the existing implementation; it does not replace its path
+model, change R3B equations, or recalibrate protected research results. The
+original commits `f0c5e61` and `d5911a4` and original offline patch are preserved.
+The numerical equations and derivation are in
+[LATERAL_RECOVERABILITY.md](LATERAL_RECOVERABILITY.md).
+
+## Model audit findings
+
+| Area | Finding / acceptance boundary |
 |---|---|
-| New lateral unit/integration tests | **51 passed** |
-| New lateral plus existing CAN Python tests | **55 passed** |
-| Complete Python suite, including normally deselected R3B study | **479 passed, 1 failed, 11 skipped; no deselection** |
-| Original complete R3B deterministic reproduction | **Passed**, output written only in pytest's temporary directory |
-| Existing native CAN CTest | **1/1 passed** |
-| Original scientific source/data/results/tests | **258 files byte-identical** to the pre-change baseline |
-| Experiment repeatability | All **8 artifacts byte-identical**, including PNGs and summary, across two full runs |
-| Hosted GitHub Actions | Not run |
+| Geometry and units | SI rear-axle, no-slip bicycle; `delta=atan(L*kappa)`; exact constant-curvature Frenet geometry, including terminal `k/(1-k*h)`. Independent Cartesian finite differences and circle references pass. |
+| Steering constraints | Angle and rate bounds checked over the whole prescribed quintic family. Steering acceleration, feedback and tracking error remain unmodelled. |
+| Dynamic constraint | `a_y=v²*abs(kappa)`, capacity `min(a_y_limit, mu*9.81)`. This necessary force bound is not a tyre-dynamics or collision-avoidance validation. |
+| Distance and delays | `S=D-buffer-v*(driver+actuator+latency)`; interval extrema use highest speed/delay for shortest horizon. Speed is along actual path; distance is road station. Delay follows the reference road. |
+| Initial steering | Must match ideal road following within 1e-9 rad. Wider uncertainty/mismatch returns unknown, rather than assuming a corrective transient. |
+| Braking and steering | Separate candidates; no grip budget is shared between them. New explicit simultaneous-request API always returns unknown. Curved-road braking already returned unknown. |
+| Stopping-wrapper defect fixed | Straight-road stopping previously accepted missing/uncertain steering. It now withholds certification for unusable or nonzero/uncertain steering. The original R3B solver and classifier are unchanged. |
+| Freshness and validity | Individual CAN signal timestamps/validity checked, explicit age threshold, future timestamps rejected, redundant disagreement fails closed. Direct State callers must supply already-gated evidence; the core has no independent clock. |
+| Invalid inputs | Wrong dataclass types and malformed required fields raise ValueError. CAN None/string/bool/nonfinite/overflowing physical values become INVALID. Geometry helpers reject unsupported scales. |
+| Clearance | External, pre-eroded swept-envelope corridor must cover delay, manoeuvre and terminal continuation. No obstacle intersection, moving-object or road-edge validation is performed. |
 
-Commands executed from the verified local repository:
+Geometry feasible alone cannot make a candidate feasible. Feasible requires both
+geometry and all conservative demand upper bounds below their minimum capacities.
+A certified lower-bound violation makes this candidate infeasible; it does not
+rule out all possible paths. Missing evidence, unsupported modelling and overlapping
+bounds remain unknown. Equality retains a relative 1e-9 guard. A known independent
+clearance violation can still prove infeasibility when another input is unknown.
+Every decision retains `collision_avoidance=not_validated` and no recommendation.
+A conditional stopping certificate with absent lateral clearance remains a 1D
+counterfactual result, not a selected safe manoeuvre.
 
-~~~sh
-MPLCONFIGDIR=/tmp/lateral-mpl-cache python3 -m pytest tests/test_lateral_recoverability.py tests/test_automotive_can.py -q
-MPLCONFIGDIR=/tmp/lateral-mpl-cache python3 -m pytest -o addopts= -q
-ctest --test-dir /tmp/vehicle-aware-can-build --output-on-failure
-MPLCONFIGDIR=/tmp/lateral-mpl-cache python3 -m lateral_recoverability.experiments
-MPLCONFIGDIR=/tmp/lateral-mpl-cache python3 -m lateral_recoverability.experiments --output /tmp/lateral-repeat
-~~~
+## All 8,748 scenarios and unknown attribution
 
-The final complete suite took 42.85 seconds. The existing R3B study marker was
-explicitly included by clearing pytest's default addopts. Its reproduction test
-passed despite the older marker description warning about previous gate changes.
-The native library was unchanged; its existing built test executable was rerun.
+The unchanged grid is 3 speeds × 3 road curvatures × 3 distances × 3 steering
+limits × 3 grip values × 3 driver delays × 3 latencies × 4 sensor modes. The exact
+axes, vehicle constants and 175-case one-at-a-time sensitivity baseline are in
+[summary.json](../lateral_recoverability/artifacts/summary.json). These synthetic
+frequencies are not driving probabilities. Actuator delay is fixed at 0.2 s in
+the grid; delay intervals and limits are tested separately.
 
-The full-suite failure is the same pre-existing
-tests/test_r2b.py::test_exposure_order_and_participant_counts failure reported
-during the CAN task. With installed pandas 2.3.3, the existing comparison of a
-Series of lists against a nested list raises a shape mismatch: (57,) versus
-(57,9). An independent comparison after converting the grouped Series to a
-Python list verified all 57 participants' exposure sequences are exactly 1..9.
-The existing test and research data were preserved, without skipping or weakening
-that assertion. The original skip conditions account for nine unavailable-D003
-tests, one unavailable-EPA-workbook test, and one embargoed/local thesis-draft
-module. These external inputs were not fabricated or replaced.
+| Candidate | Original feasible / infeasible / unknown | Audited feasible / infeasible / unknown |
+|---|---:|---:|
+| Lateral | 258 / 1,124 / 7,366 | **258 / 1,124 / 7,366** |
+| Additive R3B stopping | 549 / 873 / 7,326 | **183 / 291 / 8,274** |
 
-Machine-readable evidence and environment versions:
-[validation.json](../lateral_recoverability/verification/validation.json).
-The complete baseline file/hash list is
-[research_baseline_sha256.json](../lateral_recoverability/verification/research_baseline_sha256.json).
+No lateral unknown was promoted. Exactly 948 previously non-unknown stopping
+results are now unknown (366 feasible and 582 infeasible): the new gate prevents
+unsupported certificates in either direction. The original solver produces the
+same values for supported inputs, verified against direct oracle calls.
 
-## Test coverage
+Primary means the **first emitted reason in evaluation order**. It is a disjoint
+accounting convention, not causal importance. Overlapping counts include each
+case once per category, and must not be summed. Early return can mask later gates.
 
-The 51 new cases cover:
+| Lateral unknown category | Primary count | % of 7,366 unknown | % of 8,748 total | Overlapping count | Overlapping % of unknown |
+|---|---:|---:|---:|---:|---:|
+| combined braking steering uncertainty | 0 | 0.000% | 0.000% | 0 | 0.000% |
+| missing model assumptions | 0 | 0.000% | 0.000% | 0 | 0.000% |
+| missing road or obstacle geometry | 0 | 0.000% | 0.000% | 0 | 0.000% |
+| missing sensor evidence | 1,458 | 19.794% | 16.667% | 2,187 | 29.690% |
+| other | 0 | 0.000% | 0.000% | 0 | 0.000% |
+| overlapping constraint bounds | 49 | 0.665% | 0.560% | 49 | 0.665% |
+| r3b parameter sensitive | 0 | 0.000% | 0.000% | 0 | 0.000% |
+| sensor disagreement | 1,458 | 19.794% | 16.667% | 1,458 | 19.794% |
+| stale or invalid vehicle state | 2,916 | 39.587% | 33.333% | 2,916 | 39.587% |
+| steering uncertainty | 1,458 | 19.794% | 16.667% | 1,458 | 19.794% |
+| uncertain remaining distance | 27 | 0.367% | 0.309% | 27 | 0.367% |
 
-- Quintic endpoint values, derivatives and analytical extrema.
-- Straight paths and circular-road reference cases, including near-zero curvature.
-- Cartesian finite-difference curvature and curvature-derivative checks for both
-  road-curvature and shift directions.
-- Dense independent checks that the analytical bounds enclose the whole sampled
-  path across nine path lengths and three speeds. These checks supplement the
-  analytical derivation; they do not replace it.
-- Steering-angle units, wheelbase sensitivity, steering-rate limits, grip caps,
-  exact-limit equality, usable-distance exhaustion and uncertainty crossing zero.
-- Missing road geometry, missing clearance, unavailable corridors, incomplete
-  displacement, uncertain/mismatched initial steering and stationary input.
-- CAN/DBC decoding through the existing Replay class, km/h conversion,
-  degree/radian conversion, calibrated steering ratios, signal freshness,
-  missing/invalid/future data and redundant-sensor disagreement.
-- Exact R3B parity, speed/friction bounds for fixed P0/passive/supported
-  pre-control profiles, all nine combinations of candidate outcomes, and no
-  collision-avoidance promotion.
-- JSON configuration validation, nonfinite/extreme-scale handling, explicit
-  unknowns for unsupported states and deterministic CSV reproduction.
+All stale cases concern speed: 2,187 also have stale steering, and 729 have missing
+steering. Thus emitted missing-steering reasons total 2,187 (25% of all cases),
+although only 1,458 are primary. Invalid and future timestamps have zero cases in
+this grid; both are tested separately. Complete signal reason counts and both
+percentage denominators are preserved in the machine-readable report.
 
-## Synthetic experiments
+Each fault mode is present in 2,187 unknown cases. Staleness masks the steering
+uncertainty reason in 729 uncertain-steering inputs and the sensor-disagreement
+reason in 729 disagreement inputs. These are input conditions, not additional
+emitted diagnoses. `unknown_input_conditions` records them separately. No missing
+road/obstacle geometry, missing grip or missing braking assumption occurs in the
+grid: their zero counts are coverage gaps, not evidence that they are resolved.
+Supplementary cases and tests exercise those gates without changing the 8,748 denominator.
 
-The runner covers 3 speeds × 3 road curvatures × 3 distances × 3 steering limits
-× 3 grip values × 3 driver delays × 3 sensor latencies × 4 evidence modes:
-**8,748 cases**. All values are synthetic scenario choices. This grid is not an
-empirical driving distribution, and outcome fractions are not probabilities.
+Audited longitudinal unknown reasons are independently counted below; these must
+not be added to the lateral totals.
 
-| Candidate | Conditionally feasible | Infeasible under stated assumptions | Unknown |
+| Emitted stopping reason | Count | % of 8,274 unknown | % of all 8,748 |
 |---|---:|---:|---:|
-| Specified lateral path | 258 | 1,124 | 7,366 |
-| Original R3B stopping candidate | 549 | 873 | 7,326 |
+| `curved_or_unknown_road_requires_joint_grip_model_for_braking` | 2,916 | 35.243% | 33.333% |
+| `nonzero_or_uncertain_steering_requires_joint_braking_model` | 486 | 5.874% | 5.556% |
+| `speed:sensor_disagreement` | 1,458 | 17.621% | 16.667% |
+| `speed:stale` | 2,916 | 35.243% | 33.333% |
+| `steering:missing` | 486 | 5.874% | 5.556% |
+| `unchanged_R3B_conditional_braking_model` | 12 | 0.145% | 0.137% |
 
-The combined layer reports 120 cases where both candidates are conditionally
-feasible, 138 lateral-only certificates, 429 longitudinal-only certificates,
-270 cases with neither evaluated candidate feasible, and 7,791 cases with
-insufficient evidence or uncertainty. “Only” here identifies which candidate
-has a certificate; it does not imply the other candidate is proven impossible.
-No action is selected and no safer-manoeuvre comparison is made.
+The 12 `unchanged_R3B_conditional_braking_model` unknown results retain the
+original `PARAMETER-SENSITIVE` label; the reason is generic but the label and
+margin bounds identify the uncertainty. All 8,748 simultaneous brake/steer
+requests would be unknown by the separate unsupported-model guard. That is a
+capability statement, not an extra cause in the lateral partition.
 
-The large unknown count reflects intentional evidence gates. Missing steering,
-sensor disagreement, stale data and uncertain initial steering are not
-relabelled as feasible. Additional unknowns arise where analytical bounds
-overlap a constraint or an uncertainty interval crosses zero remaining distance.
+Audited decision counts: 120 both conditionally feasible, 138 lateral certificates,
+63 longitudinal certificates, 270 neither evaluated candidate feasible, and
+8,157 insufficient-evidence cases. A certificate does not imply that the other
+candidate is impossible or that this candidate is safer.
 
-The 175-case one-at-a-time sensitivity study holds a recorded synthetic baseline
-fixed while varying speed, curvature, distance, steering limit, grip, driver
-delay and sensor latency. In these runs, increasing speed/delay or reducing
-distance reduces the margin for the prescribed path; reduced grip can violate
-the acceleration condition, and expired signals return unknown. Curvature
-experiments re-establish ideal initial road following at each curvature and
-withhold an R3B braking verdict on curved roads.
+## Representative boundaries
 
-Artifacts:
-[scenario table](../lateral_recoverability/artifacts/scenarios.csv),
-[sensitivity table](../lateral_recoverability/artifacts/sensitivity.csv),
-[input and hash manifest](../lateral_recoverability/artifacts/summary.json).
+Stable case IDs follow product order in `AXES`; complete input evidence, metrics
+and results for each emitted reason are included in the JSON report.
 
-![Synthetic lateral feasibility map](../lateral_recoverability/artifacts/feasibility_map.png)
+- Case 449: speed 10 ±0.5 m/s, road curvature -0.01/m, distance 60 m, mu=0.3,
+  driver delay 1.5 s and latency 0.1 s. Acceleration demand bounds
+  [2.055365, 3.023236] m/s² straddle the 2.943 m/s² grip capacity: **unknown**.
+- Case 6505: speed 30 ±0.5 m/s, distance 100 m, driver delay 3 s and actuator
+  delay 0.2 s. Remaining distance [-2.6, 0.6] m: **unknown**, not a clipped path.
+- Cases 2/3/4: missing steering / disagreeing speed / steering ±0.01 rad each
+  block lateral certification before the demand bounds are evaluated.
+- Case 9: age 0.4 s exceeds the 0.25 s threshold; both signals are stale.
+- Analytical tests set exact circular demand to 4 m/s². Capacity 4 gives unknown,
+  4.01 feasible, 3.99 infeasible. At the freshness threshold evidence is accepted;
+  one nanosecond beyond it is stale. Zero horizon is infeasible for the delayed
+  path, whereas a 1e-5 m positive horizon is outside the numerical domain.
 
-![Synthetic sensitivity analysis](../lateral_recoverability/artifacts/sensitivity.png)
+Reproduce the tables and supplementary missing-input boundaries:
 
-![Exact candidate path geometry](../lateral_recoverability/artifacts/path_geometry.png)
+```sh
+python3 -m lateral_recoverability.audit
+```
 
-## Interpretation limits
+Outputs: [unknown_analysis.json](../lateral_recoverability/verification/audit/unknown_analysis.json)
+and [case_reasons.csv](../lateral_recoverability/verification/audit/case_reasons.csv).
 
-Geometric corridor membership, simplified dynamic feasibility and validated
-collision avoidance are separate concepts. The last remains not_validated in
-all outputs. Clearance is an externally supplied vehicle-envelope assumption.
-Steering transients, tyre dynamics, tracking performance, varying curvature,
-moving traffic and simultaneous braking/steering are not validated here.
-Initial steering uncertainty needs a future transient model; curved-road
-braking needs a future joint grip model. No scientific claim in the original
-research has been recalibrated or broadened by these synthetic results.
+## Regression, compatibility and reproducibility
+
+| Check on the original local tree | Actual result |
+|---|---|
+| Original lateral suite | 51 passed |
+| Added acceptance tests | 28 passed |
+| Entire research suite, including R3B study | **508 passed, 11 skipped, 0 failed** (59.10 s) |
+| Fresh native CAN configure/build/CTest | **1/1 passed** |
+| Before audit protected manifest | **258/258 byte-identical** |
+| After audit protected manifest | **257/258 identical; one authorized test-only compatibility correction** |
+| Original eight artifacts regenerated before editing | **8/8 byte-identical**, including PNGs |
+| Audited artifacts vs original | **6/8 identical**; scenarios.csv and summary.json intentionally changed |
+| Two final audited runs | **8/8 byte-identical** |
+
+`tests/test_r2b.py` formerly compared a Series of lists (shape 57) with a nested
+list (shape 57×9), which raises a pandas 2.3.3 broadcasting ValueError. Comparing
+`.apply(sorted).tolist()` with the same 57 expected lists preserves the complete
+assertion. Four mutation tests verify rejection of duplicate exposure, missing
+row, extra row and wrong participant. No assertion or test was skipped or weakened.
+The original baseline manifest is retained; the sole explicit exception is recorded
+with before/after hashes in `verification/audit_validation.json`. All protected
+scientific sources/data/results remain byte-identical.
+
+The historical `verification/validation.json` remains the record of 479 passed,
+1 failed and 11 skipped before this audit. The 11 current skips are unchanged:
+nine unavailable D003 archive tests, one unavailable EPA workbook test, and one
+collection skip for a local/embargoed thesis draft. No external evidence was invented.
+
+```sh
+MPLCONFIGDIR=/tmp/lateral-audit-mpl python3 -m pytest -o addopts= -q
+cmake -S automotive_can -B /tmp/lateral-audit-can-build
+cmake --build /tmp/lateral-audit-can-build
+ctest --test-dir /tmp/lateral-audit-can-build --output-on-failure
+MPLCONFIGDIR=/tmp/lateral-audit-mpl python3 -m lateral_recoverability.experiments
+MPLCONFIGDIR=/tmp/lateral-audit-mpl python3 -m lateral_recoverability.experiments --output /tmp/lateral-repeat
+```
+
+`pre_audit.json` records all original artifact hashes. The changed scenario table
+contains only revised longitudinal/decision labels; lateral outcomes and reasons
+are unchanged. The summary updates counts, source hashes and scenario-file hash.
+PNG figures, path samples, example result and sensitivity table are unchanged.
+Environment: Python 3.14.5, numpy 2.5.3, pandas 2.3.3, matplotlib 3.11.1.
+The separate clean delivery checkout inherits newer main changes; its results
+and inherited baseline differences are reported separately in the Git delivery record.
+
+## Remaining evidence gaps
+
+No real-road, HIL, ECU, high-fidelity dynamics or controller validation is present.
+Unknown initial steering requires a transient model. Simultaneous braking and
+steering needs coupled force/path evolution. Grip calibration, heading/position,
+road geometry, a swept vehicle envelope and obstacle clearance remain external
+assumptions. The model excludes tyre slip, load transfer, bank/grade, yaw/roll,
+variable curvature and moving traffic. Conservative bounds can be loose; an
+unknown bound must not be converted into infeasibility or success by midpoint
+sampling. Passing this audit authorizes review of a conditional feasibility
+analysis; deployment or a collision-avoidance claim remains **BLOCKED**.

@@ -36,12 +36,16 @@ def _observation(state: VehicleState, name: str, scale: float, error: float,
     provenance = f"{source}:{name}"
     if item is None:
         return Observation(None, Evidence.MISSING, provenance)
-    if type(item.timestamp_ns) is not int or item.timestamp_ns < 0:
+    if type(item.timestamp_ns) is not int or not 0 <= item.timestamp_ns <= 2**63-1:
         return Observation(None, Evidence.INVALID, provenance)
     if item.timestamp_ns > now_ns:
         return Observation(None, Evidence.FUTURE, provenance)
     age = (now_ns-item.timestamp_ns)/1e9
-    if not item.valid or not math.isfinite(item.physical):
+    try:
+        finite(item.physical, "CAN physical value")
+    except ValueError:
+        return Observation(None, Evidence.INVALID, provenance, age)
+    if item.valid is not True:
         return Observation(None, Evidence.INVALID, provenance, age)
     if now_ns-item.timestamp_ns > max_age_ns:
         return Observation(None, Evidence.STALE, provenance, age)
@@ -77,7 +81,7 @@ def from_can(state: VehicleState, *, now_ns: int, max_age_ns: int, bindings: Bin
     A supplied redundant sensor must be usable and agree within the given bounds.
     Road geometry, grip, footprint clearance and driver delays remain external.
     """
-    if type(now_ns) is not int or type(max_age_ns) is not int or min(now_ns, max_age_ns) < 0:
+    if type(now_ns) is not int or type(max_age_ns) is not int or not (0 <= now_ns <= 2**63-1 and 0 <= max_age_ns <= 2**63-1):
         raise ValueError("now_ns and max_age_ns must be nonnegative integers on one monotonic clock")
     finite(speed_error_mps, "speed_error_mps", 0)
     finite(steering_error_rad, "steering_error_rad", 0)

@@ -8,15 +8,15 @@
     "unknown": 7366
   },
   "longitudinal_counts": {
-    "feasible": 549,
-    "infeasible": 873,
-    "unknown": 7326
+    "feasible": 183,
+    "infeasible": 291,
+    "unknown": 8274
   },
   "decision_counts": {
     "both_candidates_conditionally_feasible_no_safety_ranking": 120,
-    "insufficient_evidence_or_uncertainty": 7791,
+    "insufficient_evidence_or_uncertainty": 8157,
     "lateral_conditionally_feasible": 138,
-    "longitudinal_conditionally_feasible": 429,
+    "longitudinal_conditionally_feasible": 63,
     "neither_evaluated_candidate_feasible_under_assumptions": 270
   },
   "axes": {
@@ -168,19 +168,20 @@
   },
   "source_sha256": {
     "__init__.py": "326c861f40c6a529d943a5777cc3eacfa40b5cc1de91f7eb295feb36020a2ec2",
-    "can_adapter.py": "d0354c7047b5ba3b7796c14dfbeee734b1f19be2a03681bd6ec25a46e0e76b30",
-    "decision.py": "420934239ef16339af40bae6bc1df48b3f0d2527a364b9406184f02da9884609",
+    "audit.py": "177c15577b3c1ac3bf608a09d6c4a2aab154078e73f252ed5ea8dd839796d996",
+    "can_adapter.py": "e4091c3fac26bd4abb03903e49ec9374b0d24300164c5be52a4ea8cb7eb6598a",
+    "decision.py": "1c2745d00b49605daa9d6fd6703f59a8715e2ccf78015a08417bff7c9ce57b24",
     "experiments.py": "e2712d047d1b8cd7319c868980c8a397b443be95c01172085cb9b05181473446",
-    "kinematics.py": "d63acc6473efb7d3941f183d807f9ffbd352c5865d25255845c72a2204b18fd9",
-    "model.py": "c19880aa242122e7fb8bbb79f4837836352bf9fe5d16e55f97c40d46e5a6d70e",
-    "schema.py": "261bc3ae35b7d29501b7f8bf89a3dc2ab924ff3e1c1463183766829a93a8ddbc"
+    "kinematics.py": "ceb4c43d3658783517e2ee2bd00f2672c737b568bf05b8cc5e92938501843817",
+    "model.py": "caee10cfaa7c739a9852d9c3fa74126d2de6a8e87653f906f28877c33527a097",
+    "schema.py": "129cdd3267349af3fadb4441d11fe93ba9d1aa08504948ce0168246cd7f6a8a3"
   },
   "artifact_sha256": {
     "example_result.json": "6daac88fb85c9cd9c6eab2db0764b6ecde99c4fec4493733f83c67d01c81b490",
     "feasibility_map.png": "576e561c0f3ea8cf33a615b026ab4d84d3a7e66fd16f67a9a840b1b0d68cd8ea",
     "path_geometry.png": "16eed2b9afb9b6f3e31740bc68a90d73f8e8e079419ea7dacf3d22757b098c57",
     "path_samples.csv": "01f0b494f4678bc5d8dcc1c8f35a1bfca86e70ceadbe2901560685d506e2d2e3",
-    "scenarios.csv": "945113be0ad7814b12f4e1877d83a5f49e749fde43052bb3520aa65f1f259a38",
+    "scenarios.csv": "24483a1ea4295d538f044ffb4204d1ff0fc66c87ff27b7e0d4f7c9fd42b836e7",
     "sensitivity.csv": "f00405897d6c60253e52a1ffd5c125f5bce792e7ccc33efcd67d1928dda32efa",
     "sensitivity.png": "b71aec6c4ad5ed92fc344b1d0dfbfebe73c4f887bfca0df045471879bad72d10"
   }

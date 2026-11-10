@@ -1,0 +1,47 @@
+{
+  "acceptance": "PASS conditional model/software; BLOCKED validated collision avoidance",
+  "audit_tests": 28,
+  "authorized_test_only_exception": {
+    "tests/test_r2b.py": {
+      "after": "4138f83cbab0ca826a34a54003269550cd4d098f3d3e9dbf41b0f5bc8fc52aaa",
+      "before": "06353396cd0649a37adfb716e301725152c4f9b2ee8b03a5359bec3856e66672"
+    }
+  },
+  "date": "2026-11-10",
+  "environment": {
+    "matplotlib": "3.11.1",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "python": "3.14.5"
+  },
+  "fresh_native_can_ctest": "1/1 passed",
+  "full_suite": {
+    "deselected": 0,
+    "duration_s": 59.1,
+    "failed": 0,
+    "passed": 508,
+    "skipped": 11
+  },
+  "git_delivery": "see docs/LATERAL_GIT_DELIVERY.md",
+  "original_artifact_comparison": {
+    "identical": 6,
+    "intentional_changes": [
+      "summary.json",
+      "scenarios.csv"
+    ]
+  },
+  "original_lateral_tests": 51,
+  "original_source_commit": "d5911a483b573b62144ff5bbc0099c08d0c0a051",
+  "protected_files": 258,
+  "two_final_runs": {
+    "example_result.json": true,
+    "feasibility_map.png": true,
+    "path_geometry.png": true,
+    "path_samples.csv": true,
+    "scenarios.csv": true,
+    "sensitivity.csv": true,
+    "sensitivity.png": true,
+    "summary.json": true
+  },
+  "unchanged_protected_files": 257
+}

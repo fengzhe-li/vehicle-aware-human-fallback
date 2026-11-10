@@ -25,8 +25,8 @@ def path_point(u: float, length_m: float, offset_m: float, road_curvature: float
     finite(length_m, "length_m")
     finite(offset_m, "offset_m")
     finite(road_curvature, "road_curvature")
-    if length_m <= 0:
-        raise ValueError("path length must be positive")
+    if not 1e-3 <= length_m <= 1e6 or max(abs(offset_m), abs(road_curvature)) > 1e6:
+        raise ValueError("path inputs outside numerically supported domain")
     q, q1, q2, q3 = smoothstep(u)
     s, k = u * length_m, road_curvature
     y, b, c, d = offset_m*q, offset_m*q1/length_m, offset_m*q2/length_m**2, offset_m*q3/length_m**3
@@ -56,6 +56,12 @@ def demand_bounds(length_low: float, length_high: float, offset: float,
     Upper bounds use triangle inequalities and A_min > 0. Lower certificates
     evaluate endpoints and q'' extrema with interval arithmetic over S.
     """
+    for name, value in locals().copy().items():
+        finite(value, name)
+    if wheelbase <= 0 or not 0 <= speed_low <= speed_high:
+        raise ValueError("need positive wheelbase and ordered nonnegative speeds")
+    if length_low < 1e-3 or max(length_high, abs(offset), abs(road_k), wheelbase, speed_high) > 1e6:
+        raise ValueError("demand inputs outside numerically supported domain")
     if not 0 < length_low <= length_high:
         raise ValueError("need 0 < length_low <= length_high")
     a_min, a_max = sorted((1.0, 1-road_k*offset))

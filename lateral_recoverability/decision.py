@@ -55,6 +55,12 @@ def assess_stopping(state: State, scenario: Scenario,
         return unknown("speed:"+state.speed_mps.evidence.value)
     if scenario.road_curvature_per_m != 0:
         return unknown("curved_or_unknown_road_requires_joint_grip_model_for_braking")
+    # Straight-road R3B has no lateral tyre-force budget or steering transient.
+    if not state.front_steering_rad.usable:
+        return unknown("steering:"+state.front_steering_rad.evidence.value)
+    steering = state.front_steering_rad.bounds
+    if max(abs(steering.low), abs(steering.high)) > 1e-9:
+        return unknown("nonzero_or_uncertain_steering_requires_joint_braking_model")
     if scenario.available_distance_m is None or scenario.friction is None:
         return unknown("missing_longitudinal_distance_or_friction")
     v, mu = state.speed_mps.bounds, scenario.friction
@@ -119,3 +125,20 @@ def combine(longitudinal: LongitudinalResult, lateral: LateralResult) -> Decisio
 def assess_options(vehicle: Vehicle, scenario: Scenario, state: State,
                    braking: BrakingAssumptions | None) -> Decision:
     return combine(assess_stopping(state, scenario, braking), assess_lateral(vehicle, scenario, state))
+
+
+@dataclass(frozen=True)
+class CombinedResult:
+    """Explicit unsupported simultaneous manoeuvre; never inferred from two certificates."""
+    outcome: Outcome = Outcome.UNKNOWN
+    reasons: tuple[str, ...] = ("simultaneous_braking_steering_requires_joint_grip_and_transient_model",)
+    collision_avoidance: str = "not_validated"
+
+
+def assess_combined_braking_steering() -> CombinedResult:
+    """Neither separate candidate supplies a coupled force/path evolution model.
+
+    Even a friction-circle necessary check would not certify a coupled trajectory.
+    No inputs can presently turn this unsupported request into a certificate.
+    """
+    return CombinedResult()

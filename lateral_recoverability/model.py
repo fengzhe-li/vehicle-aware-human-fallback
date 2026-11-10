@@ -96,7 +96,7 @@ def assess_lateral(vehicle: Vehicle, scenario: Scenario, state: State) -> Latera
 
     try:
         bounds = demand_bounds(length_low, length_high, h, k, vehicle.wheelbase_m, v.low, v.high)
-    except (OverflowError, ZeroDivisionError):
+    except (OverflowError, ZeroDivisionError, ValueError):
         reasons.append("nonfinite_numerical_demand")
         return result(geometry)
     if not all(math.isfinite(value) for value in bounds.values()):

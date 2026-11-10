@@ -11,7 +11,8 @@ against braking, or certifies that no other manoeuvre could work.
 From the repository root, using its existing requirements.txt dependencies:
 
 ~~~sh
-python3 -m pytest tests/test_lateral_recoverability.py -q
+python3 -m pytest tests/test_lateral_recoverability.py tests/test_lateral_audit.py -q
+python3 -m lateral_recoverability.audit
 python3 -m lateral_recoverability.experiments --output lateral_recoverability/artifacts
 ~~~
 
@@ -153,9 +154,20 @@ R3B equations and historical classifications remain unchanged. The additive
 stopping adapter supports fixed explicit R3B timelines and pre-control profiles
 with speed/friction intervals. On curved or unknown roads it returns longitudinal
 unknown because a shared lateral/longitudinal tyre-force model is absent.
+Unusable or nonzero/uncertain initial steering also withholds a stopping verdict.
+`assess_combined_braking_steering()` explicitly returns unknown because no coupled
+trajectory and tyre-force model is implemented.
 Braking and steering are alternative candidates, never a simultaneous
 brake-and-steer policy.
 
 See [model derivation and assumptions](../docs/LATERAL_RECOVERABILITY.md) and
 [actual validation results](../docs/LATERAL_VALIDATION.md). No real vehicle, ECU,
 HIL, high-fidelity dynamics, real-road or functional-safety validation is claimed.
+
+## Acceptance audit
+
+The [validation report](../docs/LATERAL_VALIDATION.md) records the historical and
+revised counts, primary and overlapping unknown causes, exact artifact comparisons,
+protected-file exception and actual Git delivery. `python3 -m lateral_recoverability.audit`
+writes `verification/audit/unknown_analysis.json` and `case_reasons.csv`; it includes
+complete representative inputs and supplementary cases outside the sweep denominator.

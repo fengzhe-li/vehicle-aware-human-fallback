@@ -102,12 +102,13 @@ lateral limit and mu*g, using the original GRAVITY=9.81. No longitudinal
 acceleration is commanded during this candidate. A friction circle for
 simultaneous braking and steering is outside the scope.
 
-The rear-axle kinematic single-track convention follows the formulation described
-in [Althoff, Koschi and Manzinger, CommonRoad: Composable Benchmarks for Motion
+The distinction between a no-slip kinematic single-track model and tyre-slip
+dynamics is illustrated in [Althoff, Koschi and Manzinger, CommonRoad: Composable Benchmarks for Motion
 Planning on Roads](https://commonroad.in.tum.de/static/media/LA17.8f9d9dc3.pdf).
-That source supports the kinematic convention, not the numerical limits or
-synthetic scenarios chosen here. The curvature/interval certificates above are
-derived for this extension.
+That presentation (model comparison, slide 6) supports this fidelity distinction;
+it does not validate the numerical limits or synthetic scenarios here. The
+rear-axle equations and curvature/interval certificates above are derived for
+this extension.
 
 ## Certificates over the whole path
 
@@ -205,3 +206,28 @@ estimation, map/perception validation and initial steering correction. Numerical
 input guards return unknown for extremely small usable distances or extreme
 scales. No empirical calibration, real-road experiment, HIL, ECU test or safety
 certification is implied by any result.
+
+## Acceptance audit clarifications
+
+The stopping adapter now requires usable initial steering consistent with zero
+road curvature (within the same 1e-9 rad numerical tolerance). Otherwise it
+returns unknown: the original R3B longitudinal equation cannot allocate grip to
+an unmodelled lateral force. This gate changes additive classifications only;
+the original solver, classifier and historical research outputs are untouched.
+The standalone `assess_combined_braking_steering()` returns unknown for every
+request. Separate feasible certificates cannot be combined into simultaneous
+braking and steering. Even the necessary idealized circle condition
+`sqrt(a_x²+a_y²) <= mu*g` would not validate the changing speed, path, tyre forces
+or controller tracking; it is not implemented as a coupled feasibility model.
+
+Direct `State` construction is a contract with the caller: evidence labels must
+already reflect the caller's freshness policy. It has no wall clock or universal
+maximum age. `from_can` enforces the explicitly supplied monotonic `now_ns` and
+`max_age_ns` at each critical signal; equality at maximum age is accepted. Ages
+are consumed once in the available-distance horizon. Runtime configuration
+errors (wrong types, absent required delays, NaN/Infinity, reversed intervals)
+raise ValueError before assessment. Represent absent measurements with a MISSING
+Observation and absent road/grip/clearance with None to obtain unknown. Malformed
+CAN physical values are INVALID evidence, never substituted with zero.
+Public geometry helpers reject unsupported scales; the assessor reports unknown
+when its demand calculation leaves that numerical domain.

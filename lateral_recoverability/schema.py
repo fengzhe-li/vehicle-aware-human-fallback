@@ -7,7 +7,11 @@ import math
 
 
 def finite(value: float, name: str, minimum: float | None = None) -> None:
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+    try:
+        valid = not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value)
+    except OverflowError:
+        valid = False
+    if not valid:
         raise ValueError(f"{name} must be a finite number")
     if minimum is not None and value < minimum:
         raise ValueError(f"{name} must be >= {minimum}")
@@ -54,8 +58,10 @@ class Observation:
 
     def __post_init__(self):
         finite(self.age_s, "age_s", 0.0)
-        if not isinstance(self.evidence, Evidence) or not self.source:
+        if not isinstance(self.evidence, Evidence) or not isinstance(self.source, str) or not self.source.strip():
             raise ValueError("observation needs an Evidence enum and a nonempty source")
+        if self.bounds is not None and not isinstance(self.bounds, Interval):
+            raise ValueError("observation bounds must be an Interval or None")
         if self.evidence in (Evidence.ASSUMED, Evidence.MEASURED) and self.bounds is None:
             raise ValueError("usable evidence needs bounds")
 
@@ -71,6 +77,10 @@ class State:
     latency_s: Interval
 
     def __post_init__(self):
+        if not isinstance(self.latency_s, Interval) or not all(
+            isinstance(o, Observation) for o in (self.speed_mps, self.front_steering_rad)
+        ):
+            raise ValueError("state requires observations and a latency Interval")
         if self.latency_s.low < 0:
             raise ValueError("latency must be nonnegative")
         if self.latency_s.low+1e-12 < max(self.speed_mps.age_s, self.front_steering_rad.age_s):
@@ -118,7 +128,7 @@ class Clearance:
         finite(self.center_max_m, "center_max_m")
         finite(self.required_offset_m, "required_offset_m", 0)
         finite(self.longitudinal_buffer_m, "longitudinal_buffer_m", 0)
-        if self.center_min_m > self.center_max_m or not self.source:
+        if self.center_min_m > self.center_max_m or not isinstance(self.source, str) or not self.source.strip():
             raise ValueError("clearance needs an ordered corridor and provenance")
         if self.corridor_available is not None and type(self.corridor_available) is not bool:
             raise ValueError("corridor_available must be true, false or null")
@@ -141,15 +151,21 @@ class Scenario:
         if self.available_distance_m is not None:
             finite(self.available_distance_m, "available_distance_m", 0)
         finite(self.target_offset_m, "target_offset_m")
+        if not all(isinstance(x, Interval) for x in (self.driver_delay_s, self.steering_delay_s)):
+            raise ValueError("driver and steering delays require explicit Intervals")
+        if self.friction is not None and not isinstance(self.friction, Interval):
+            raise ValueError("friction must be an Interval or None")
+        if self.clearance is not None and not isinstance(self.clearance, Clearance):
+            raise ValueError("clearance must be a Clearance or None")
         if self.driver_delay_s.low < 0 or self.steering_delay_s.low < 0:
             raise ValueError("delays must be nonnegative")
         if self.friction is not None and self.friction.low < 0:
             raise ValueError("friction must be nonnegative")
-        if not self.source:
+        if not isinstance(self.source, str) or not self.source.strip():
             raise ValueError("scenario provenance is required")
 
 
-def load_config(data: dict) -> tuple[Vehicle, Scenario, State]:
+def _load_config(data: dict) -> tuple[Vehicle, Scenario, State]:
     """Strict constructor; unknown keys and missing keys raise, rather than default."""
     if set(data) != {"vehicle", "scenario", "state"}:
         raise ValueError("configuration requires exactly vehicle, scenario and state")
@@ -165,3 +181,11 @@ def load_config(data: dict) -> tuple[Vehicle, Scenario, State]:
         state[field] = Observation(**observation)
     state["latency_s"] = Interval(**state["latency_s"])
     return Vehicle(**data["vehicle"]), Scenario(**scenario), State(**state)
+
+
+def load_config(data: dict) -> tuple[Vehicle, Scenario, State]:
+    """Reject malformed configuration explicitly, including missing nested fields."""
+    try:
+        return _load_config(data)
+    except (TypeError, KeyError, AttributeError) as exc:
+        raise ValueError(f"malformed configuration: {exc}") from exc
