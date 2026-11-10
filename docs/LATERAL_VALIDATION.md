@@ -2,10 +2,13 @@
 
 ## Assessment and scope
 
-**PASS for conditional model/software acceptance on the original local tree.**
-**BLOCKED for repository-wide acceptance** by the independently reproduced
-YOLO frozen-input guard failures and hosted R6A PNG hash mismatch described in
-the Git delivery record.
+**PASS for conditional model/software acceptance on the original local tree and
+hosted Linux CI (`507 passed, 11 skipped, 1 deselected, 0 failed` in CI;
+`508 passed, 11 skipped, 0 failed` with full R3B study locally).**
+**BLOCKED for repository-wide acceptance** only by the independently reproduced
+YOLO `frozen_inputs.json` baseline reconciliation and VLA demo test-output
+isolation described in the Git delivery record (the hosted R6A PNG DEFLATE hash
+mismatch is resolved in CAN commit `16f18d6` without replacing frozen figures).
 **BLOCKED for validated collision avoidance or choosing a safe manoeuvre.** Those
 claims require evidence and models outside this extension. Git delivery and the
 current-main integration check are tracked in [LATERAL_GIT_DELIVERY.md](LATERAL_GIT_DELIVERY.md).
@@ -183,12 +186,18 @@ MPLCONFIGDIR=/tmp/lateral-audit-mpl python3 -m lateral_recoverability.experiment
 contains only revised longitudinal/decision labels; lateral outcomes and reasons
 are unchanged. The summary updates counts, source hashes and scenario-file hash.
 PNG figures, path samples, example result and sensitivity table are unchanged.
-Environment: Python 3.14.5, numpy 2.5.3, pandas 2.3.3, matplotlib 3.11.1.
-The clean delivery research suite also passed 508 tests with 11 skips. The
-additional VLA/YOLO run passed 60 and failed 3 frozen-input checks, also reproduced
-on pristine main; its preserved manifest needs separate reconciliation.
-The separate clean delivery checkout inherits newer main changes; its results
-and inherited baseline differences are reported separately in the Git delivery record.
+Local environment: macOS arm64, Python 3.14.5, numpy 2.5.3, pandas 2.3.3,
+matplotlib 3.11.1, Pillow 12.3.0, fonttools 4.65.0 (`Agg` backend, `DejaVu Sans`).
+Hosted Linux CI environment: Ubuntu x86_64 (`ubuntu-latest`), Python 3.11.18,
+numpy 2.4.6, scipy 1.17.1, pandas 3.1.1, sympy 1.14.0, matplotlib 3.11.1,
+Pillow 12.3.0, fonttools 4.65.0, contourpy 1.3.3, kiwisolver 1.5.1,
+cycler 0.12.1, pyparsing 3.3.2, pytest 9.2.0, jsonschema 4.26.0.
+The clean delivery research suite passed 508 tests with 11 skips locally and
+507 tests with 11 skips and 1 deselected in Linux CI. The additional VLA/YOLO
+run passed 60 and failed 3 frozen-input checks, also reproduced on pristine
+main; its preserved manifest needs separate reconciliation. The separate clean
+delivery checkout inherits newer main changes; its results and inherited
+baseline differences are reported in the Git delivery record.
 
 ## Remaining evidence gaps
 
