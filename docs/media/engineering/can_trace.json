@@ -1,0 +1,741 @@
+[
+  {
+    "index": 0,
+    "title": "Waiting for the first frame",
+    "now_ns": 900000000,
+    "duration_ms": 1800,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 0,
+    "age_ns": null,
+    "state_valid": false,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": null,
+        "available_value": null,
+        "status": "missing",
+        "reason": "no measurement"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": null,
+        "available_value": null,
+        "status": "missing",
+        "reason": "no measurement"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": null,
+        "available_value": null,
+        "status": "missing",
+        "reason": "no measurement"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": null,
+        "available_value": null,
+        "status": "missing",
+        "reason": "no measurement"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": null,
+        "available_value": null,
+        "status": "missing",
+        "reason": "no measurement"
+      }
+    ],
+    "faults": [
+      "vehicle state stale or missing"
+    ]
+  },
+  {
+    "index": 1,
+    "title": "Decode the synthetic fixture",
+    "now_ns": 1000000000,
+    "duration_ms": 3000,
+    "incoming_payload_hex": "D0 07 64 50 64 32 00 00",
+    "can_id": 256,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 0,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": []
+  },
+  {
+    "index": 2,
+    "title": "Same values; freshness changes",
+    "now_ns": 1025000000,
+    "duration_ms": 800,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 25000000,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": []
+  },
+  {
+    "index": 3,
+    "title": "Same values; freshness changes",
+    "now_ns": 1050000000,
+    "duration_ms": 800,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 50000000,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": []
+  },
+  {
+    "index": 4,
+    "title": "Same values; freshness changes",
+    "now_ns": 1075000000,
+    "duration_ms": 800,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 75000000,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": []
+  },
+  {
+    "index": 5,
+    "title": "At the freshness boundary",
+    "now_ns": 1100000000,
+    "duration_ms": 2200,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 100000000,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": []
+  },
+  {
+    "index": 6,
+    "title": "Expired values are unavailable",
+    "now_ns": 1125000000,
+    "duration_ms": 3000,
+    "incoming_payload_hex": null,
+    "can_id": null,
+    "state_timestamp_ns": 1000000000,
+    "age_ns": 125000000,
+    "state_valid": false,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": null,
+        "status": "stale",
+        "reason": "signal VehicleSpeed is stale"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": null,
+        "status": "stale",
+        "reason": "signal RoadFriction is stale"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": null,
+        "status": "stale",
+        "reason": "signal MaxDecel is stale"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": null,
+        "status": "stale",
+        "reason": "signal BrakeDelay is stale"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1000000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": null,
+        "status": "stale",
+        "reason": "signal BrakeBuildup is stale"
+      }
+    ],
+    "faults": [
+      "vehicle state stale or missing",
+      "signal stale: VehicleSpeed",
+      "signal stale: RoadFriction",
+      "signal stale: MaxDecel",
+      "signal stale: BrakeDelay",
+      "signal stale: BrakeBuildup"
+    ]
+  },
+  {
+    "index": 7,
+    "title": "Reject out-of-range speed",
+    "now_ns": 1200000000,
+    "duration_ms": 3000,
+    "incoming_payload_hex": "FF FF 64 50 64 32 00 00",
+    "can_id": 256,
+    "state_timestamp_ns": 1200000000,
+    "age_ns": 0,
+    "state_valid": false,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 65535,
+          "physical": 655.35,
+          "timestamp_ns": 1200000000,
+          "valid": false,
+          "reason": "physical value outside DBC range"
+        },
+        "available_value": null,
+        "status": "invalid",
+        "reason": "signal VehicleSpeed is invalid: physical value outside DBC range"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1200000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1200000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1200000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1200000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": [
+      "invalid signal: VehicleSpeed"
+    ]
+  },
+  {
+    "index": 8,
+    "title": "A fresh valid frame restores availability",
+    "now_ns": 1300000000,
+    "duration_ms": 2600,
+    "incoming_payload_hex": "D0 07 64 50 64 32 00 00",
+    "can_id": 256,
+    "state_timestamp_ns": 1300000000,
+    "age_ns": 0,
+    "state_valid": true,
+    "signals": [
+      {
+        "name": "VehicleSpeed",
+        "unit": "m/s",
+        "decoded": {
+          "raw": 2000,
+          "physical": 20.0,
+          "timestamp_ns": 1300000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 20.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "RoadFriction",
+        "unit": "coefficient",
+        "decoded": {
+          "raw": 100,
+          "physical": 1.0,
+          "timestamp_ns": 1300000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 1.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "MaxDecel",
+        "unit": "m/s2",
+        "decoded": {
+          "raw": 80,
+          "physical": 8.0,
+          "timestamp_ns": 1300000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 8.0,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeDelay",
+        "unit": "s",
+        "decoded": {
+          "raw": 100,
+          "physical": 0.1,
+          "timestamp_ns": 1300000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.1,
+        "status": "available",
+        "reason": "within range and age limit"
+      },
+      {
+        "name": "BrakeBuildup",
+        "unit": "s",
+        "decoded": {
+          "raw": 50,
+          "physical": 0.5,
+          "timestamp_ns": 1300000000,
+          "valid": true,
+          "reason": ""
+        },
+        "available_value": 0.5,
+        "status": "available",
+        "reason": "within range and age limit"
+      }
+    ],
+    "faults": [
+      "invalid signal: VehicleSpeed"
+    ]
+  }
+]

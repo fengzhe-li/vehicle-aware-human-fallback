@@ -1,0 +1,132 @@
+{
+  "all_main_tracked_files": 387,
+  "environment": {
+    "compiler": "AppleClang 21.0.0",
+    "ffmpeg": "7.1 (imageio-ffmpeg 0.6.0 temporary install)",
+    "machine": "arm64",
+    "matplotlib": "3.11.1",
+    "numpy": "2.5.3",
+    "pandas": "2.3.3",
+    "pillow": "12.3.0",
+    "platform": "Darwin",
+    "python": "3.14.5"
+  },
+  "existing_demo_inspection": {
+    "gif": "37 frames, 640x360, 39.2 s; sampled frames visually inspected",
+    "mp4": "389 frames decoded successfully, 1280x720, 38.9 s; sample at 20 s visually inspected",
+    "pages": "Play/Pause visibly advanced recorded steps from t=0 to t=4 s; boundary labels retained"
+  },
+  "existing_files_modified": [
+    "README.md"
+  ],
+  "frozen_manifest_modified": false,
+  "github_rendering": {
+    "can_readme": "CAN GIF loaded at 1200x680; actual GitHub rendering visually inspected",
+    "lateral_readme": "All three PNGs loaded: 1296x828, 1650x1500, 1500x600; feasibility map visually inspected",
+    "pages_player": "Existing live demo exercised; no deployment performed",
+    "relative_links": "All local README links resolve in automated checks",
+    "root_readme": "Existing VLA GIF, CAN GIF and lateral feasibility map loaded at natural dimensions; visual section inspected",
+    "verified_commit": "7fa3c56d15bc500865551464052c47e61309e321"
+  },
+  "lateral_artifacts_reproduced": {
+    "example_result.json": true,
+    "feasibility_map.png": true,
+    "path_geometry.png": true,
+    "path_samples.csv": true,
+    "scenarios.csv": true,
+    "sensitivity.csv": true,
+    "sensitivity.png": true,
+    "summary.json": true
+  },
+  "main_base": "f52230a5b836fa3049bfa407ca2ebf5768676816",
+  "media_pull_request": {
+    "base": "main",
+    "branch": "codex/engineering-visuals",
+    "ci_run": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/actions/runs/42868760349",
+    "draft": true,
+    "hosted_ci": "VLA verification SUCCESS; Pages deployment SKIPPED",
+    "merged": false,
+    "url": "https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/3",
+    "verified_head": "7fa3c56d15bc500865551464052c47e61309e321"
+  },
+  "media_repeatability": "All 8 generated files byte-identical across two runs, including GIF and MP4",
+  "media_tests": {
+    "failed": 0,
+    "passed": 9
+  },
+  "native_ctest": {
+    "failed": 0,
+    "passed": 1
+  },
+  "new_can_video": {
+    "decoded_frames": 180,
+    "duration_s": 18,
+    "fps": 10,
+    "height": 680,
+    "width": 1200
+  },
+  "preserved_vla": {
+    "extensions/vla_handover_feasibility/artifacts/report/demo_preview.gif": "ec4d08d570350d438493e6dbd6693843b9ffd217f0f2e44409240ecf617fb1e5",
+    "extensions/vla_handover_feasibility/artifacts/report/demo_walkthrough.mp4": "6d2a6cbe087f42f036549c33527bf87ec42deaa0a61883a921414f27621e8f3c"
+  },
+  "pull_requests_at_start": {
+    "1": {
+      "base": "main",
+      "checks": "success",
+      "head": "16f18d6108f04697244b07da7432676509027440",
+      "open": true
+    },
+    "2": {
+      "base": "feat/automotive-can-dbc-integration",
+      "checks": "success",
+      "draft": true,
+      "head": "ed96d22194536e0b3a72197682063052b7111341",
+      "open": true
+    }
+  },
+  "research_tests": {
+    "failed": 0,
+    "passed": 508,
+    "r3b_study_included": true,
+    "skipped": 11
+  },
+  "scientific_files_changed": [],
+  "scientific_files_checked": 201,
+  "skipped_checks": {
+    "hardware_or_real_road": "not performed; synthetic software replay only",
+    "post_merge_ci": "not possible until PRs are explicitly approved and merged",
+    "research": {
+      "D003_external_archive_missing": 9,
+      "EPA_workbook_missing": 1,
+      "local_embargoed_thesis_collection": 1
+    }
+  },
+  "source_commit": "ed96d22194536e0b3a72197682063052b7111341",
+  "status": "complete_for_review_merges_pending_approval",
+  "vla_tests": {
+    "failed": 0,
+    "isolated_checkout": true,
+    "passed": 24
+  },
+  "yolo_frozen_mismatches": {
+    "README.md": {
+      "actual": "28ebd7b59c94927d455b50aaf9494575e723059e95b3029d3afb642518f64a21",
+      "expected": "5e5f57f3343002929a4e78575ce256fe0333e5d70acc2117d6fced5ad8c4eda5"
+    },
+    "docs/R3B_INTERVAL_BRAKING_RECOVERABILITY.md": {
+      "actual": "4e9e40ddefaa73805ef6196f13086fca55a3b9e5fb376f7161c3e7e6e234ce84",
+      "expected": "cfe3bf7b8a2ddfb7a3a1a5e7c62a14cfc49975488b089738028238aaea7a5edb"
+    }
+  },
+  "yolo_tests": {
+    "failed": 3,
+    "failures": [
+      "test_frozen_inputs",
+      "test_pipeline_contract[False]",
+      "test_pipeline_contract[True]"
+    ],
+    "inherited": true,
+    "isolated_after_restoring_test_generated_vla_outputs": true,
+    "passed": 36
+  }
+}

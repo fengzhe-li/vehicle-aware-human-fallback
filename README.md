@@ -132,6 +132,43 @@ Full technical documentation, step-wise kinematics, synthetic verifier stress fi
 
 ---
 
+## CAN/DBC and Lateral Recoverability — Engineering Previews
+
+These additions are **under review**, not yet released on main:
+[CAN PR #1](https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/1) →
+[Lateral PR #2](https://github.com/fengzhe-li/vehicle-aware-human-fallback/pull/2).
+The demonstrations below use verified synthetic fixtures and computed model
+outputs. They do not extend the project's real-world safety claims.
+
+### CAN frames → decoded values → explicit availability
+
+![Synthetic CAN/DBC replay showing physical decoding, VehicleState freshness and unavailable invalid or stale signals](docs/media/engineering/can_decode.gif)
+
+A deterministic replay through the actual adapter shows decoding, the 100 ms
+freshness boundary, expiry, out-of-range speed and recovery. Last decoded values
+are distinguished from values available to consumers. **Synthetic software
+replay only; no physical ECU or vehicle was connected.**
+
+[CAN module demonstration](automotive_can/README.md) ·
+[Full-quality MP4, 18 s](docs/media/engineering/can_decode.mp4) ·
+[Exact snapshot values](docs/media/engineering/can_trace.json)
+
+### Lateral recoverability under stated assumptions
+
+![Existing synthetic lateral feasibility map, retaining infeasible, unknown and conditionally feasible regions](docs/media/engineering/feasibility_map.png)
+
+The bicycle-model analysis checks a prescribed path's geometry, steering limits
+and necessary lateral acceleration/grip bounds. The separate 8,748-case grid
+retains **258 conditionally feasible / 1,124 infeasible / 7,366 unknown** outcomes.
+The map above is a diagnostic speed/distance slice. Feasibility is conditional;
+**collision avoidance remains unvalidated**. This is not a closed-loop driving
+or obstacle-avoidance demonstration.
+
+[Lateral model, sensitivity and path figures](lateral_recoverability/README.md) ·
+[Visual provenance, verification and merge order](docs/ENGINEERING_MEDIA.md)
+
+---
+
 ## Core Baseline Research Question
 
 > Under what combinations of vehicle dynamics, human driver capability, handover policy, and scenario criticality does human fallback remain an effective and physically recoverable safety mechanism during time-critical automated-driving takeovers?

@@ -1,0 +1,48 @@
+{
+  "can": {
+    "animation": "Held computed snapshots; wall time differs from synthetic timestamps",
+    "duration_ms": 18000,
+    "freshness_limit_ns": 100000000,
+    "height": 680,
+    "states": 9,
+    "width": 1200
+  },
+  "collision_avoidance": "not_validated",
+  "ffmpeg_version": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "font_sha256": {
+    "DejaVuSans-Bold.ttf": "b184b89e3c1075f22f6b71575b6fc20d4972b3cfd3b23322ca6fd596dcaef167",
+    "DejaVuSans.ttf": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22"
+  },
+  "hardware_tested": false,
+  "lateral_animation": "Not generated: static feasibility/sensitivity/path figures explain independent cases without suggesting a vehicle executes the paths.",
+  "lateral_counts": {
+    "feasible": 258,
+    "infeasible": 1124,
+    "unknown": 7366
+  },
+  "matplotlib": "3.11.1",
+  "output_sha256": {
+    "can_decode.gif": "683875a8fd16c8e5a161f8295f9aeedd0a55de6aab14274335a1c1fba032e18e",
+    "can_decode.mp4": "ee9baa6c740a504c45e83216f8625c3e024f21f941c33b94ec8434e10a8ad1de",
+    "can_decode_poster.png": "8a50c6c1c0db204a22f5f2c5135a34aa06703f7eceb4121c6ab0b5c2b7d3ac64",
+    "can_trace.json": "60a3b0135a7c58f4dc64c1fc0ee25bbad3c09ea399fc71f2682a20e7669d3a86",
+    "feasibility_map.png": "576e561c0f3ea8cf33a615b026ab4d84d3a7e66fd16f67a9a840b1b0d68cd8ea",
+    "path_geometry.png": "16eed2b9afb9b6f3e31740bc68a90d73f8e8e079419ea7dacf3d22757b098c57",
+    "sensitivity.png": "b71aec6c4ad5ed92fc344b1d0dfbfebe73c4f887bfca0df045471879bad72d10"
+  },
+  "pillow": "12.3.0",
+  "python": "3.14.5",
+  "renderer_sha256": "e7abccb5df73c14a53371685ad5c8f84ea2ca3c01b971bae5f65f3623bd819c2",
+  "source_commit": "ed96d22194536e0b3a72197682063052b7111341",
+  "source_sha256": {
+    "automotive_can/dbc.py": "9cb62733f8efa9018fb3d65da12a6847ba5aa4b06ed1fa3e85737b30f8128f1a",
+    "automotive_can/examples/replay_synthetic.py": "b4c969f17ac388787c894697b3262b7e06d4276747900ac94a9b7218a91de9ec",
+    "automotive_can/examples/synthetic_vehicle.dbc": "2ba8f99fde8ce51acddd4c276d7b8dee2b37ef8e2fdca5dd21e0058c39cd5701",
+    "lateral_recoverability/artifacts/feasibility_map.png": "576e561c0f3ea8cf33a615b026ab4d84d3a7e66fd16f67a9a840b1b0d68cd8ea",
+    "lateral_recoverability/artifacts/path_geometry.png": "16eed2b9afb9b6f3e31740bc68a90d73f8e8e079419ea7dacf3d22757b098c57",
+    "lateral_recoverability/artifacts/sensitivity.png": "b71aec6c4ad5ed92fc344b1d0dfbfebe73c4f887bfca0df045471879bad72d10",
+    "lateral_recoverability/artifacts/summary.json": "2c8a310b9fcdd3ba80a15b4289c73f435e225fa8f018f25c232b705632a1dca5",
+    "tests/test_automotive_can.py": "ab89d05f40358227562edc74e2a64a2c972926238c6e17ecbede4ba6bd50f9e0"
+  },
+  "synthetic_only": true
+}
