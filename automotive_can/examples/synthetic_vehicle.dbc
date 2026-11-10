@@ -1,0 +1,8 @@
+VERSION "Synthetic SIL fixture only; not real vehicle telemetry"
+
+BO_ 256 VehicleState: 8 ECU
+ SG_ VehicleSpeed : 0|16@1+ (0.01,0) [0|100] "m/s" ECU
+ SG_ RoadFriction : 16|8@1+ (0.01,0) [0|1.5] "" ECU
+ SG_ MaxDecel : 24|8@1+ (0.1,0) [0|15] "m/s2" ECU
+ SG_ BrakeDelay : 32|8@1+ (0.001,0) [0|1] "s" ECU
+ SG_ BrakeBuildup : 40|8@1+ (0.01,0) [0|3] "s" ECU
